@@ -1,0 +1,44 @@
+<app-header></app-header>
+
+<div class="bg-blackColor/5">
+  <div class="container mx-auto max-w-screen-xl p-3">
+    <!-- Empty state -->
+    @if(false){
+    <div class="h-[100vh]">
+      <div
+        class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center items-center"
+      >
+        <span
+          class="cursor-default hover:rotate-180 hover:text-blue-400 hover:transition-all duration-[2.5s] material-symbols-outlined text-blackColor/50 text-[60px]"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="currentColor"
+          >
+            <path
+              d="M440-183v-274L200-596v274l240 139Zm80 0 240-139v-274L520-457v274Zm-40-343 237-137-237-137-237 137 237 137ZM160-252q-19-11-29.5-29T120-321v-318q0-22 10.5-40t29.5-29l280-161q19-11 40-11t40 11l280 161q19 11 29.5 29t10.5 40v318q0 22-10.5 40T800-252L520-91q-19 11-40 11t-40-11L160-252Zm320-228Z"
+            />
+          </svg>
+        </span>
+
+        <p class="text-blackColor/50 text-xl font-semibold ml-3">
+          Please enter a tracking number.
+        </p>
+      </div>
+    </div>
+    }
+    <div class="bg-white rounded-md">
+      <!-- Shipment details -->
+      <app-shipment-details></app-shipment-details>
+    </div>
+    <div class="bg-white rounded-md mt-3">
+      <!-- Shipment other details -->
+      <app-shipment-other-info></app-shipment-other-info>
+    </div>
+  </div>
+</div>
+<router-outlet></router-outlet>
+<app-footer></app-footer>

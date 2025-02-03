@@ -1,0 +1,57 @@
+<!--------------- Process graphics start --------------->
+<!-- main info -->
+<div
+  class="mainInfo flex gap-x-2 justify-between p-10 border-b-[1px] border-blackColor/20"
+>
+  <div id="HAWBno">
+    <p class="text-blackColor/50 font-medium">HAWB No.</p>
+    <p class="text-3xl font-semibold">016-23794094</p>
+  </div>
+  <div id="HAWBno">
+    <p class="text-blackColor/50 font-medium">MAWB No.</p>
+    <p class="text-3xl font-semibold">016-23794094</p>
+  </div>
+  <div id="origin">
+    <p class="text-blackColor/50 font-medium">Origin</p>
+    <p class="font-medium">TPE - TAIPEI, TAIWAN</p>
+  </div>
+  <div id="destination">
+    <p class="text-blackColor/50 font-medium">Destination</p>
+    <p class="font-medium">TPE - TAIPEI, TAIWAN</p>
+  </div>
+</div>
+<!-- Process -->
+<div class="process flex justify-between items-start p-10">
+  @for (item of processList; track $index){
+  <div class="process-item w-full">
+    <div class="icons flex justify-between items-center">
+      <mat-icon
+        class="material-symbols-outlined text-[45px] text-primary"
+        style="height: 50px; width: 60px"
+        >{{ item.icon }}</mat-icon
+      >
+      <div class="line w-full h-[3px] bg-primary"></div>
+    </div>
+    <div class="description">
+      <p class="text-blackColor/50 font-medium mb-0">{{ item.title }}</p>
+      <p class="mt-0">Dec 29, 2025, 12:00</p>
+      <p class="text-blackColor/50 font-medium mb-0">Flight No.</p>
+      <p class="mt-0">BR0650</p>
+
+      <p class="text-blackColor/50 font-medium mb-0">Origin / Destination</p>
+      <p class="mt-0">TPE / IAH</p>
+      <div matRipple class="btn-outline" style="width: fit-content">
+        View Images
+      </div>
+    </div>
+  </div>
+  }
+  <div class="completed">
+    <mat-icon
+      class="material-symbols-outlined text-[45px] text-primary"
+      style="height: 50px; width: 60px"
+      >task_alt</mat-icon
+    >
+    <p class="text-blackColor/50 font-medium mb-0">Completed</p>
+  </div>
+</div>
