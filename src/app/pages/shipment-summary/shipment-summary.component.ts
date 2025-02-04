@@ -21,5 +21,7 @@ export class ShipmentSummaryComponent {
 
   /*------- Data import -------*/
   /*------- Functions -------*/
+  // 驗證是否有登入
+  // 驗證trackId是否存在
 
 }

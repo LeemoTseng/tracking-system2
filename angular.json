@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "notice-template": {
+    "tracking-system": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/notice-template",
+            "outputPath": "dist/tracking-system",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -60,10 +60,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "notice-template:build:production"
+              "buildTarget": "tracking-system:build:production"
             },
             "development": {
-              "buildTarget": "notice-template:build:development"
+              "buildTarget": "tracking-system:build:development"
             }
           },
           "defaultConfiguration": "development"

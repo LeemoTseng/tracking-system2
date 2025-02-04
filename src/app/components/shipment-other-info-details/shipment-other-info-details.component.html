@@ -1,1 +1,202 @@
-<p>shipment-other-info-details works!</p>
+<div class="grid grid-cols-3 gap-5">
+  <div class="col-imgBox w-full">
+    <img
+      class="w-full h-full rounded-md overflow-hidden object-cover"
+      src="https://picsum.photos/id/100/100/100"
+      alt=""
+    />
+  </div>
+  <div class="col-left">
+    <table>
+      <thead>
+        <tr>
+          <td></td>
+          <td></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <!-- 左邊欄位 -->
+          <!-- General_Info -->
+          <td>
+            <mat-list role="list">
+              <mat-list-item role="listitem">
+                @for (item of General_Info; track $index) {
+                <p class="text-blackColor font-semibold pt-1 pl-5">
+                  {{ item.key }}
+                </p>
+                }
+              </mat-list-item>
+            </mat-list>
+          </td>
+          <td>
+            <mat-list role="list">
+              <mat-list-item
+                >@for (item of General_Info; track $index) {
+                <p class="text-blackColor/70 font-normal pl-4 pt-1">
+                  {{ item.value }}
+                  @if (item.key === 'MAWB No.' || item.key === 'HAWB No.') {
+                  <span class="pl-2 relative">
+                    <mat-icon
+                      (click)="copyText('General_Info', $index)"
+                      style="height: 16px; width: 16px"
+                      class="text-[16px] pt-[1px] text-blackColor/40 hover:text-blackColor/70 cursor-pointer"
+                      >content_copy</mat-icon
+                    >
+                    <p
+                      [class]="item.isCopied ? 'opacity-100' : 'opacity-0 '"
+                      class="absolute top-0 right-10 bg-blackColor text-sm text-white px-2 py-1 w-fit rounded-md transition-opacity duration-200 z-50"
+                    >
+                      Copied!
+                    </p> </span
+                  >}
+                </p>
+                }
+              </mat-list-item>
+            </mat-list>
+          </td>
+        </tr>
+        <tr>
+          <!-- Package_Info -->
+          <td>
+            <mat-list role="list">
+              <mat-list-item role="listitem">
+                @for (item of Package_Info; track $index) {
+                <p class="text-blackColor font-semibold pt-1 pl-5">
+                  {{ item.key }}
+                </p>
+                }
+              </mat-list-item>
+            </mat-list>
+          </td>
+          <td>
+            <mat-list role="list">
+              <mat-list-item
+                >@for (item of Package_Info; track $index) {
+                <p class="text-blackColor/70 font-normal pl-4 pt-1">
+                  {{ item.value }}
+                </p>
+                }
+              </mat-list-item>
+            </mat-list>
+          </td>
+        </tr>
+        <tr>
+          <!-- Route_Info -->
+          <td colspan="2">
+            <mat-list role="list">
+              <mat-list-item role="listitem ">
+                <!-- <p class="text-blackColor font-bold">Route Information</p> -->
+                @for (item of Route_Info; track $index) {
+                <p class="text-blackColor font-semibold pl-5">
+                  {{ item.key }}
+                </p>
+
+                <p class="text-blackColor font-normal pt-1 text-wrap pl-5">
+                  {{ item.value }}
+                  <span class="pl-1 relative">
+                    <mat-icon
+                      (click)="copyText('Route_Info', $index)"
+                      style="height: 16px; width: 16px"
+                      class="text-[16px] pt-[1px] text-blackColor/40 hover:text-blackColor/70 cursor-pointer"
+                      >content_copy</mat-icon
+                    >
+                    <p
+                      [class]="item.isCopied ? 'opacity-100' : 'opacity-0 '"
+                      class="absolute -top-6 right-10 bg-blackColor text-sm text-white px-2 py-1 w-fit rounded-md transition-opacity duration-200 z-50"
+                    >
+                      Copied!
+                    </p>
+                  </span>
+                </p>
+                }
+              </mat-list-item>
+            </mat-list>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-right">
+    <table>
+      <thead>
+        <tr>
+          <td></td>
+          <td></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <mat-list role="list">
+              <mat-list-item role="listitem">
+                <p class="text-blackColor font-bold">SHIPR INFO</p>
+
+                @for (item of Shipper_Info; track $index) {
+                <p class="text-blackColor font-semibold">
+                  {{ item.key }}
+                </p>
+                <p
+                  class="relative text-blackColor/70 font-normal pt-1 text-wrap"
+                >
+                  {{ item.value }}
+                  <span class="pl-1 relative">
+                    <mat-icon
+                      (click)="copyText('Shipper_Info', $index)"
+                      style="height: 16px; width: 16px"
+                      class="text-[16px] pt-[1px] text-blackColor/40 hover:text-blackColor/70 cursor-pointer"
+                      >content_copy</mat-icon
+                    >
+                    <p
+                      [class]="item.isCopied ? 'opacity-100' : 'opacity-0 '"
+                      class="absolute -top-6 right-10 bg-blackColor text-sm text-white px-2 py-1 w-fit rounded-md transition-opacity duration-200 z-50"
+                    >
+                      Copied!
+                    </p>
+                  </span>
+                </p>
+                }
+              </mat-list-item>
+            </mat-list>
+          </td>
+          <td>
+            <mat-list role="list">
+              <mat-list-item></mat-list-item>
+            </mat-list>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <mat-list role="list">
+              <mat-list-item role="listitem ">
+                <p class="text-blackColor font-bold">CNEE INFO</p>
+                @for (item of Consignee_Info; track $index) {
+                <p class="text-blackColor font-semibold">
+                  {{ item.key }}
+                </p>
+                <p class="text-blackColor/70 font-normal pt-1 text-wrap">
+                  {{ item.value }}
+                  <span class="pl-1 relative">
+                    <mat-icon
+                      (click)="copyText('Consignee_Info', $index)"
+                      style="height: 16px; width: 16px"
+                      class="text-[16px] pt-[1px] text-blackColor/40 hover:text-blackColor/70 cursor-pointer"
+                      >content_copy</mat-icon
+                    >
+                    <p
+                      [class]="item.isCopied ? 'opacity-100' : 'opacity-0 '"
+                      class="absolute -top-6 right-5 bg-blackColor text-sm text-white px-2 py-1 w-fit rounded-md transition-opacity duration-200 z-50"
+                    >
+                      Copied!
+                    </p>
+                  </span>
+                </p>
+                }
+              </mat-list-item>
+            </mat-list>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
