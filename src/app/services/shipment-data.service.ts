@@ -7,21 +7,20 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ShipmentDataService {
-  // constructor(private http: HttpClient) {}
 
+  /*--------- Inject ---------*/
+  http = inject(HttpClient)
   
   /*--------- Variables ---------*/
   shipmentDataAPI = environment.shipmentDataAPI;
 
 
-  /*--------- Inject ---------*/
-  http = inject(HttpClient)
-
 
   /*--------- Functions ---------*/
   getShipmentData(): Observable<any[]> {
-    return this.http.get<any[]>(this.shipmentDataAPI);
+    return this.http.get<any[]>(`${this.shipmentDataAPI}/data`);
   }
+
 
 
 

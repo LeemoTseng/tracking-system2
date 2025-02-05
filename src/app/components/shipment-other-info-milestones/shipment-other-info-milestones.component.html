@@ -7,23 +7,30 @@
 <table class="w-full border-collapse mb-8">
   <thead>
     <tr class="text-blackColor/90 font-semibold bg-blackColor/5">
-      <th class="px-4 py-4 text-start w-auto">Order</th>
-      <th class="px-4 py-4 text-start w-auto">Milestone</th>
-      <th class="px-4 py-4 text-start w-auto">Date and Time</th>
-      <th class="px-4 py-4 text-start w-auto">Files</th>
+      @for (item of milestoneCols; track $index) {
+      <th class="px-4 py-4 text-start w-auto">{{ item }}</th>
+      }
     </tr>
   </thead>
   <tbody>
+    @for (item of milestones; track $index) {
     <tr class="text-blackColor/70 font-normal border-b">
-      <td class="px-4 py-2 text-start">1</td>
-      <td class="px-4 py-2 text-start">Booking Creation</td>
-      <td class="px-4 py-2 text-start">2024-11-09 11:10</td>
+      <td class="px-4 py-2 text-start">{{ $index + 1 }}</td>
+      <td class="px-4 py-2 text-start">{{ item.name }}</td>
       <td class="px-4 py-2 text-start">
-        <button matRipple class="btn-outline" style="width: fit-content">
-          View Images
-        </button>
+        {{ item.DateTime }}
+      </td>
+      <td class="px-4 py-2 text-start">
+        @if (item.ImageUrls.length !== 0) {<button
+          matRipple
+          class="btn-outline"
+          style="width: fit-content"
+        >
+          View Image</button
+        >}
       </td>
     </tr>
+    }
   </tbody>
 </table>
 
@@ -35,14 +42,9 @@
 <table class="w-full border-collapse mb-8">
   <thead>
     <tr class="text-blackColor/90 font-semibold bg-blackColor/5">
-      <th class="px-4 py-4 text-start w-auto">Order</th>
-      <th class="px-4 py-4 text-start w-auto">Flight No.</th>
-      <th class="px-4 py-4 text-start w-auto">From</th>
-      <th class="px-4 py-4 text-start w-auto">To</th>
-      <th class="px-4 py-4 text-start w-auto">ETD</th>
-      <th class="px-4 py-4 text-start w-auto">ATD</th>
-      <th class="px-4 py-4 text-start w-auto">ETA</th>
-      <th class="px-4 py-4 text-start w-auto">ATA</th>
+      @for (item of flightCols; track $index) {
+      <th class="px-4 py-4 text-start w-auto">{{ item }}</th>
+      }
     </tr>
   </thead>
   <tbody>
@@ -69,20 +71,16 @@
 <table class="w-full border-collapse mb-8">
   <thead>
     <tr class="text-blackColor/90 font-semibold bg-blackColor/5">
-      <th class="px-4 py-4 text-start w-auto">Length</th>
-      <th class="px-4 py-4 text-start w-auto">Width</th>
-      <th class="px-4 py-4 text-start w-auto">Height</th>
-      <th class="px-4 py-4 text-start w-auto">Pkg Qty</th>
-      <th class="px-4 py-4 text-start w-auto">VW</th>
+      @for (item of dimentions; track $index) {
+      <th class="px-4 py-4 text-start w-auto">{{ item.key | titlecase }}</th>
+      }
     </tr>
   </thead>
   <tbody>
     <tr class="text-blackColor/70 font-normal border-b">
-      <td class="px-4 py-2 text-start w-auto">71</td>
-      <td class="px-4 py-2 text-start w-auto">71</td>
-      <td class="px-4 py-2 text-start w-auto">77</td>
-      <td class="px-4 py-2 text-start w-auto">2</td>
-      <td class="px-4 py-2 text-start w-auto">129.38</td>
+      @for (item of dimentions; track $index) {
+      <td class="px-4 py-2 text-start w-auto">{{ item.value }}</td>
+      }
     </tr>
   </tbody>
 </table>

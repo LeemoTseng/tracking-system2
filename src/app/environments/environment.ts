@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
-  shipmentDataAPI:'json/ShipmentList_Detail.json',
+  shipmentDataAPI:'http://localhost:3000',
 
 };

@@ -41,7 +41,7 @@ export class ShipmentDetailsComponent {
     },
   ]
 
-  /*------- Data imported -------*/
+  /*------- Data import -------*/
 
   shipmentDataService = inject(ShipmentDataService);
   shipmentData: any = [];
@@ -60,10 +60,11 @@ export class ShipmentDetailsComponent {
 
   ngOnInit() {
     this.shipmentDataService.getShipmentData().subscribe({
-      next: (data) => {
-        this.shipmentData = data,
-          this.shipmentInfo = this.shipmentData.data.ShipmentInfo,
-          this.milestones = this.shipmentData.data.Milestone
+      next: (res) => {
+        this.shipmentData = res,
+        // console.log('res',res)
+        this.shipmentInfo = this.shipmentData.ShipmentInfo,
+        this.milestones = this.shipmentData.Milestone
         this.processListData();
         this.setStatusAndTimeAry(this.milestones)
         this.setLastStatus(this.processTimeList)
@@ -75,6 +76,7 @@ export class ShipmentDetailsComponent {
 
   // Import data from shipment-data.service.ts
   processListData() {
+
     this.processList.forEach((item: any) => {
       if (item.title === 'Booking Creation') {
         item.dateTime = this.replaceChineseToEnglish(this.milestones.BookingCreation)
