@@ -3,6 +3,9 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ShipmentDataService } from '../../services/shipment-data.service';
 import { CommonModule } from '@angular/common';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment.prod';
 
 @Component({
   selector: 'app-shipment-details',
@@ -11,6 +14,9 @@ import { CommonModule } from '@angular/common';
   styleUrl: './shipment-details.component.css'
 })
 export class ShipmentDetailsComponent {
+
+  /*--------- Inject ---------*/
+  http = inject(HttpClient)
 
   /*------- style settings -------*/
   rippleColor: string = 'rgba(0, 0, 0, 0.1)';
@@ -40,10 +46,12 @@ export class ShipmentDetailsComponent {
       "icon": "event_available"
     },
   ]
+  shipmentDataAPI = environment.shipmentDataAPI;
+  flightsDataAPI = environment.flightsDataAPI;
+  // shipmentDataService = inject(ShipmentDataService);
 
   /*------- Data import -------*/
 
-  shipmentDataService = inject(ShipmentDataService);
   shipmentData: any = [];
   shipmentInfo: any = {};
   milestones: any = {};
@@ -54,17 +62,24 @@ export class ShipmentDetailsComponent {
   lastTime: Date = new Date()
   isCompleted: boolean = false
 
+  getShipmentData(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.shipmentDataAPI}/data`);
+  }
 
+  getFlightsData(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.flightsDataAPI}/data`);
+  }
 
   /*------- Functions -------*/
 
   ngOnInit() {
-    this.shipmentDataService.getShipmentData().subscribe({
+
+    // Get shipment data
+    this.getShipmentData().subscribe({
       next: (res) => {
         this.shipmentData = res,
-        // console.log('res',res)
-        this.shipmentInfo = this.shipmentData.ShipmentInfo,
-        this.milestones = this.shipmentData.Milestone
+          this.shipmentInfo = this.shipmentData.ShipmentInfo,
+          this.milestones = this.shipmentData.Milestone
         this.processListData();
         this.setStatusAndTimeAry(this.milestones)
         this.setLastStatus(this.processTimeList)
@@ -74,9 +89,10 @@ export class ShipmentDetailsComponent {
     });
   }
 
+
+
   // Import data from shipment-data.service.ts
   processListData() {
-
     this.processList.forEach((item: any) => {
       if (item.title === 'Booking Creation') {
         item.dateTime = this.replaceChineseToEnglish(this.milestones.BookingCreation)

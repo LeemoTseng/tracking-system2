@@ -1,0 +1,133 @@
+<div class="searchGroup w-full flex items-center justify-between pt-0 pb-10">
+  <div class="flex">
+    <div class="search relative border rounded-md border-1 border-[#b9b9b9]">
+      <div class="border flex p-1 searchContent rounded-md">
+        <!-- tracking number -->
+        <div
+          class="inputTrackingNum flex flex-nowrap justify-center items-center relative pr-3 pl-1"
+        >
+          <mat-icon
+            class="text-blackColor/80 mr-1 text-[20px]"
+            style="width: 20px; height: 20px"
+            >search</mat-icon
+          >
+          <input
+            class="cursor-text w-full focus:outline-none focus:ring-transparent text-blackColor py-1"
+            type="text"
+            placeholder="Tracking number"
+          />
+          <div
+            class="diver absolute -top-[3px] right-0 bg-[#b9b9b9] h-[40px] w-[1px]"
+          ></div>
+        </div>
+
+        <!-- datepicker - Start date -->
+        <div class="startDate relative flex">
+          <input
+            type="date"
+            class="cursor-pointer w-full px-2 focus:outline-none focus:ring-transparent text-blackColor placeholder-transparent bg-white"
+          />
+          <!-- @if (false) {
+          <span
+            class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none transition-opacity duration-200"
+          >
+            Start date
+          </span>
+          } -->
+        </div>
+        <div>
+          <mat-icon
+            class="text-blackColor/80 mx-3 py-1 text-[20px]"
+            style="width: 20px; height: 20px"
+          >
+            arrow_forward
+          </mat-icon>
+        </div>
+        <!-- datepicker - End date -->
+        <div class="endDate relative flex">
+          <input
+            type="date"
+            class="cursor-pointer w-full mr-2 focus:outline-none focus:ring-transparent text-blackColor placeholder-transparent bg-white"
+          />
+          <!-- @if (false) {
+          <span
+            class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none transition-opacity duration-200"
+          >
+            End date
+          </span>
+          } -->
+          <div
+            class="diver absolute -top-[3px] right-0 bg-[#b9b9b9] h-[40px] w-[1px]"
+          ></div>
+        </div>
+
+        <div
+          mat-button
+          [matMenuTriggerFor]="processMenu"
+          style="background-color: white"
+          class="cursor-pointer text-nowrap flex items-center gap-2"
+        >
+          <div class="flex items-center gap-1 cursor-pointer">
+            <p class="mx-auto px-3 cursor-pointer">All</p>
+            <mat-icon class="cursor-pointer">arrow_drop_down</mat-icon>
+          </div>
+
+          <mat-menu #processMenu="matMenu">
+            <button mat-menu-item class="cursor-pointer">
+              <p class="cursor-pointer">All</p>
+            </button>
+            <button mat-menu-item class="cursor-pointer">
+              <p class="cursor-pointer">ETD</p>
+            </button>
+            <button mat-menu-item><p class="cursor-pointer">ETA</p></button>
+          </mat-menu>
+        </div>
+
+        <!-- Search btn -->
+      </div>
+      @if (true) {
+      <p class="absolute -bottom-[30px] left-0 text-sm text-blackColor">
+        Please enter at least one condition.
+      </p>
+      }
+    </div>
+    <div
+      matRipple
+      [matRippleColor]="rippleColor"
+      class="cursor-pointer hover:bg-blackColor/90 bg-blackColor/80 text-white font-medium px-10 pt-3 rounded-md ml-3 border-transparent"
+    >
+      Search
+    </div>
+  </div>
+
+  <!-- btn group -->
+  <div class="btnGroup flex items-center gap-5">
+    <div
+      matRipple
+      [matRippleColor]="rippleColor"
+      mat-button
+      [matMenuTriggerFor]="menu"
+      class="btn-outline cursor-pointer text-nowrap flex items-center gap-2"
+      style="width: fit-content"
+    >
+      <mat-icon>sort</mat-icon>
+      <p class="cursor-pointer">Order</p>
+    </div>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>Ascending by date</button>
+      <button mat-menu-item>Decending by date</button>
+    </mat-menu>
+    <div
+      mat-raised-button
+      matTooltipPosition="above"
+      matTooltip="Export all items as CSV"
+      matRipple
+      [matRippleColor]="rippleColor"
+      class="btn-outline cursor-pointer text-nowrap flex items-center gap-2"
+      style="width: fit-content"
+    >
+      <mat-icon>download</mat-icon>
+      <p class="cursor-pointer">Export</p>
+    </div>
+  </div>
+</div>

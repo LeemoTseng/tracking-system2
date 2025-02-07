@@ -10,7 +10,7 @@
       <ul class="flex gap-5">
         @for (item of menuList; track $index) {
         <li
-          (click)="selectMenu(item.name)"
+          (click)="selectMenu(item.name, item.routerLink)"
           [class]="
             selectedMenu === item.name
               ? 'text-blackColor'

@@ -13,12 +13,17 @@ export class ShipmentDataService {
   
   /*--------- Variables ---------*/
   shipmentDataAPI = environment.shipmentDataAPI;
+  flightsDataAPI = environment.shipmentDataAPI;
 
 
 
   /*--------- Functions ---------*/
   getShipmentData(): Observable<any[]> {
     return this.http.get<any[]>(`${this.shipmentDataAPI}/data`);
+  }
+
+  getFlightsData(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.flightsDataAPI}/data`);
   }
 
 

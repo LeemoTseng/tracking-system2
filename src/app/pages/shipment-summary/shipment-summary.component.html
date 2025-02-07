@@ -1,7 +1,20 @@
 <app-header></app-header>
 
-<div class="bg-blackColor/5">
+<div class="bg-blackColor/5 pb-[150px]">
   <div class="container mx-auto max-w-screen-xl p-3">
+    <!-- Bakc to list -->
+    <div class="py-3 w-fit h-fit flex items-center cursor-pointer group">
+      <mat-icon
+        class="cursor-pointer text-blackColor group-hover:text-primary group-hover:font-bold transition-all"
+        >arrow_back</mat-icon
+      >
+      <p
+        routerLink="/shipment-list/all-shipment"
+        class="cursor-pointer text-blackColor text-lg pl-2 group-hover:text-primary group-hover:font-bold transition-all"
+      >
+        Back to list
+      </p>
+    </div>
     <!-- Empty state -->
     @if(false){
     <div class="h-[100vh]">
@@ -30,6 +43,7 @@
       </div>
     </div>
     }
+    <!-- Shipment processes -->
     <div class="bg-white rounded-md">
       <!-- Shipment details(processes) -->
       <app-shipment-details></app-shipment-details>

@@ -39,25 +39,26 @@
   <mat-icon class="text-blackColor/50">folder</mat-icon>
   <p class="text-lg text-blackColor/90 font-semibold">Flight Info</p>
 </div>
-<table class="w-full border-collapse mb-8">
+<table class="w-full border-collapse mb-8 table-fixed">
   <thead>
     <tr class="text-blackColor/90 font-semibold bg-blackColor/5">
       @for (item of flightCols; track $index) {
-      <th class="px-4 py-4 text-start w-auto">{{ item }}</th>
+      <th class="px-4 py-4 text-start">{{ item }}</th>
       }
     </tr>
   </thead>
   <tbody>
+    @for (item of flightSegments; track $index) {
     <tr class="text-blackColor/70 font-normal border-b">
-      <td class="px-4 py-2 text-start w-auto">1</td>
-      <td class="px-4 py-2 text-start w-auto">UA00872</td>
-      <td class="px-4 py-2 text-start w-auto">TPE</td>
-      <td class="px-4 py-2 text-start w-auto">SFO</td>
-      <td class="px-4 py-2 text-start w-auto">2024-11-09 11:10</td>
-      <td class="px-4 py-2 text-start w-auto">2024-11-09 11:10</td>
-      <td class="px-4 py-2 text-start w-auto">2024-11-09 11:10</td>
-      <td class="px-4 py-2 text-start w-auto">2024-11-09 11:10</td>
+      <td class="px-4 py-2 text-start">{{ item.SeqNo || "-" }}</td>
+      <td class="px-4 py-2 text-start">{{ item.OriginCode || "-" }}</td>
+      <td class="px-4 py-2 text-start">{{ item.DestCode || "-" }}</td>
+      <td class="px-4 py-2 text-start">{{ item.ETD || "-" }}</td>
+      <td class="px-4 py-2 text-start">{{ item.ATD || "-" }}</td>
+      <td class="px-4 py-2 text-start">{{ item.ETA || "-" }}</td>
+      <td class="px-4 py-2 text-start">{{ item.ATA || "-" }}</td>
     </tr>
+    }
   </tbody>
 </table>
 
@@ -71,15 +72,15 @@
 <table class="w-full border-collapse mb-8">
   <thead>
     <tr class="text-blackColor/90 font-semibold bg-blackColor/5">
-      @for (item of dimentions; track $index) {
-      <th class="px-4 py-4 text-start w-auto">{{ item.key | titlecase }}</th>
+      @for (item of dimensions; track $index) {
+      <th class="px-4 py-4 text-center w-auto">{{ item.key }}</th>
       }
     </tr>
   </thead>
   <tbody>
     <tr class="text-blackColor/70 font-normal border-b">
-      @for (item of dimentions; track $index) {
-      <td class="px-4 py-2 text-start w-auto">{{ item.value }}</td>
+      @for (item of dimensions; track $index) {
+      <td class="px-4 py-2 text-center w-auto">{{ item.value }}</td>
       }
     </tr>
   </tbody>

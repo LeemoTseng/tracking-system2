@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -10,21 +10,65 @@ import { RouterLink } from '@angular/router';
 })
 export class HeaderComponent {
 
-  /* style settings */
+
+  /*--------- Inject ---------*/
+
+  constructor(@Inject(Router) private router: Router) { }
 
 
-  /* items */
-    menuList: any[] = [
+
+  /*--------- style settings ---------*/
+
+
+  /*--------- items ---------*/
+  menuList: any[] = [
     { name: 'Shipment Summary', routerLink: '/shipment-summary' },
-    { name: 'Shipment List', routerLink: '/shipment-list/all-shipment' },
+    { name: 'Shipment List', routerLink: '/shipment-list' },
   ];
-    selectedMenu: string = "";
+  _selectedMenu: string = "";
+  url: string = "";
 
-  /* functions */
+  /*--------- functions ---------*/
 
-  selectMenu(menu: string) {
+  // on init
+
+  ngOnInit() {
+    this.getUrlAndRender()
+
+  }
+
+  // Getter and Setter
+
+  get selectedMenu() {
+    return this._selectedMenu;
+  }
+
+  set selectedMenu(value: string) {
+    this._selectedMenu = value;
+  }
+
+
+  // select menu
+  selectMenu(menu: string, route: string) {
+    this.navigateTo(route)
     this.selectedMenu = menu;
   }
+
+  // router
+  navigateTo(route: string) {
+    this.router.navigate([route]);
+  }
+
+  getUrlAndRender() {
+    this.url = this.router.url;
+        if (this.url == "/shipment-summary") {
+      this.selectedMenu = "Shipment Summary"
+    } else {
+      this.selectedMenu = "Shipment List"
+    }
+  }
+
+
 
 
 

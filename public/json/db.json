@@ -57,9 +57,9 @@
       "Dimensions": [
         {
           "PCS": 1,
-          "LENGTH": 98,
-          "WIDTH": 48,
-          "HEIGHT": 45,
+          "Length": 98,
+          "Width": 48,
+          "Height": 45,
           "VW": "35.28"
         }
       ],
@@ -87,7 +87,38 @@
         "Country": "US",
         "Fax": null
       }
-    }
+    },
+    "FlightSegments": [
+      {
+        "SeqNo": "1",
+        "FlightNo": "CX407",
+        "OriginCode": "TPE",
+        "DestCode": "HKG",
+        "ETD": "2024-10-17 07:51",
+        "ATD": null,
+        "ETA": "2024-10-17 10:02",
+        "ATA": null
+      },
+      {
+        "SeqNo": "2",
+        "FlightNo": "CX882",
+        "OriginCode": "HKG",
+        "DestCode": "LAX",
+        "ETD": "2024-10-17 16:42",
+        "ATD": null,
+        "ETA": "2024-10-17 14:56",
+        "ATA": null
+      }
+    ],
+    "Dimensions": [
+      {
+        "PCS": 5,
+        "Length": 53,
+        "Width": 30,
+        "Height": 23,
+        "VW": "30.47"
+      }
+    ]
   },
   "code": "1",
   "message": "Success"

@@ -1,1 +1,49 @@
-<p>shipment-list works!</p>
+<app-header></app-header>
+
+<div class="bg-blackColor/5 pb-[150px]">
+  <div class="container mx-auto max-w-screen-xl p-3">
+    <div class="greeting py-3">
+      <p class="font-semibold text-3xl text-blackColor">Hello {{ user }},</p>
+      <p class="text-blackColor">Tracking your shipment</p>
+    </div>
+
+    <!-- Menu -->
+    <div class="frame bg-white rounded-md p-10 pb-[100px] mb-[100px]">
+      <div class="process-menu flex justify-between mb-5 border-b-2">
+        <div class="flex gap-x-2 relative">
+          @for (item of menuItems; track $index) {
+          <p
+            (click)="menuSelected(item)"
+            [class]="selectedMenu === item ? '' : 'text-blackColor/50'"
+            class="cursor-pointer text-xl transition-all font-semibold hover:text-blackColor/90 py-0 pb-3 px-3 mr-1 m-0 border-transparent border-b-4"
+          >
+            {{ item }}
+          </p>
+          }
+          <div
+            [class]="
+              selectedMenu === '' || selectedMenu === 'All Cargos'
+                ? 'absolute border-b-4 border-primary'
+                : selectedMenu === 'On-Going'
+                ? 'absolute border-b-4 border-primary translate-x-[120px]'
+                : selectedMenu === 'Completed'
+                ? 'absolute border-b-4  border-primary translate-x-[250px]'
+                : 'absolute border-b-4'
+            "
+            class="transition-transform duration-200 pt-[42px] w-[120px]"
+          ></div>
+        </div>
+      </div>
+      <!-- mutiple search bar -->
+      <app-search-bar></app-search-bar>
+
+      <!-- shipment list -->
+      <div class="shipmentList">
+        <app-list-table [selectedMenuInner]="selectedMenu"></app-list-table>
+      </div>
+    </div>
+  </div>
+
+  <app-footer></app-footer>
+  <div></div>
+</div>
