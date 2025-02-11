@@ -5,25 +5,89 @@
   <p class="text-lg text-blackColor/90 font-semibold">Files</p>
 </div>
 
+<!-- Files -->
+<table class="w-full border-collapse mb-8">
+  <thead>
+    <tr class="text-blackColor/90 font-semibold bg-blackColor/5">
+      <th class="px-4 py-4 text-start w-auto">#</th>
+      <th class="px-4 py-4 text-start w-auto">Type</th>
+      <th class="px-4 py-4 text-start w-auto">Name</th>
+      <th class="px-4 py-4 text-center w-[250px]">Download</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (item of newFilesList; track $index) {
+    <tr class="text-blackColor/70 font-normal border-b">
+      <td class="px-4 py-2 text-start w-auto">{{ $index + 1 }}</td>
+      <td class="px-4 py-2 text-start w-auto">
+        @if ($index === 0 || item.Type !== newFilesList[$index - 1].Type) {
+        {{ item.Type }}
+        }
+      </td>
+      <td class="px-4 py-2 text-start w-auto">{{ item.Name }}</td>
+      <td class="align-center px-4 py-2 text-center w-[250px]">
+        @if (item.Guid) {<button
+          (click)="postFilesData(item.Type, item.Guid)"
+          matRipple
+          class="btn-outline"
+          style="width: fit-content"
+        >
+          Download</button
+        >}
+      </td>
+    </tr>
+    }
+  </tbody>
+</table>
+
+<!-- Images -->
+<div class="title flex items-center gap-2">
+  <mat-icon class="text-blackColor/50">folder</mat-icon>
+  <p class="text-lg text-blackColor/90 font-semibold">Images</p>
+</div>
 <table class="w-full border-collapse mb-8">
   <thead>
     <tr class="text-blackColor/90 font-semibold bg-blackColor/5">
       <th class="px-4 py-4 text-start w-auto">ID</th>
       <th class="px-4 py-4 text-start w-auto">Type</th>
       <th class="px-4 py-4 text-start w-auto">Name</th>
-      <th class="px-4 py-4 text-start w-auto">Download</th>
+      <th class="align-center px-4 py-4 text-center w-[250px]">View</th>
     </tr>
   </thead>
   <tbody>
+    @for (item of newImagesList; track $index) {
     <tr class="text-blackColor/70 font-normal border-b">
-      <td class="px-4 py-2 text-start w-auto">1</td>
-      <td class="px-4 py-2 text-start w-auto">POD</td>
-      <td class="px-4 py-2 text-start w-auto">filename-434fs-fj3of.jpg</td>
+      @if ($index === 0 || item.Type !== newImagesList[$index - 1].Type) {
       <td class="px-4 py-2 text-start w-auto">
-        <button matRipple class="btn-outline" style="width: fit-content">
-          Download
-        </button>
+        {{ $index + 1 }}
       </td>
+      } @if ($index === 0 || item.Type !== newImagesList[$index - 1].Type) {
+      <td class="px-4 py-2 text-start w-auto">
+        {{ item.Type }}
+      </td>
+      } @if ($index === 0 || item.Type !== newImagesList[$index - 1].Type) {
+      <td class="px-4 py-2 text-start w-auto">
+        {{ item.Name + ", ..." }}
+      </td>
+      } @if ($index === 0 || item.Type !== newImagesList[$index - 1].Type) {
+      <td class="align-center px-4 py-2 text-center w-[250px]">
+        <button
+          (click)="postImgData(item.Guid)"
+          matRipple
+          class="btn-outline"
+          style="width: fit-content"
+        >
+          View
+        </button>
+        @if (isViewImg){
+        <app-view-img
+          (closeClicked)="getClosedStatus($event)"
+          [imgList]="newImagesList"
+        ></app-view-img>
+        }
+      </td>
+      }
     </tr>
+    }
   </tbody>
 </table>

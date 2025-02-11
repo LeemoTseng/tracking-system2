@@ -78,8 +78,8 @@ export class ShipmentDetailsComponent {
     this.getShipmentData().subscribe({
       next: (res) => {
         this.shipmentData = res,
-          this.shipmentInfo = this.shipmentData.ShipmentInfo,
-          this.milestones = this.shipmentData.Milestone
+        this.shipmentInfo = this.shipmentData.ShipmentInfo,
+        this.milestones = this.shipmentData.Milestone
         this.processListData();
         this.setStatusAndTimeAry(this.milestones)
         this.setLastStatus(this.processTimeList)

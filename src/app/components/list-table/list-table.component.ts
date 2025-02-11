@@ -1,10 +1,11 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
+import { MatRipple, MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-list-table',
-  imports: [MatIconModule, MatTooltipModule],
+  imports: [MatIconModule, MatTooltipModule, MatRipple],
   templateUrl: './list-table.component.html',
   styleUrl: './list-table.component.css'
 })
@@ -40,13 +41,21 @@ export class ListTableComponent {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['selectedMenuInner']) {
-      // 變更後要重新render資料:改變this.items的資料
       this.renderItems();
+      // 變更後要重新render資料:改變this.items的資料
     }
   }
 
   // render 
   renderItems() {
+
+  return this.items = [
+    {
+      nowStatus: 'ATD',
+    }, {
+      nowStatus: 'ETA',
+    }
+  ]
   // 根據selectedMenuInner去render對應的items
   /* 處理資料：
     1. nowStatus要處理為六個狀態

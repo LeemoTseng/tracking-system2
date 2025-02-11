@@ -43,7 +43,7 @@ export class CubeComponent implements AfterViewInit {
     // 設定渲染器 (背景白色)
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
     this.renderer.setSize(container.clientWidth, 400);
-    this.renderer.setClearColor(0xffffff); 
+    this.renderer.setClearColor(0xffffff);
     container.appendChild(this.renderer.domElement);
 
     // 創建立方體的邊線
@@ -67,7 +67,7 @@ export class CubeComponent implements AfterViewInit {
 
   // 動畫函數（讓控制器流暢運作）
   private animate = () => {
-    requestAnimationFrame(this.animate);
+    requestAnimationFrame(() => this.animate()); // 確保 `this` 正確綁定
     this.controls.update();
     this.renderer.render(this.scene, this.camera);
   };

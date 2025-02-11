@@ -31,13 +31,13 @@
     <div class="icons flex justify-between items-center">
       <mat-icon
         [ngClass]="getStatusClass(item.title)"
-        class="material-symbols-outlined text-[45px] transition-all duration-300"
+        class="material-symbols-outlined text-[45px] transition-all duration-500"
         style="height: 50px; width: 60px"
         >{{ item.icon }}</mat-icon
       >
       <div
         [ngClass]="getLineClass(item.title)"
-        class="line w-full h-[3px]"
+        class="line w-full h-[3px] transition-all duration-500"
       ></div>
     </div>
     <div class="description">

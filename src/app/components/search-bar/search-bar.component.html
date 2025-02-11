@@ -27,13 +27,6 @@
             type="date"
             class="cursor-pointer w-full px-2 focus:outline-none focus:ring-transparent text-blackColor placeholder-transparent bg-white"
           />
-          <!-- @if (false) {
-          <span
-            class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none transition-opacity duration-200"
-          >
-            Start date
-          </span>
-          } -->
         </div>
         <div>
           <mat-icon
@@ -49,13 +42,6 @@
             type="date"
             class="cursor-pointer w-full mr-2 focus:outline-none focus:ring-transparent text-blackColor placeholder-transparent bg-white"
           />
-          <!-- @if (false) {
-          <span
-            class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none transition-opacity duration-200"
-          >
-            End date
-          </span>
-          } -->
           <div
             class="diver absolute -top-[3px] right-0 bg-[#b9b9b9] h-[40px] w-[1px]"
           ></div>
@@ -68,7 +54,7 @@
           class="cursor-pointer text-nowrap flex items-center gap-2"
         >
           <div class="flex items-center gap-1 cursor-pointer">
-            <p class="mx-auto px-3 cursor-pointer">All</p>
+            <p class="mx-auto px-3 cursor-pointer">{{ searchStatus }}</p>
             <mat-icon class="cursor-pointer">arrow_drop_down</mat-icon>
           </div>
 
@@ -85,9 +71,17 @@
 
         <!-- Search btn -->
       </div>
-      @if (true) {
+      @if (false) {
       <p class="absolute -bottom-[30px] left-0 text-sm text-blackColor">
         Please enter at least one condition.
+      </p>
+      } @else{
+      <p
+        class="absolute -bottom-[30px] left-0 text-sm text-blackColor/80 text-nowrap"
+      >
+        Search from August 8, 2024, to August 8, 2024, including 'THI2240231',
+        sorted from newest to oldest, all items.
+        <span class="font-bold">{{ searchStatus }}</span>
       </p>
       }
     </div>

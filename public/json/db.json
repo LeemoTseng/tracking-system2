@@ -118,6 +118,74 @@
         "Height": 23,
         "VW": "30.47"
       }
+    ],
+    "Documents": [
+      {
+        "FileType": "OTHER",
+        "Files": []
+      },
+      {
+        "FileType": "PACKING",
+        "Files": [
+          {
+            "FileName": "0280-INV_PK1.pdf",
+            "Guid": "21b01e3d-b552-412a-a9ef-41a6dcb12563"
+          },
+          {
+            "FileName": "0280-INV_PK2.pdf",
+            "Guid": "b7f4dfb2-7bb8-4b3f-b185-4bc6ae8076a8"
+          },
+          {
+            "FileName": "HKG_THI012500280_250113.pdf",
+            "Guid": "2b08de4b-85b9-44f9-9caa-3740b6d38402"
+          }
+        ]
+      },
+      {
+        "FileType": "INVOICE",
+        "Files": []
+      },
+      {
+        "FileType": "HAWB",
+        "Files": []
+      },
+      {
+        "FileType": "MAWB",
+        "Files": []
+      },
+      {
+        "FileType": "POD",
+        "Files": []
+      }
+    ],
+    "Pictures": [
+      {
+        "FileType": "POD",
+        "Files": []
+      },
+      {
+        "FileType": "DELIVERY",
+        "Files": [
+          {
+            "FileName": "AI2411001885_配送中_20241112122341_1.jpg",
+            "Guid": "06abca74-c7e9-4785-af4d-6a57489d8e2e"
+          },{
+            "FileName": "AI2411001885_配送中_20241112122341_1.jpg",
+            "Guid": "06abca74-c7e9-4785-af4d-6a57489d8e2e"
+          },{
+            "FileName": "AI2411001885_配送中_20241112122341_1.jpg",
+            "Guid": "06abca74-c7e9-4785-af4d-6a57489d8e2e"
+          }
+        ]
+      },
+      {
+        "FileType": "AIRPORT PICKUP",
+        "Files": []
+      },
+      {
+        "FileType": "WAREHOUSE",
+        "Files": []
+      }
     ]
   },
   "code": "1",
