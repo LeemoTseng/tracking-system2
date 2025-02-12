@@ -30,7 +30,7 @@ export class ViewImgComponent {
   imgList2: any[] = [
     {
       id:1,
-      img: 'https://picsum.photos/id/684/80/1200',
+      img: 'https://picsum.photos/id/684/1200/1200',
       name: 'snow'
     },
     {

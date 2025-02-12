@@ -66,8 +66,12 @@
         {{ item.Type }}
       </td>
       } @if ($index === 0 || item.Type !== newImagesList[$index - 1].Type) {
-      <td class="px-4 py-2 text-start w-auto">
-        {{ item.Name + ", ..." }}
+      <td class="px-4 py-2 text-start w-auto truncate">
+        {{
+          item.Name + ", " + item[$index + 1] + ", " ||
+            "" + item[$index + 2] ||
+            ""
+        }}
       </td>
       } @if ($index === 0 || item.Type !== newImagesList[$index - 1].Type) {
       <td class="align-center px-4 py-2 text-center w-[250px]">

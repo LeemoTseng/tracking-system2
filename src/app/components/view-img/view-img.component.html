@@ -35,7 +35,7 @@
     >
       @for (item of imgList2; track $index) {
       <div
-        class="recIcon w-[50px] h-[5px] drop-shadow-lg"
+        class="recIcon w-[100px] h-[3px] transition-colors duration-300 drop-shadow-lg"
         [ngClass]="{
           'bg-primary': $index === currentIndex,
           'bg-white': $index !== currentIndex
