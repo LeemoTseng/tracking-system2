@@ -25,9 +25,14 @@ export class ShipmentOtherInfoFilesComponent {
   /*--------- Data import ---------*/
   filesDataAPI = environment.filesDataAPI
   imagesDataAPI = environment.imageDataAPI
+
   getFilesData(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.filesDataAPI}/data`);
+    return this.http.get<any[]>(`${this.filesDataAPI}/TrackingApi/fileList`);
   }
+
+  // getFilesData(): Observable<any[]> {
+  //   return this.http.get<any[]>(`${this.filesDataAPI}/TrackingApi/fileList`);
+  // }
 
 
   /*--------- Variables ---------*/

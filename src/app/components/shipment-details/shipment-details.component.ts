@@ -1,15 +1,15 @@
 import { Component, inject } from '@angular/core';
 import { MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
-import { ShipmentDataService } from '../../services/shipment-data.service';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment.prod';
+import { SkeletonLoaderComponent } from '../skeleton-loader/skeleton-loader.component';
 
 @Component({
   selector: 'app-shipment-details',
-  imports: [MatIconModule, MatRippleModule, CommonModule],
+  imports: [MatIconModule, MatRippleModule, CommonModule, SkeletonLoaderComponent],
   templateUrl: './shipment-details.component.html',
   styleUrl: './shipment-details.component.css'
 })
@@ -17,6 +17,12 @@ export class ShipmentDetailsComponent {
 
   /*--------- Inject ---------*/
   http = inject(HttpClient)
+
+  /*--------- send to inner ---------*/
+  
+  // skeleton loader
+  isLoading: boolean = true;
+
 
   /*------- style settings -------*/
   rippleColor: string = 'rgba(0, 0, 0, 0.1)';
@@ -73,13 +79,17 @@ export class ShipmentDetailsComponent {
   /*------- Functions -------*/
 
   ngOnInit() {
+    // skeleton loader
+    setTimeout(() => {
+      this.isLoading = false; 
+    }, 3000);
 
     // Get shipment data
     this.getShipmentData().subscribe({
       next: (res) => {
         this.shipmentData = res,
-        this.shipmentInfo = this.shipmentData.ShipmentInfo,
-        this.milestones = this.shipmentData.Milestone
+          this.shipmentInfo = this.shipmentData.ShipmentInfo,
+          this.milestones = this.shipmentData.Milestone
         this.processListData();
         this.setStatusAndTimeAry(this.milestones)
         this.setLastStatus(this.processTimeList)
