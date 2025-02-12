@@ -6,7 +6,7 @@ import { CubeComponent } from '../cube/cube.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment.prod';
+import { environment } from '../../.environments/environment.prod';
 
 @Component({
   selector: 'app-shipment-other-info-details',

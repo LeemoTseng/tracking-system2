@@ -6,7 +6,7 @@ import { Observable, pipe } from 'rxjs';
 import { TitleCasePipe } from '@angular/common';
 import { CubeComponent } from '../cube/cube.component';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment.prod';
+import { environment } from '../../.environments/environment.prod';
 
 @Component({
   selector: 'app-shipment-other-info-milestones',

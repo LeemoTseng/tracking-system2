@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { MatRipple } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
-import { environment } from '../../environments/environment.prod';
+import { environment } from '../../.environments/environment.prod';
 import { Observable } from 'rxjs';
 import { ViewImgComponent } from '../view-img/view-img.component';
 
