@@ -24,6 +24,8 @@ export class ShipmentOtherInfoComponent {
   selectedMenu = 'Shipment Details';
   users: any[] = [];
 
+  isLoading:boolean = false;
+
   /*------- Data import -------*/
 
 
