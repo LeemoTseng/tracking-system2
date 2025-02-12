@@ -1,12 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { MatRipple } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
-import { ShipmentDataService } from '../../services/shipment-data.service';
-import { Observable, pipe } from 'rxjs';
-import { TitleCasePipe } from '@angular/common';
-import { CubeComponent } from '../cube/cube.component';
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../.environments/environment.prod';
+import { environment } from '../../../.environments/environment.prod';
 
 @Component({
   selector: 'app-shipment-other-info-milestones',

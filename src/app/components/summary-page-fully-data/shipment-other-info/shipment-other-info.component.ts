@@ -1,15 +1,13 @@
 import { Component, inject } from '@angular/core';
-import { ShipmentOtherInfoDetailsComponent } from '../shipment-other-info-details/shipment-other-info-details.component';
-import { ShipmentOtherInfoMilestonesComponent } from '../shipment-other-info-milestones/shipment-other-info-milestones.component';
-import { ShipmentOtherInfoFilesComponent } from '../shipment-other-info-files/shipment-other-info-files.component';
-import { ShipmentDataService } from '../../services/shipment-data.service';
+import { ShipmentOtherInfoDetailsComponent } from '../../summary-page-fully-data/shipment-other-info-details/shipment-other-info-details.component';
+import { ShipmentOtherInfoMilestonesComponent } from '../../summary-page-fully-data/shipment-other-info-milestones/shipment-other-info-milestones.component';
+import { ShipmentOtherInfoFilesComponent } from '../../summary-page-fully-data/shipment-other-info-files/shipment-other-info-files.component';
+import { ShipmentDataService } from '../../../services/shipment-data.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-shipment-other-info',
-  imports: [ShipmentOtherInfoDetailsComponent, ShipmentOtherInfoMilestonesComponent, 
-    ShipmentOtherInfoFilesComponent,CommonModule
-  ],
+  imports: [ShipmentOtherInfoDetailsComponent, ShipmentOtherInfoMilestonesComponent,ShipmentOtherInfoFilesComponent,CommonModule],
   templateUrl: './shipment-other-info.component.html',
   styleUrl: './shipment-other-info.component.css'
 })

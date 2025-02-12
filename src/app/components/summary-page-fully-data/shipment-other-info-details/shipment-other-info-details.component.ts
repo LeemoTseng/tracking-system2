@@ -1,12 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import {MatListModule} from '@angular/material/list';
-import { ShipmentDataService } from '../../services/shipment-data.service';
-import { CubeComponent } from '../cube/cube.component';
+import { CubeComponent } from '../../cube/cube.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../.environments/environment.prod';
+import { environment } from '../../../.environments/environment.prod';
 
 @Component({
   selector: 'app-shipment-other-info-details',

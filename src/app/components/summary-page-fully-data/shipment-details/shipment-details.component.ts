@@ -4,12 +4,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../.environments/environment.prod';
-import { SkeletonLoaderComponent } from '../skeleton-loader/skeleton-loader.component';
+import { environment } from '../../../.environments/environment.prod';
 
 @Component({
   selector: 'app-shipment-details',
-  imports: [MatIconModule, MatRippleModule, CommonModule, SkeletonLoaderComponent],
+  imports: [MatIconModule, MatRippleModule, CommonModule],
   templateUrl: './shipment-details.component.html',
   styleUrl: './shipment-details.component.css'
 })
@@ -18,16 +17,15 @@ export class ShipmentDetailsComponent {
   /*--------- Inject ---------*/
   http = inject(HttpClient)
 
-  /*--------- send to inner ---------*/
-  
-  // skeleton loader
-  isLoading: boolean = true;
 
 
   /*------- style settings -------*/
   rippleColor: string = 'rgba(0, 0, 0, 0.1)';
 
   /*------- Variables -------*/
+
+  // skeleton loader
+  isSkeletonLoading: boolean = true;
 
   processList: any = [
     {
@@ -68,6 +66,8 @@ export class ShipmentDetailsComponent {
   lastTime: Date = new Date()
   isCompleted: boolean = false
 
+
+
   getShipmentData(): Observable<any[]> {
     return this.http.get<any[]>(`${this.shipmentDataAPI}/data`);
   }
@@ -79,10 +79,6 @@ export class ShipmentDetailsComponent {
   /*------- Functions -------*/
 
   ngOnInit() {
-    // skeleton loader
-    setTimeout(() => {
-      this.isLoading = false; 
-    }, 3000);
 
     // Get shipment data
     this.getShipmentData().subscribe({
@@ -93,8 +89,14 @@ export class ShipmentDetailsComponent {
         this.processListData();
         this.setStatusAndTimeAry(this.milestones)
         this.setLastStatus(this.processTimeList)
+
+        this.isSkeletonLoading = false;
+
       },
-      error: (error) => { console.log('error', error) },
+      error: (error) => { 
+        console.log('error', error) 
+        this.isSkeletonLoading = false;
+      },
       complete: () => { }
     });
   }

@@ -1,10 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { MatRipple } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
-import { environment } from '../../.environments/environment.prod';
+import { environment } from '../../../.environments/environment.prod';
 import { Observable } from 'rxjs';
-import { ViewImgComponent } from '../view-img/view-img.component';
+import { ViewImgComponent } from '../../view-img/view-img.component';
 
 @Component({
   selector: 'app-shipment-other-info-files',
@@ -18,24 +18,27 @@ export class ShipmentOtherInfoFilesComponent {
   http = inject(HttpClient);
 
 
-
   /*--------- Data output ---------*/
-
 
   /*--------- Data import ---------*/
   filesDataAPI = environment.filesDataAPI
   imagesDataAPI = environment.imageDataAPI
 
-  getFilesData(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.filesDataAPI}/TrackingApi/fileList`);
+  trackingNo: string = 'THI132400003';
+
+  getFilesData(trackingNo: string): Observable<any[]> {
+    const params = new HttpParams().set('trackingNo', trackingNo);
+    return this.http.get<any[]>(`${this.filesDataAPI}TrackingApi/fileList`, { params });
   }
 
-  // getFilesData(): Observable<any[]> {
-  //   return this.http.get<any[]>(`${this.filesDataAPI}/TrackingApi/fileList`);
-  // }
 
 
   /*--------- Variables ---------*/
+
+  // skeleton loader
+  isSkeletonLoading: boolean = true;
+
+  // files
   allFiles: any = []
   files: any[] = []
   newFilesList: any[] = []
@@ -50,19 +53,29 @@ export class ShipmentOtherInfoFilesComponent {
   /*--------- Functions ---------*/
 
   ngOnInit(): void {
-    this.getFilesData().subscribe({
+    this.getFilesData(this.trackingNo).subscribe({
       next: (res) => {
+        console.log('res', res)
         // files
         this.allFiles = res
-        this.files = this.allFiles.Documents
+        this.files = this.allFiles.data.Documents
         this.newFilesList = this.transformAndSortFiles(this.files)
 
         // images
-        this.allImages = this.allFiles.Pictures
+        this.allImages = this.allFiles.data.Pictures
+        console.log('allImages', this.allImages)
         this.newImagesList = this.renderImage(this.allImages)
-        console.log('imagefileList',this.newImagesList)
+        console.log('imagefileList', this.newImagesList)
 
-      }
+        this.isSkeletonLoading = false;
+
+
+      },
+      error: (err) => {
+        console.log('error', err)
+        this.isSkeletonLoading = false;
+      },
+      complete: () => {}
     })
   }
 
@@ -94,12 +107,12 @@ export class ShipmentOtherInfoFilesComponent {
   }
 
   // render images
-  renderImage(images:any): any[]  {
-    let newList:any = []
+  renderImage(images: any): any[] {
+    let newList: any = []
 
-    images.forEach((img:any)=>{
-      if (img.Files != 0){
-        img.Files.forEach((f:any)=>{
+    images.forEach((img: any) => {
+      if (img.Files != 0) {
+        img.Files.forEach((f: any) => {
           newList.push({
             Type: this.trangeFileName(img.FileType),
             Name: f.FileName,
@@ -107,20 +120,20 @@ export class ShipmentOtherInfoFilesComponent {
           })
         })
       }
-     
+
     })
     return newList;
   }
 
-  trangeFileName(name:string): string {
+  trangeFileName(name: string): string {
     let newName = ''
-    if (name = "DELIVERY"){
+    if (name = "DELIVERY") {
       newName = "Delivery"
     }
-    if (name = "AIRPORT PICKUP"){
+    if (name = "AIRPORT PICKUP") {
       newName = "Airport Pickup"
     }
-    if(name = "WAREHOUSE"){
+    if (name = "WAREHOUSE") {
       newName = "Cargo Arrive Terminal"
     }
     return newName

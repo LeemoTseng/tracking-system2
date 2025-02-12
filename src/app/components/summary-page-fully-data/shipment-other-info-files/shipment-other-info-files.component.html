@@ -6,6 +6,19 @@
 </div>
 
 <!-- Files -->
+@if (isSkeletonLoading) {
+<div class="skeleton-loading flex flex-col gap-5 pt-5 pb-8">
+  <div
+    class="w-full h-5 rounded bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100 bg-[length:200%_100%] animate-[shimmer_1.5s_infinite_linear]"
+  ></div>
+  <div
+    class="w-full h-5 rounded bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100 bg-[length:200%_100%] animate-[shimmer_1.5s_infinite_linear]"
+  ></div>
+  <div
+    class="w-full h-5 rounded bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100 bg-[length:200%_100%] animate-[shimmer_1.5s_infinite_linear]"
+  ></div>
+</div>
+}@else{
 <table class="w-full border-collapse mb-8">
   <thead>
     <tr class="text-blackColor/90 font-semibold bg-blackColor/5">
@@ -39,12 +52,28 @@
     }
   </tbody>
 </table>
+}
 
 <!-- Images -->
+
 <div class="title flex items-center gap-2">
   <mat-icon class="text-blackColor/50">folder</mat-icon>
   <p class="text-lg text-blackColor/90 font-semibold">Images</p>
 </div>
+
+@if (isSkeletonLoading) {
+<div class="skeleton-loading flex flex-col gap-5 pt-5 pb-8">
+  <div
+    class="w-full h-5 rounded bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100 bg-[length:200%_100%] animate-[shimmer_1.5s_infinite_linear]"
+  ></div>
+  <div
+    class="w-full h-5 rounded bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100 bg-[length:200%_100%] animate-[shimmer_1.5s_infinite_linear]"
+  ></div>
+  <div
+    class="w-full h-5 rounded bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100 bg-[length:200%_100%] animate-[shimmer_1.5s_infinite_linear]"
+  ></div>
+</div>
+}@else{
 <table class="w-full border-collapse mb-8">
   <thead>
     <tr class="text-blackColor/90 font-semibold bg-blackColor/5">
@@ -95,3 +124,4 @@
     }
   </tbody>
 </table>
+}

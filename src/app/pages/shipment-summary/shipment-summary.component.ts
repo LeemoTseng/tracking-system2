@@ -3,9 +3,8 @@ import { HeaderComponent } from '../../components/header/header.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { ShipmentDetailsComponent } from '../../components/shipment-details/shipment-details.component';
-import { ShipmentOtherInfoComponent } from '../../components/shipment-other-info/shipment-other-info.component';
-import { LoadingComponent } from '../../components/loading/loading.component';
+import { ShipmentDetailsComponent } from '../../components/summary-page-fully-data/shipment-details/shipment-details.component';
+import { ShipmentOtherInfoComponent } from '../../components/summary-page-fully-data/shipment-other-info/shipment-other-info.component';
 import { CommonModule } from '@angular/common';
 
 @Component({
