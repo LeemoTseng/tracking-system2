@@ -17,12 +17,15 @@ export class ShipmentOtherInfoFilesComponent {
   /*--------- Inject ---------*/
   http = inject(HttpClient);
 
+  /*--------- style settings ---------*/
+  skeletonClass: string = 'w-full h-5 rounded bg-gradient-to-r from-gray-50 via-gray-100 to-gray-50 bg-[length:200%_100%] animate-[shimmer_1.5s_infinite_linear]';
+
+
 
   /*--------- Data output ---------*/
 
   /*--------- Data import ---------*/
-  filesDataAPI = environment.filesDataAPI
-  imagesDataAPI = environment.imageDataAPI
+  filesDataAPI = environment.baseAPI
 
   trackingNo: string = 'THI132400003';
 
@@ -53,6 +56,10 @@ export class ShipmentOtherInfoFilesComponent {
   /*--------- Functions ---------*/
 
   ngOnInit(): void {
+    // console.log('API URL:', this.filesDataAPI)
+    // console.log('Tracking No:', this.trackingNo);
+
+    console.log(this.filesDataAPI)
     this.getFilesData(this.trackingNo).subscribe({
       next: (res) => {
         console.log('res', res)

@@ -21,6 +21,8 @@ export class ShipmentDetailsComponent {
 
   /*------- style settings -------*/
   rippleColor: string = 'rgba(0, 0, 0, 0.1)';
+  skeletonClass: string = 'w-full h-5 rounded bg-gradient-to-r from-gray-50 via-gray-100 to-gray-50 bg-[length:200%_100%] animate-[shimmer_1.5s_infinite_linear]';
+
 
   /*------- Variables -------*/
 
@@ -52,7 +54,6 @@ export class ShipmentDetailsComponent {
   ]
   shipmentDataAPI = environment.shipmentDataAPI;
   flightsDataAPI = environment.flightsDataAPI;
-  // shipmentDataService = inject(ShipmentDataService);
 
   /*------- Data import -------*/
 
@@ -63,7 +64,8 @@ export class ShipmentDetailsComponent {
   processTimeList: any = []
   lastStatus: string = ''
 
-  lastTime: Date = new Date()
+  lastTime: Date = new Date();
+  trackingNo: string = '';
   isCompleted: boolean = false
 
 
@@ -79,6 +81,9 @@ export class ShipmentDetailsComponent {
   /*------- Functions -------*/
 
   ngOnInit() {
+
+    console.log('API URL:', this.shipmentDataAPI);
+    console.log('Tracking No:', this.trackingNo);
 
     // Get shipment data
     this.getShipmentData().subscribe({

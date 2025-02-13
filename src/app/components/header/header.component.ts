@@ -22,7 +22,7 @@ export class HeaderComponent {
 
   /*--------- items ---------*/
   menuList: any[] = [
-    { name: 'Shipment Summary', routerLink: '/shipment-summary' },
+    { name: 'Shipment Summary', routerLink: '/shipment-summary-guest' },
     { name: 'Shipment List', routerLink: '/shipment-list' },
   ];
   _selectedMenu: string = "";
@@ -61,7 +61,7 @@ export class HeaderComponent {
 
   getUrlAndRender() {
     this.url = this.router.url;
-        if (this.url == "/shipment-summary") {
+        if (this.url == "/shipment-summary-guest") {
       this.selectedMenu = "Shipment Summary"
     } else {
       this.selectedMenu = "Shipment List"

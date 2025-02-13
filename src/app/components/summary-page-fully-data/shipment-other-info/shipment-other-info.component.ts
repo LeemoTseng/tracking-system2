@@ -29,12 +29,9 @@ export class ShipmentOtherInfoComponent {
 
   /*------- Functions -------*/
 
-
-
   menuSelected(menu: string, $index: number): void {
     this.selectedMenu = menu;
   }
-
 
 
 }

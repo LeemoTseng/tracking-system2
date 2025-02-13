@@ -1,26 +1,27 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FooterComponent } from '../../components/footer/footer.component';
-import {MatIconModule} from '@angular/material/icon'
+import { MatIconModule } from '@angular/material/icon'
 import { MatRippleModule } from '@angular/material/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { LoginService } from '../../services/login.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-login',
-  imports: [FooterComponent, MatIconModule, MatRippleModule, 
-     CommonModule, FormsModule],
+  imports: [FooterComponent, MatIconModule, MatRippleModule,
+    CommonModule, FormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
 
-  /*------- Variables -------*/
-  
-
-
-
-  
+  /*------- Inject -------*/
+  router = inject(Router)
+  authService = inject(LoginService);
+  cookieService = inject(CookieService);
 
   /*------- styles settings -------*/
   rippleColor = 'rgba(255, 255, 255, 0.1)';
@@ -31,38 +32,59 @@ export class LoginComponent {
   trackingNumber: string = '';
   isValidTrackingNum: boolean = false;
   alertMessage: string = '';
-  isLoginError: boolean = false;
 
   // login
-  account='';
-  password='';
+  account = '';
+  password = '';
+  isLogin = false;
+  loginAlertMessage = '';
+  rememberMe = false;
+  typing = true;
+
+  /*------- Data import -------*/
+
 
 
   /*------- Functions -------*/
 
   checkLogin() {
-    if (true) {
-      this.isLoginError = false;
-      console.log('login success');
-      window.location.href = '/shipment-list';
-      
+    this.checkLoginInput(this.account, this.password);
+    if(!this.isLogin) return;
+    this.authService.login(this.account, this.password, this.rememberMe).subscribe({
+      next: (res) => {
+        const token = res.data;
+        this.cookieService.set('authToken', res.data, {
+          path: '/',
+          secure: true,
+          sameSite: 'Strict'
+        });
+        this.router.navigate(['/shipment-list']);
+      },
+      error: (err) => {
+        console.error('Login Failed:', err);
+        this.loginAlertMessage = 'Login failed, please try again';
+        this.isLogin = false;
+        this.typing = false;
+
+      }
+    });
+  }
+
+  checkLoginInput(account: string, password: string) {
+    if (account.trim() == '' || password.trim() == '') {
+      this.isLogin = false;
+      this.typing = false;
+      this.loginAlertMessage = 'Please enter your account and password';
     } else {
-      this.isLoginError = true;
-      console.log('login failed');
+      this.isLogin = true;
+      this.typing = true;
     }
   }
 
-  checkLoginInput(e:any){
-    console.log(e.target.value);
-    if (e.target.value === '') {
-      this.isLoginError = true;
-    } else {
-      this.isLoginError = false;
-    }
+  typeAccount(e: any) {
+    this.typing = true;
+    this.loginAlertMessage = '';
   }
-
-
-
 
   checkValid(e: any) {
     console.log(e.target.value);
