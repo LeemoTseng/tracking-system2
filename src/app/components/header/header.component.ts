@@ -1,11 +1,12 @@
-import { Component, inject, Inject } from '@angular/core';
+import { Component, HostListener, inject, Inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterLink } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-header',
-  imports: [MatIconModule, RouterLink],
+  imports: [MatIconModule, RouterLink, MatTooltipModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
@@ -19,9 +20,7 @@ export class HeaderComponent {
 
   /*--------- variables ---------*/
 
-  account: string = 'User';
-
-
+  account: string = '';
 
 
   /*--------- style settings ---------*/
@@ -77,6 +76,12 @@ export class HeaderComponent {
     } else {
       this.selectedMenu = "Shipment List"
     }
+  }
+
+  // logout
+  logout() {
+    this.cookieService.delete('authToken', '/');
+    this.router.navigate(['/login']);
   }
 
 

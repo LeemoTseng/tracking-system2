@@ -31,13 +31,30 @@
         }
 
         <!-- (mouseleave)="toggleLogout = false" -->
-        <li class="login cursor-pointer -translate-y-1 flex items-center">
-          @if (account) {
-          <p class="pl-1 cursor-pointer hover:text-blackColor/90">
+        <li class="login cursor-pointer -translate-y-1 flex items-center gap-2">
+          @if (account !== '') {
+          <p class="pl-1">
             {{ account }}
           </p>
+          <div
+            matTooltip="Logout"
+            matTooltipPosition="above"
+            style="width: 28px; height: 28px"
+            class="icon hover:bg-blackColor/10 rounded-full p-[5px]"
+          >
+            <mat-icon
+              (click)="logout()"
+              class="material-icons-outlined text-[18px] text-blackColor/80 cursor-pointer"
+              >logout</mat-icon
+            >
+          </div>
           }@else {
-          <p class="pl-1 cursor-pointer hover:text-blackColor/90">Login</p>
+          <p
+            routerLink="/login"
+            class="pl-1 cursor-pointer hover:text-blackColor/90"
+          >
+            Login
+          </p>
           }
         </li>
         <li
