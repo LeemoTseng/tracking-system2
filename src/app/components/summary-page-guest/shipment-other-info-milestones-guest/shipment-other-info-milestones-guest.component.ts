@@ -40,7 +40,6 @@ export class ShipmentOtherInfoMilestonesGuestComponent {
 
   baseAPI = environment.baseAPI;
 
-
   @Input() trackingNo: string = ''
 
   getMilestonesData(trackingNo: string): Observable<any[]> {

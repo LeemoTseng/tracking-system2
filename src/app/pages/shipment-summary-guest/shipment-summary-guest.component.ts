@@ -39,7 +39,6 @@ export class ShipmentSummaryGuestComponent {
 
   // services
   trackingNumberService = inject(TrackingNumberService);
-
   summaryDataGuestAPI = environment.baseAPI;
 
   // check data from API

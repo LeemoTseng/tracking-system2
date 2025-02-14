@@ -35,6 +35,9 @@ export class LoginService {
 
 logout() {
   this.cookieService.delete('authToken', '/');
+  //彈出瀏覽器的警告視窗
+  alert('登出成功');
+
   this.router.navigate(['/login']);
 }
 

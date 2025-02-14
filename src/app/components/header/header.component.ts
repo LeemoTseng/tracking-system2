@@ -21,10 +21,11 @@ export class HeaderComponent {
   /*--------- variables ---------*/
 
   account: string = '';
-
+  userToken: string = '';
 
   /*--------- style settings ---------*/
 
+  menuDisabled: boolean = false;
 
   /*--------- items ---------*/
   menuList: any[] = [
@@ -40,15 +41,14 @@ export class HeaderComponent {
 
   ngOnInit() {
     this.getUrlAndRender()
-        const authToken = this.cookieService.get('authToken');
-    if (authToken) {
+    this.userToken = this.cookieService.get('authToken');
+    if (this.userToken !== '') {
       this.account = this.cookieService.get('account');
-    } 
+    }
 
   }
 
   // Getter and Setter
-
   get selectedMenu() {
     return this._selectedMenu;
   }
@@ -71,8 +71,11 @@ export class HeaderComponent {
 
   getUrlAndRender() {
     this.url = this.router.url;
-        if (this.url == "/shipment-summary-guest") {
+    if (this.url == "/shipment-summary-guest" ) {
       this.selectedMenu = "Shipment Summary"
+      if (this.userToken == ""){
+
+      }
     } else {
       this.selectedMenu = "Shipment List"
     }
@@ -80,6 +83,7 @@ export class HeaderComponent {
 
   // logout
   logout() {
+    this.userToken = '';
     this.cookieService.delete('authToken', '/');
     this.router.navigate(['/login']);
   }
