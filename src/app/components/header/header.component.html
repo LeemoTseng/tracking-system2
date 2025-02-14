@@ -32,8 +32,13 @@
 
         <!-- (mouseleave)="toggleLogout = false" -->
         <li class="login cursor-pointer -translate-y-1 flex items-center">
-          <p class="pl-1 cursor-pointer hover:text-blackColor/90"></p>
-          Login
+          @if (account) {
+          <p class="pl-1 cursor-pointer hover:text-blackColor/90">
+            {{ account }}
+          </p>
+          }@else {
+          <p class="pl-1 cursor-pointer hover:text-blackColor/90">Login</p>
+          }
         </li>
         <li
           class="-translate-y-1 flex items-center cursor-pointer hover:text-blackColor/90"

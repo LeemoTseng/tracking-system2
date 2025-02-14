@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component, inject, input, Input } from '@angular/core';
 import { MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { environment } from '../../../.environments/environment.prod';
@@ -23,8 +23,13 @@ export class ShipmentDetailsGuestComponent {
 
   /*------- Variables -------*/
 
+  alertMessage: string = 'No data available';
+
   // skeleton loader
   isSkeletonLoading: boolean = true;
+
+  // No data status
+  hasData: boolean = true;
 
   processList: any = [
     {
@@ -55,6 +60,11 @@ export class ShipmentDetailsGuestComponent {
 
   /*------- Data import -------*/
 
+  // @Input
+  @Input() trackingNo: string = ''
+
+
+  // Data
   shipmentData: any = [];
   shipmentInfo: any = {};
   milestones: any = {};
@@ -65,7 +75,6 @@ export class ShipmentDetailsGuestComponent {
   lastTime: Date = new Date()
   isCompleted: boolean = false
 
-  trackingNo: string = 'TECSHA126236';
   getSummaryData(trackingNo: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.summaryDataGuestAPI}TrackingApi/shipmentSummary`, {
       params: new HttpParams().set('trackingNo', trackingNo)
@@ -80,16 +89,18 @@ export class ShipmentDetailsGuestComponent {
     // Get shipment data
     this.getSummaryData(this.trackingNo).subscribe({
       next: (res) => {
-        this.shipmentData = res;
-        console.log('this.shipmentData', this.shipmentData)
-        this.shipmentInfo = this.shipmentData.data.ShipmentDetails.ShipmentInfo;
-        this.milestones = this.shipmentData.data.Milestone
-
-        this.processListData();
-        this.lastStatus = this.setLastStatus(this.shipmentData.data.MilestoneNode)
-
         this.isSkeletonLoading = false;
+        this.shipmentData = res;
+        if (this.shipmentData.data.code != '0') {
+          this.shipmentInfo = this.shipmentData.data.ShipmentDetails.ShipmentInfo;
+          this.milestones = this.shipmentData.data.Milestone
 
+          this.processListData();
+          this.lastStatus = this.setLastStatus(this.shipmentData.data.MilestoneNode)
+
+          this.isSkeletonLoading = false;
+        }
+        console.log('shipmentData', this.shipmentData)
       },
       error: (error) => {
         console.log('error!!!!!Q_Q', error)
@@ -145,110 +156,110 @@ export class ShipmentDetailsGuestComponent {
   }
 
   // set the last status FROM IMPORTED DATA
-  setLastStatus(lastStatus: string) : string {
+  setLastStatus(lastStatus: string): string {
     let status = ''
-    if (lastStatus = 'null'){
-      status =  'Booking Creation'
+    if (lastStatus = 'null') {
+      status = 'Booking Creation'
     }
     // other conditions
     return status
   }
 
 
-/* ----- if there is a need to caculate the time -----
-*
-*
-  // set status and time array
-  setStatusAndTimeAry(milestones: any) {
-
-    if (!milestones) return;
-    // set time
-    if (milestones.ATA.DateTime) {
-      let ataTime5days = new Date(this.replaceChineseToEnglish(milestones.ATA.DateTime))
-      ataTime5days.setDate(ataTime5days.getDate() + 5)
-      this.processTimeList.unshift({
-        status: 'ATA',
-        dateTime: ataTime5days
-      })
-    }
-    if (milestones.ATD.DateTime) {
-      let atdTime = new Date(this.replaceChineseToEnglish(milestones.ATD.DateTime))
-      this.processTimeList.unshift({
-        status: 'ATD',
-        dateTime: atdTime
-      })
-    }
-    if (milestones.AirportPickup.DateTime) {
-      let airportPickupTime3days = new Date(this.replaceChineseToEnglish(milestones.AirportPickup.DateTime))
-      airportPickupTime3days.setDate(airportPickupTime3days.getDate() + 3)
-      this.processTimeList.unshift({
-        status: 'AirportPickup',
-        dateTime: airportPickupTime3days
-      })
-    }
-    if (milestones.Delivered.DateTime) {
-      const deliveredTime2days = new Date(this.replaceChineseToEnglish(milestones.Delivered.DateTime))
-      deliveredTime2days.setDate(deliveredTime2days.getDate() + 2)
-      this.processTimeList.unshift({
-        status: 'Delivered',
-        dateTime: deliveredTime2days
-      })
-    }
-    if (milestones.ETA.DateTime) {
-      const etaTime = new Date(this.replaceChineseToEnglish(milestones.ETA.DateTime))
-      this.processTimeList.unshift({
-        status: 'ETA',
-        dateTime: etaTime
-      })
-    }
-    if (milestones.ETD.DateTime) {
-      const etdTime = new Date(this.replaceChineseToEnglish(milestones.ETD.DateTime))
-      this.processTimeList.unshift({
-        status: 'ETD',
-        dateTime: etdTime
-      })
-    }
-    if (milestones.POD) {
-      const podTime = new Date(this.replaceChineseToEnglish(milestones.POD))
-      this.processTimeList.unshift({
-        status: 'POD',
-        dateTime: podTime
-      })
-    }
-  }
-
-  // set the last status
-  setLastStatus(processTimeList: any) {
-    if (!processTimeList || processTimeList.length === 0) return;
-
-    const nowTime = new Date().getTime();
-    let closestPast: any = '';
-
-    // From the latest to the oldest
-    for (let i = processTimeList.length - 1; i >= 0; i--) {
-      const item = processTimeList[i];
-      const eventTime = new Date(item.dateTime).getTime();
-
-      if (eventTime < nowTime) {
-        closestPast = item;
-        break;
+  /* ----- if there is a need to caculate the time -----
+  *
+  *
+    // set status and time array
+    setStatusAndTimeAry(milestones: any) {
+  
+      if (!milestones) return;
+      // set time
+      if (milestones.ATA.DateTime) {
+        let ataTime5days = new Date(this.replaceChineseToEnglish(milestones.ATA.DateTime))
+        ataTime5days.setDate(ataTime5days.getDate() + 5)
+        this.processTimeList.unshift({
+          status: 'ATA',
+          dateTime: ataTime5days
+        })
+      }
+      if (milestones.ATD.DateTime) {
+        let atdTime = new Date(this.replaceChineseToEnglish(milestones.ATD.DateTime))
+        this.processTimeList.unshift({
+          status: 'ATD',
+          dateTime: atdTime
+        })
+      }
+      if (milestones.AirportPickup.DateTime) {
+        let airportPickupTime3days = new Date(this.replaceChineseToEnglish(milestones.AirportPickup.DateTime))
+        airportPickupTime3days.setDate(airportPickupTime3days.getDate() + 3)
+        this.processTimeList.unshift({
+          status: 'AirportPickup',
+          dateTime: airportPickupTime3days
+        })
+      }
+      if (milestones.Delivered.DateTime) {
+        const deliveredTime2days = new Date(this.replaceChineseToEnglish(milestones.Delivered.DateTime))
+        deliveredTime2days.setDate(deliveredTime2days.getDate() + 2)
+        this.processTimeList.unshift({
+          status: 'Delivered',
+          dateTime: deliveredTime2days
+        })
+      }
+      if (milestones.ETA.DateTime) {
+        const etaTime = new Date(this.replaceChineseToEnglish(milestones.ETA.DateTime))
+        this.processTimeList.unshift({
+          status: 'ETA',
+          dateTime: etaTime
+        })
+      }
+      if (milestones.ETD.DateTime) {
+        const etdTime = new Date(this.replaceChineseToEnglish(milestones.ETD.DateTime))
+        this.processTimeList.unshift({
+          status: 'ETD',
+          dateTime: etdTime
+        })
+      }
+      if (milestones.POD) {
+        const podTime = new Date(this.replaceChineseToEnglish(milestones.POD))
+        this.processTimeList.unshift({
+          status: 'POD',
+          dateTime: podTime
+        })
       }
     }
-
-    if (closestPast) {
-      if (
-        closestPast.status === 'AirportPickup' ||
-        closestPast.status === 'Delivered' ||
-        closestPast.status === 'POD'
-      ) { closestPast.status === 'ATA' }
-      this.lastStatus = closestPast.status;
-      this.lastTime = closestPast.dateTime;
+  
+    // set the last status
+    setLastStatus(processTimeList: any) {
+      if (!processTimeList || processTimeList.length === 0) return;
+  
+      const nowTime = new Date().getTime();
+      let closestPast: any = '';
+  
+      // From the latest to the oldest
+      for (let i = processTimeList.length - 1; i >= 0; i--) {
+        const item = processTimeList[i];
+        const eventTime = new Date(item.dateTime).getTime();
+  
+        if (eventTime < nowTime) {
+          closestPast = item;
+          break;
+        }
+      }
+  
+      if (closestPast) {
+        if (
+          closestPast.status === 'AirportPickup' ||
+          closestPast.status === 'Delivered' ||
+          closestPast.status === 'POD'
+        ) { closestPast.status === 'ATA' }
+        this.lastStatus = closestPast.status;
+        this.lastTime = closestPast.dateTime;
+      }
     }
-  }
-*
-*
-* ----- if there is a need to caculate the time -----
-*/
+  *
+  *
+  * ----- if there is a need to caculate the time -----
+  */
 
   // Status class implementation
   getStatusClass(title: string): string {

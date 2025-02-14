@@ -15,8 +15,6 @@
           [class]="
             selectedMenu === 'Shipment Details'
               ? 'border-primary w-[180px]'
-              : selectedMenu === 'Files'
-              ? 'border-primary  translate-x-[320px] w-[70px]'
               : selectedMenu === 'Milestones'
               ? 'border-primary translate-x-[185px] w-[125px]'
               : 'border-white'
@@ -27,11 +25,13 @@
     </div>
     <div class="min-h-[380px]">
       @if (selectedMenu === 'Shipment Details') {
-      <app-shipment-other-info-details-guest></app-shipment-other-info-details-guest>
-      } @if (selectedMenu === 'Files') {
-      <app-shipment-other-info-files-guest></app-shipment-other-info-files-guest>
+      <app-shipment-other-info-details-guest
+        [trackingNo]="trackingNo"
+      ></app-shipment-other-info-details-guest>
       } @if (selectedMenu === 'Milestones') {
-      <app-shipment-other-info-milestones-guest></app-shipment-other-info-milestones-guest>
+      <app-shipment-other-info-milestones-guest
+        [trackingNo]="trackingNo"
+      ></app-shipment-other-info-milestones-guest>
       }
     </div>
   </div>

@@ -5,14 +5,14 @@ import { MatRippleModule } from '@angular/material/core';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { LoginService } from '../../services/login.service';
 import { CookieService } from 'ngx-cookie-service';
+import { TrackingNumberService } from '../../services/tracking-number.service';
 
 @Component({
   selector: 'app-login',
   imports: [FooterComponent, MatIconModule, MatRippleModule,
-    CommonModule, FormsModule],
+    CommonModule, FormsModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -36,24 +36,63 @@ export class LoginComponent {
   // login
   account = '';
   password = '';
-  isLogin = false;
+  isLoginInput = false;
   loginAlertMessage = '';
   rememberMe = false;
   typing = true;
 
+  isLogin: boolean = false;
+
+
+  linkToList = '/shipment-list';
+
+
   /*------- Data import -------*/
+  
+  // services
+  trackingNumberService = inject(TrackingNumberService);
 
 
 
   /*------- Functions -------*/
 
+  ngOnInit() {
+    // check if user is already logged in
+    const rememberMeCookie = this.cookieService.get('rememberMe');
+    const authToken = this.cookieService.get('authToken');
+    if (rememberMeCookie === 'true') {
+      this.rememberMe = rememberMeCookie === 'true';
+      this.account = this.cookieService.get('account');
+    }else{
+      this.rememberMe = false;
+      this.account = '';
+    }
+
+    if(authToken){
+      this.isLogin = true;
+    }else{
+      this.isLogin = false;
+    }
+    
+  }
+
   checkLogin() {
     this.checkLoginInput(this.account, this.password);
-    if(!this.isLogin) return;
+    if (!this.isLoginInput) return;
     this.authService.login(this.account, this.password, this.rememberMe).subscribe({
       next: (res) => {
         const token = res.data;
         this.cookieService.set('authToken', res.data, {
+          path: '/',
+          secure: true,
+          sameSite: 'Strict'
+        });
+        this.cookieService.set('account', this.account.toString(), {
+          path: '/',
+          secure: true,
+          sameSite: 'Strict'
+        });
+        this.cookieService.set('rememberMe', this.rememberMe.toString(), {
           path: '/',
           secure: true,
           sameSite: 'Strict'
@@ -63,20 +102,19 @@ export class LoginComponent {
       error: (err) => {
         console.error('Login Failed:', err);
         this.loginAlertMessage = 'Login failed, please try again';
-        this.isLogin = false;
+        this.isLoginInput = false;
         this.typing = false;
-
       }
     });
   }
 
   checkLoginInput(account: string, password: string) {
     if (account.trim() == '' || password.trim() == '') {
-      this.isLogin = false;
+      this.isLoginInput = false;
       this.typing = false;
       this.loginAlertMessage = 'Please enter your account and password';
     } else {
-      this.isLogin = true;
+      this.isLoginInput = true;
       this.typing = true;
     }
   }
@@ -91,9 +129,6 @@ export class LoginComponent {
     if (e.target.value === '') {
       this.isValidTrackingNum = false;
       this.alertMessage = 'the tracking number cannot be empty';
-    } else if (this.trackingNumber !== Number(this.trackingNumber).toString()) {
-      this.isValidTrackingNum = false;
-      this.alertMessage = 'Tracking number must be a number';
     } else {
       this.isValidTrackingNum = true;
       this.alertMessage = '';
@@ -103,6 +138,8 @@ export class LoginComponent {
   sendTrackingNumber() {
     if (this.isValidTrackingNum) {
       console.log('sent!');
+      this.trackingNumberService.setData(this.trackingNumber);
+      this.router.navigate(['/shipment-summary-guest']);
     } else {
       this.alertMessage = 'Please enter a valid tracking number';
     }

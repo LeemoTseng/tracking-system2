@@ -18,12 +18,15 @@
       <div class="inputBox relative">
         <input
           (keydown.enter)="sendTrackingNumber()"
-          (input)="checkValid($event)"
           [(ngModel)]="trackingNumber"
+          (input)="checkValid($event)"
           class="input cursor-text border"
           placeholder="ex.12345678"
           type="text"
         />
+        <p class="absolute text-sm text-blackColor/40 -top-7">
+          （測試用）TECSHA126236
+        </p>
         <mat-icon
           (click)="sendTrackingNumber()"
           class="absolute cursor-pointer right-2 top-1/2 -translate-y-1/2 fill-current text-blackColor"
@@ -35,6 +38,7 @@
       </div>
     </div>
     <!---------- Login ---------->
+    @if (!this.isLogin) {
     <div class="popUp frame flex flex-col bg-white p-10 rounded-md">
       <p class="text-2xl font-semibold">Air Cargo Tracking System</p>
       <p class="text-blackColor/50">Welcome back to our air tracking system</p>
@@ -67,7 +71,6 @@
           class="input cursor-text"
           placeholder="Enter your password"
         />
-
         <p class="absolute text-sm text-red-500">
           {{ loginAlertMessage }}
         </p>
@@ -102,6 +105,23 @@
         </div>
       </div>
     </div>
+    }@else {
+    <div class="h-[450px] flex flex-col justify-center items-center">
+      <div class="w-[450px]">
+        <p class="text-blackColor text-2xl font-semibold">Hi {{ account }},</p>
+        <p class="text-blackColor text-xl">Welcome back!</p>
+        <div
+          class="cursor-pointer w-fit py-2 px-5 bg-black/70 text-white rounded-md"
+          routerLink="/shipment-list"
+          matRipple
+          [matRippleColor]="rippleColor"
+          style="margin-top: 30px"
+        >
+          <div class="cursor-pointer">View your all shipments</div>
+        </div>
+      </div>
+    </div>
+    }
   </div>
 </div>
 <app-footer class="fixed bottom-0 w-full"></app-footer>

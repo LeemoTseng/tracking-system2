@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ShipmentOtherInfoDetailsGuestComponent } from '../shipment-other-info-details-guest/shipment-other-info-details-guest.component';
 import { ShipmentOtherInfoFilesGuestComponent } from '../shipment-other-info-files-guest/shipment-other-info-files-guest.component';
 import { ShipmentOtherInfoMilestonesComponent } from '../../summary-page-fully-data/shipment-other-info-milestones/shipment-other-info-milestones.component';
@@ -19,13 +19,14 @@ export class ShipmentOtherInfoGuestComponent {
 
   /*------- Variables -------*/
 
-  menu = ['Shipment Details', 'Milestones', 'Files']
+  menu = ['Shipment Details', 'Milestones']
   selectedMenu = 'Shipment Details';
   users: any[] = [];
 
-  isLoading: boolean = false;
 
   /*------- Data import -------*/
+  // @Input
+  @Input() trackingNo: string = ''
 
 
   /*------- Functions -------*/

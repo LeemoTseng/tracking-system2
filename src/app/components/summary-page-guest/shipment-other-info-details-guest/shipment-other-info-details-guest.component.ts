@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { environment } from '../../../.environments/environment.prod';
 import { Observable } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
@@ -43,9 +43,13 @@ export class ShipmentOtherInfoDetailsGuestComponent {
 
   /*--------- Data import ---------*/
 
+  // @Input
+  @Input() trackingNo: string = ''
+
+  
+  // API
   summaryDataGuestAPI = environment.baseAPI;
 
-  trackingNo: string = 'TECSHA126236';
   getSummaryData(trackingNo: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.summaryDataGuestAPI}TrackingApi/shipmentSummary`, {
       params: new HttpParams().set('trackingNo', trackingNo)
@@ -57,7 +61,10 @@ export class ShipmentOtherInfoDetailsGuestComponent {
 
   ngOnInit() {
     this.getSummaryData(this.trackingNo).subscribe({
+
       next: (res) => {
+        this.isSkeletonLoading = false;
+
         this.shipmentData = res;
         console.log(this.shipmentData)
 
@@ -65,9 +72,6 @@ export class ShipmentOtherInfoDetailsGuestComponent {
         console.log('this.shipmentDetails', this.shipmentDetails)
         this.dimensionsApplied(this.shipmentDetails.Dimensions)
         // console.log(this.shipmentDetails);
-        setTimeout(() => {
-          this.isSkeletonLoading = false;
-        },1000)
 
       },
       error: (err) => {

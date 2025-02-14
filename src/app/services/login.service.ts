@@ -34,7 +34,7 @@ export class LoginService {
   }
 
 logout() {
-  this.cookieService.delete('authToken', '/'); // 確保刪除 Cookie
+  this.cookieService.delete('authToken', '/');
   this.router.navigate(['/login']);
 }
 

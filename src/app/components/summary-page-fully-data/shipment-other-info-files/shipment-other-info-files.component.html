@@ -61,7 +61,7 @@
   <div [class]="skeletonClass"></div>
   }
 </div>
-}@else{
+}@else{ @if (newImagesList.length !== 0) {
 <table class="w-full border-collapse mb-8">
   <thead>
     <tr class="text-blackColor/90 font-semibold bg-blackColor/5">
@@ -112,4 +112,11 @@
     }
   </tbody>
 </table>
-}
+}@else {
+<div>
+  <p class="text-blackColor/50 text-sm px-5 flex">
+    <mat-icon class="text-blackColor/50 text-[18px]">search</mat-icon>
+    No images found.
+  </p>
+</div>
+} }

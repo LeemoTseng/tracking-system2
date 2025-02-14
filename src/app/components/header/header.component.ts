@@ -1,6 +1,7 @@
-import { Component, Inject } from '@angular/core';
+import { Component, inject, Inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterLink } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-header',
@@ -13,7 +14,13 @@ export class HeaderComponent {
 
   /*--------- Inject ---------*/
 
-  constructor(@Inject(Router) private router: Router) { }
+  router = inject(Router);
+  cookieService = inject(CookieService)
+
+  /*--------- variables ---------*/
+
+  account: string = 'User';
+
 
 
 
@@ -34,6 +41,10 @@ export class HeaderComponent {
 
   ngOnInit() {
     this.getUrlAndRender()
+        const authToken = this.cookieService.get('authToken');
+    if (authToken) {
+      this.account = this.cookieService.get('account');
+    } 
 
   }
 

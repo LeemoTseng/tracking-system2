@@ -1,10 +1,11 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { MatRipple } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { environment } from '../../../.environments/environment.prod';
 import { Observable } from 'rxjs';
 import { ViewImgComponent } from '../../view-img/view-img.component';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-shipment-other-info-files',
@@ -20,8 +21,6 @@ export class ShipmentOtherInfoFilesComponent {
   /*--------- style settings ---------*/
   skeletonClass: string = 'w-full h-5 rounded bg-gradient-to-r from-gray-50 via-gray-100 to-gray-50 bg-[length:200%_100%] animate-[shimmer_1.5s_infinite_linear]';
 
-
-
   /*--------- Data output ---------*/
 
   /*--------- Data import ---------*/
@@ -29,11 +28,17 @@ export class ShipmentOtherInfoFilesComponent {
 
   trackingNo: string = 'THI132400003';
 
-  getFilesData(trackingNo: string): Observable<any[]> {
-    const params = new HttpParams().set('trackingNo', trackingNo);
-    return this.http.get<any[]>(`${this.filesDataAPI}TrackingApi/fileList`, { params });
-  }
 
+  getFilesData(trackingNo: string): Observable<any[]> {
+    const token = this.getCookie('authToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    const params = new HttpParams().set('trackingNo', trackingNo);
+
+    return this.http.get<any[]>(`${this.filesDataAPI}TrackingApi/fileList`, { headers, params });
+  }
 
 
   /*--------- Variables ---------*/
@@ -56,13 +61,10 @@ export class ShipmentOtherInfoFilesComponent {
   /*--------- Functions ---------*/
 
   ngOnInit(): void {
-    // console.log('API URL:', this.filesDataAPI)
-    // console.log('Tracking No:', this.trackingNo);
 
     console.log(this.filesDataAPI)
     this.getFilesData(this.trackingNo).subscribe({
       next: (res) => {
-        console.log('res', res)
         // files
         this.allFiles = res
         this.files = this.allFiles.data.Documents
@@ -70,21 +72,26 @@ export class ShipmentOtherInfoFilesComponent {
 
         // images
         this.allImages = this.allFiles.data.Pictures
-        console.log('allImages', this.allImages)
         this.newImagesList = this.renderImage(this.allImages)
-        console.log('imagefileList', this.newImagesList)
 
         this.isSkeletonLoading = false;
-
 
       },
       error: (err) => {
         console.log('error', err)
         this.isSkeletonLoading = false;
       },
-      complete: () => {}
+      complete: () => { }
     })
   }
+
+
+  // get coolies
+  getCookie(name: string): string | null {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? match[2] : null;
+  }
+
 
   // rearrange files
   transformAndSortFiles(files: any[]): { Type: string, Name: string, Guid: string }[] {
