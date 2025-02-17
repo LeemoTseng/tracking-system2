@@ -11,12 +11,23 @@
           id="search"
           type="text"
         />
+        @if (loading) {
+        <div
+          class="w-[160px] h-8 bg-blackColor/60 text-white font-medium px-10 py-1 rounded-sm ml-3"
+        >
+          <div
+            class="w-5 h-5 mt-[2px] ml-3 border-2 border-white border-t-transparent rounded-full animate-spin"
+          ></div>
+        </div>
+        } @else {
         <div
           (click)="sendTrackingNumber()"
-          class="cursor-pointer bg-blackColor text-white font-medium px-10 py-1 rounded-sm ml-3"
+          class="w-[160px] h-8 cursor-pointer bg-blackColor text-white font-medium px-10 py-1 rounded-sm ml-3"
         >
           Search
         </div>
+        }
+
         <mat-icon
           class="text-blackColor/60 absolute left-1 top-1/2 -translate-y-1/2"
           >search</mat-icon
@@ -24,7 +35,8 @@
       </div>
     </div>
     <!-- Empty state -->
-    @if(!hasData){
+    <!-- !hasData -->
+    @if(false){
     <div class="h-[100vh]">
       <div
         class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center items-center"
@@ -50,7 +62,7 @@
         </p>
       </div>
     </div>
-    } @else{
+    } @else {
     <!-- Shipment processes -->
     <div class="bg-white rounded-md">
       <!-- Shipment details(processes) -->

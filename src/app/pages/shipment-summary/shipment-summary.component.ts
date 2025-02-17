@@ -7,12 +7,14 @@ import { ShipmentDetailsComponent } from '../../components/summary-page-fully-da
 import { ShipmentOtherInfoComponent } from '../../components/summary-page-fully-data/shipment-other-info/shipment-other-info.component';
 import { CommonModule } from '@angular/common';
 import { TrackingNumberService } from '../../services/tracking-number.service';
+import { MatRipple, MatRippleModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-shipment-summary',
   imports: [HeaderComponent, FooterComponent, RouterOutlet,
     MatIconModule, ShipmentDetailsComponent,
-    ShipmentOtherInfoComponent, CommonModule],
+    ShipmentOtherInfoComponent, CommonModule, 
+  MatRippleModule],
   templateUrl: './shipment-summary.component.html',
   styleUrl: './shipment-summary.component.css'
 })

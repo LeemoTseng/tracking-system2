@@ -43,18 +43,25 @@
             class="icon hover:bg-blackColor/10 rounded-full p-[5px]"
           >
             <mat-icon
-              (click)="logout()"
+              (click)="logoutBtn()"
               class="material-icons-outlined text-[18px] text-blackColor/80 cursor-pointer"
               >logout</mat-icon
             >
           </div>
           }@else {
-          <p
-            routerLink="/login"
-            class="pl-1 cursor-pointer hover:text-blackColor/90"
+          <div
+            (click)="loginBtn()"
+            matRipple
+            [matRippleColor]="rippleColor"
+            class="flex items-center gap-x-1 mb-2 border rounded-md py-1 px-2 text-blackColor/60 hover:text-blackColor/70 hover:bg-blackColor/5 transition-all"
           >
-            Login
-          </p>
+            <mat-icon
+              style="width: 18px; height: 18px"
+              class="material-icons-outlined cursor-pointer text-sm"
+              >person</mat-icon
+            >
+            <p class="cursor-pointer p-0 m-0 text-sm">Login</p>
+          </div>
           }
         </li>
         <li
@@ -71,3 +78,14 @@
     </div>
   </div>
 </div>
+@if (toggleLogout) {
+<app-logout-popup
+  (toggleLogoutChange)="toggleLogoutChange($event)"
+  [toggleLogout]="toggleLogout"
+></app-logout-popup
+>} @if (toggleLogin) {
+<app-login-popup
+  (toggleLoginChange)="toggleLoginChange($event)"
+  [toggleLogin]="toggleLogin"
+></app-login-popup
+>}

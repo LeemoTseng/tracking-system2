@@ -3,10 +3,16 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterLink } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
+import { LogoutPopupComponent } from "../logout-popup/logout-popup.component";
+import { MatRippleModule } from '@angular/material/core';
+import { LoginComponent } from '../../pages/login/login.component';
+import { LoginPopupComponent } from "../login-popup/login-popup.component";
 
 @Component({
   selector: 'app-header',
-  imports: [MatIconModule, RouterLink, MatTooltipModule],
+  imports: [MatIconModule, RouterLink, MatTooltipModule,
+    LogoutPopupComponent, LogoutPopupComponent, MatRippleModule,
+    LoginPopupComponent, LoginPopupComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
@@ -22,10 +28,13 @@ export class HeaderComponent {
 
   account: string = '';
   userToken: string = '';
+  toggleLogout: boolean = false;
+  toggleLogin: boolean = false;
 
   /*--------- style settings ---------*/
 
   menuDisabled: boolean = false;
+  rippleColor:string ='rgba(0, 0, 0, 0.02)';
 
   /*--------- items ---------*/
   menuList: any[] = [
@@ -45,7 +54,6 @@ export class HeaderComponent {
     if (this.userToken !== '') {
       this.account = this.cookieService.get('account');
     }
-
   }
 
   // Getter and Setter
@@ -81,12 +89,22 @@ export class HeaderComponent {
     }
   }
 
-  // logout
-  logout() {
-    this.userToken = '';
-    this.cookieService.delete('authToken', '/');
-    this.router.navigate(['/login']);
+  logoutBtn(){
+    this.toggleLogout = true;
   }
+  toggleLogoutChange(event: boolean){
+    this.toggleLogout = event;
+  }
+
+  loginBtn(){
+    this.toggleLogin = true;
+  }
+  toggleLoginChange(event: boolean){
+    this.toggleLogin = event;
+  }
+
+
+
 
 
 

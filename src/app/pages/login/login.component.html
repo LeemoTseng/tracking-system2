@@ -93,6 +93,22 @@
 
         <!-- login btn -->
         <!-- routerLink="/shipment-summary" -->
+        @if (loading) {
+        <div
+          class="btn cursor-pointer"
+          style="
+            margin-top: 30px;
+            padding: 7px;
+            cursor: auto;
+            background-color: black;
+            opacity: 0.5;
+          "
+        >
+          <div
+            class="mx-auto w-5 h-5 mt-[2px] border-2 border-white border-t-transparent rounded-full animate-spin"
+          ></div>
+        </div>
+        }@else {
         <div
           class="btn cursor-pointer"
           matRipple
@@ -101,6 +117,7 @@
         >
           <div (click)="checkLogin()" class="cursor-pointer">Login</div>
         </div>
+        }
       </div>
     </div>
     }@else {
@@ -122,4 +139,6 @@
     }
   </div>
 </div>
-<app-footer class="pt-[200px] w-full"></app-footer>
+<div class="fixed bottom-0 w-full">
+  <app-footer class="pt-[200px] w-full"></app-footer>
+</div>

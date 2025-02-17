@@ -1,40 +1,38 @@
-import { Component, inject } from '@angular/core';
-import { FooterComponent } from '../../components/footer/footer.component';
-import { MatIconModule } from '@angular/material/icon'
-import { MatRippleModule } from '@angular/material/core';
-import { Router, RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { MatRipple } from '@angular/material/core';
+import { Router } from '@angular/router';
 import { LoginService } from '../../services/login.service';
 import { CookieService } from 'ngx-cookie-service';
-import { TrackingNumberService } from '../../services/tracking-number.service';
+import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-login',
-  imports: [FooterComponent, MatIconModule, MatRippleModule,
-    CommonModule, FormsModule, RouterLink],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  selector: 'app-login-popup',
+  imports: [MatRipple, FormsModule, MatIconModule],
+  templateUrl: './login-popup.component.html',
+  styleUrl: './login-popup.component.css'
 })
-export class LoginComponent {
+export class LoginPopupComponent {
+
+  /*--------- style settings ---------*/
+  rippleColor: string = '(0, 0, 0, 0.02)';
 
   /*------- Inject -------*/
   router = inject(Router)
   authService = inject(LoginService);
   cookieService = inject(CookieService);
 
-  /*------- styles settings -------*/
-  rippleColor = 'rgba(255, 255, 255, 0.1)';
+
+  /*------- Input/Output -------*/
+  @Input() toggleLogin: boolean = false;
+  @Output() toggleLoginChange = new EventEmitter<boolean>();
 
 
   /*------- Variables -------*/
-  //loading
-  loading:boolean = false;
 
-  // tracking number
-  trackingNumber: string = '';
-  isValidTrackingNum: boolean = false;
-  alertMessage: string = '';
+  //loading
+  loading: boolean = false;
+
 
   // login
   account = '';
@@ -49,48 +47,39 @@ export class LoginComponent {
 
   linkToList = '/shipment-list';
 
-
-  /*------- Data import -------*/
-  
-  // services
-  trackingNumberService = inject(TrackingNumberService);
-
-
-
-  /*------- Functions -------*/
+  /*--------- functions ---------*/
 
   ngOnInit() {
-    // check if user is already logged in
     const rememberMeCookie = this.cookieService.get('rememberMe');
     const authToken = this.cookieService.get('authToken');
     if (rememberMeCookie === 'true') {
       this.rememberMe = rememberMeCookie === 'true';
       this.account = this.cookieService.get('account');
-    }else{
+    } else {
       this.rememberMe = false;
       this.account = '';
     }
-
-    if(authToken){
+    if (authToken) {
       this.isLogin = true;
-    }else{
+    } else {
       this.isLogin = false;
     }
-    
   }
+
+
 
   checkLogin() {
     this.loading = true;
     this.checkLoginInput(this.account, this.password);
-    if (!this.isLoginInput){
+    if (!this.isLoginInput) {
       this.loading = false;
       return;
-    } 
+    }
     this.authService.login(this.account, this.password, this.rememberMe).subscribe({
       next: (res) => {
         const token = res.data;
         const expirationDate = new Date();
-        expirationDate.setDate(expirationDate.getDate() + 7); 
+        expirationDate.setDate(expirationDate.getDate() + 7);
 
         this.cookieService.set('authToken', res.data, {
           path: '/',
@@ -109,7 +98,10 @@ export class LoginComponent {
           secure: true,
           sameSite: 'Strict'
         });
+        this.toggleLoginChange.emit(false);
         this.router.navigate(['/shipment-list']);
+        this.loading = false;
+        window.location.reload();
       },
       error: (err) => {
         console.error('Login Failed:', err);
@@ -138,29 +130,8 @@ export class LoginComponent {
     this.loginAlertMessage = '';
   }
 
-  checkValid(e: any) {
-    console.log(e.target.value);
-    if (e.target.value === '') {
-      this.isValidTrackingNum = false;
-      this.alertMessage = 'the tracking number cannot be empty';
-    } else {
-      this.isValidTrackingNum = true;
-      this.alertMessage = '';
-    }
-  }
-
-  sendTrackingNumber() {
-    if (this.isValidTrackingNum) {
-      console.log('sent!');
-      this.trackingNumberService.setData(this.trackingNumber);
-      this.router.navigate(['/shipment-summary-guest']);
-    } else {
-      this.alertMessage = 'Please enter a valid tracking number';
-    }
-  }
-
-  logout() {
-    this.authService.logout(); 
+  closePopup() {
+    this.toggleLoginChange.emit(false);
   }
 
 
