@@ -48,7 +48,7 @@ export class ShipmentListComponent {
 
   // select menu
   menuSelected(menu: string) {
-    console.log('外部選擇:', menu);
+    console.log('menu', menu);
     this.selectedMenu = menu;
   }
 

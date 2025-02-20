@@ -7,9 +7,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { HeaderComponent } from '../../components/header/header.component';
 import { TrackingNumberService } from '../../services/tracking-number.service';
 import { FormsModule } from '@angular/forms';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from '../../.environments/environment.prod';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError, timeout } from 'rxjs';
 import { MatRipple } from '@angular/material/core';
 
 @Component({
@@ -29,7 +29,6 @@ export class ShipmentSummaryGuestComponent {
 
   /*------- Variables -------*/
 
-
   trackingNumber: string = '';
   data: any = {};
   errorMessages: string = 'Please enter a valid tracking number';
@@ -44,13 +43,6 @@ export class ShipmentSummaryGuestComponent {
   // services
   trackingNumberService = inject(TrackingNumberService);
   summaryDataGuestAPI = environment.baseAPI;
-
-  // check data from API
-  getSummaryData(trackingNo: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.summaryDataGuestAPI}TrackingApi/shipmentSummary`, {
-      params: new HttpParams().set('trackingNo', trackingNo)
-    });
-  }
 
   /*------- Functions -------*/
 
@@ -72,41 +64,48 @@ export class ShipmentSummaryGuestComponent {
 
   }
 
+  // check data from API
+  getSummaryData(trackingNo: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.summaryDataGuestAPI}TrackingApi/shipmentSummary`, {
+      params: new HttpParams().set('trackingNo', trackingNo)
+    });
+  }
 
-
+  // fetch data from API
   fetchShipmentData() {
     this.loading = true;
-    this.getSummaryData(this.trackingNumber).subscribe({
-      next: (res) => {
-        // console.log('Tracking Number:', this.trackingNumber);
-        this.data = res;
-        // 等待API修正
-        // if (!this.data || !this.data.ok) {
-        //   console.warn('錯誤！', res);
-        //   this.hasData = false;
-        //   this.errorMessages = 'No shipment data found.';
-        //   return;
-        // }
-        console.log('this.data.Milestone', this.data.Milestone)
-        if (this.data.Milestone === undefined) {
-          this.hasData = false;
-          this.loading = false;
-          this.errorMessages = 'No shipment data found.';
-          return;
-        }
-        this.hasData = true;
-        this.loading = false;
-
-      },
-      error: (err) => {
-        console.error('API Error:', err);
+    this.getSummaryData(this.trackingNumber)
+      .pipe(timeout(15000),
+        catchError(err => {
         this.hasData = false;
-        this.errorMessages = 'No shipment data found.';
         this.loading = false;
-      }
+        this.errorMessages = 'Request timed out. Please try again later.';
+        return throwError(() => err);
+        }))
+      .subscribe({
+        next: (res) => {
+          this.data = res;
+          const milestones = this.data.data.Milestone;
+          if (!this.data && !this.data.ok) {
+            console.warn('錯誤！', res);
+            this.hasData = false;
+            this.loading = false;
+            this.errorMessages = `No data found.<br/>  Please check your tracking number.`;
+            return;
+          }
+          this.hasData = true;
+          this.loading = false;
 
-    }
-    );
+        },
+        error: (err) => {
+          console.error('error:', err);
+          this.hasData = false;
+          this.errorMessages = 'Data not found.';
+          this.loading = false;
+        }
+
+      }
+      );
   }
 
   sendTrackingNumber() {
@@ -118,7 +117,6 @@ export class ShipmentSummaryGuestComponent {
     } else {
       this.trackingNumberService.setData(this.trackingNumber);
       this.fetchShipmentData();
-      console.log('Tracking Number:', this.trackingNumber);
       this.loading = false;
     }
 
@@ -126,5 +124,10 @@ export class ShipmentSummaryGuestComponent {
   }
 
 
-
+  // Cookie
+  // get coolies
+  getCookie(name: string): string | null {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? match[2] : null;
+  }
 }

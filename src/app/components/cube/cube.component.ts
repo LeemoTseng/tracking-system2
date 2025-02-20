@@ -15,9 +15,9 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 })
 export class CubeComponent implements AfterViewInit {
   @ViewChild('cubeContainer', { static: true }) cubeContainer!: ElementRef;
-  @Input() length: number = 98;
-  @Input() width: number = 48;
-  @Input() height: number = 45;
+  @Input() length: number = 1;
+  @Input() width: number = 1;
+  @Input() height: number = 1;
 
   private scene!: THREE.Scene;
   private camera!: THREE.PerspectiveCamera;
@@ -36,7 +36,7 @@ export class CubeComponent implements AfterViewInit {
     this.scene = new THREE.Scene();
 
     // 設定相機
-    this.camera = new THREE.PerspectiveCamera(60, container.clientWidth / 400, 0.1, 1000);
+    this.camera = new THREE.PerspectiveCamera(40, container.clientWidth / 400, 0.1, 1000);
     this.camera.position.set(100, 100, 100); // 設定相機初始位置
     this.camera.lookAt(0, 0, 0);
 

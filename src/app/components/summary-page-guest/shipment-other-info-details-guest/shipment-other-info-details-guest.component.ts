@@ -66,12 +66,8 @@ export class ShipmentOtherInfoDetailsGuestComponent {
         this.isSkeletonLoading = false;
 
         this.shipmentData = res;
-        console.log(this.shipmentData)
-
         this.shipmentDetails = this.shipmentData.data.ShipmentDetails;
-        console.log('this.shipmentDetails', this.shipmentDetails)
         this.dimensionsApplied(this.shipmentDetails.Dimensions)
-        // console.log(this.shipmentDetails);
 
       },
       error: (err) => {
@@ -91,7 +87,7 @@ export class ShipmentOtherInfoDetailsGuestComponent {
     if (!text) { return; }
 
     navigator.clipboard.writeText(text).then(() => {
-      console.log(text);
+      console.log('clipboard:',text);
     });
 
     const copiedElement = e.target.closest('.copyIcon');

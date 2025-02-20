@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { MatRipple } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { environment } from '../../../.environments/environment.prod';
@@ -17,6 +17,10 @@ export class ShipmentOtherInfoFilesComponent {
 
   /*--------- Inject ---------*/
   http = inject(HttpClient);
+  
+  /*--------- @Iutput ---------*/
+    @Input() trackingNumber: string = '';
+  
 
   /*--------- style settings ---------*/
   skeletonClass: string = 'w-full h-5 rounded bg-gradient-to-r from-gray-50 via-gray-100 to-gray-50 bg-[length:200%_100%] animate-[shimmer_1.5s_infinite_linear]';

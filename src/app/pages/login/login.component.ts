@@ -142,6 +142,7 @@ export class LoginComponent {
     console.log(e.target.value);
     if (e.target.value === '') {
       this.isValidTrackingNum = false;
+      
       this.alertMessage = 'the tracking number cannot be empty';
     } else {
       this.isValidTrackingNum = true;

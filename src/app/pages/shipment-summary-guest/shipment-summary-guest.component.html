@@ -1,11 +1,18 @@
 <app-header></app-header>
-<div class="bg-blackColor/5 pb-[150px]">
+<div [class]="loading ? 'h-[100svh]' : 'pb-[150px]'" class="bg-blackColor/5">
   <div class="container mx-auto max-w-screen-xl p-3">
+    <div class="greeting py-3">
+      <p class="font-semibold text-3xl text-blackColor">Simple query</p>
+      <p class="text-blackColor/70">
+        Tracking your shipment by entering the tracking number.
+      </p>
+    </div>
+
     <!-- Searshing -->
     <div class="search">
-      <div class="search relative flex items-center w-[400px] py-10">
+      <div class="search relative flex items-center w-[400px] pb-10">
         <input
-          class="focus:outline-blackColor p-1 pl-8 w-full"
+          class="focus:outline-blackColor focus:bg-white p-1 pl-8 w-full rounded-md"
           [(ngModel)]="trackingNumber"
           placeholder="Enter your tracking number"
           id="search"
@@ -13,7 +20,7 @@
         />
         @if (loading) {
         <div
-          class="w-[160px] h-8 bg-blackColor/60 text-white font-medium px-10 py-1 rounded-sm ml-3"
+          class="w-[160px] h-8 bg-blackColor/60 text-white font-medium px-10 py-1 rounded-md ml-3"
         >
           <div
             class="w-5 h-5 mt-[2px] ml-3 border-2 border-white border-t-transparent rounded-full animate-spin"
@@ -21,34 +28,35 @@
         </div>
         } @else {
         <div
+          matRipple
+          [matRippleColor]="rippleColor"
           (click)="sendTrackingNumber()"
-          class="w-[160px] h-8 cursor-pointer bg-blackColor text-white font-medium px-10 py-1 rounded-sm ml-3"
+          class="w-[160px] h-8 cursor-pointer bg-blackColor text-white font-medium px-10 py-1 rounded-md ml-3"
         >
           Search
         </div>
         }
 
         <mat-icon
-          class="text-blackColor/60 absolute left-1 top-1/2 -translate-y-1/2"
+          class="text-blackColor/60 absolute left-1 top-1/4 -translate-y-1/2"
           >search</mat-icon
         >
       </div>
     </div>
     <!-- Empty state -->
-    <!-- !hasData -->
-    @if(false){
+    @if (!hasData) {
     <div class="h-[100vh]">
       <div
-        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center items-center"
+        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center items-center"
       >
         <span
-          class="cursor-default hover:rotate-180 hover:text-blue-400 hover:transition-all duration-[2.5s] material-symbols-outlined text-blackColor/50 text-[60px]"
+          class="cursor-default hover:rotate-180 hover:text-blue-400 transition-all duration-700 material-symbols-outlined text-blackColor/50 text-[60px]"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            height="24px"
+            height="50px"
             viewBox="0 -960 960 960"
-            width="24px"
+            width="50px"
             fill="currentColor"
           >
             <path
@@ -57,9 +65,10 @@
           </svg>
         </span>
 
-        <p class="text-blackColor/50 text-xl font-semibold ml-3">
-          {{ errorMessages }}
-        </p>
+        <p
+          class="text-blackColor/50 text-xl font-semibold ml-3"
+          [innerHTML]="errorMessages"
+        ></p>
       </div>
     </div>
     } @else {

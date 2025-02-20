@@ -91,16 +91,16 @@ export class ShipmentDetailsGuestComponent {
       next: (res) => {
         this.isSkeletonLoading = false;
         this.shipmentData = res;
+        console.log(res,'res')
         if (this.shipmentData.data.code != '0') {
           this.shipmentInfo = this.shipmentData.data.ShipmentDetails.ShipmentInfo;
           this.milestones = this.shipmentData.data.Milestone
+          console.log('this.milestones',this.milestones)
 
           this.processListData();
           this.lastStatus = this.setLastStatus(this.shipmentData.data.MilestoneNode)
-
           this.isSkeletonLoading = false;
         }
-        console.log('shipmentData', this.shipmentData)
       },
       error: (error) => {
         console.log('error!!!!!Q_Q', error)

@@ -16,7 +16,7 @@
     @for (item of milestones; track $index) {
     <tr class="text-blackColor/70 font-normal border-b">
       <td class="px-4 py-2 text-start">{{ $index + 1 }}</td>
-      <td class="px-4 py-2 text-start">{{ item.name }}</td>
+      <td class="px-4 py-2 text-start">{{ milestonRows[$index] }}</td>
       <td class="px-4 py-2 text-start">
         {{ item.DateTime }}
       </td>
@@ -39,7 +39,7 @@
   <mat-icon class="text-blackColor/50">folder</mat-icon>
   <p class="text-lg text-blackColor/90 font-semibold">Flight Info</p>
 </div>
-<table class="w-full border-collapse mb-8 table-fixed">
+<table class="w-full border-collapse mb-8 table-auto">
   <thead>
     <tr class="text-blackColor/90 font-semibold bg-blackColor/5">
       @for (item of flightCols; track $index) {
@@ -51,6 +51,7 @@
     @for (item of flightSegments; track $index) {
     <tr class="text-blackColor/70 font-normal border-b">
       <td class="px-4 py-2 text-start">{{ item.SeqNo || "-" }}</td>
+      <td class="px-4 py-2 text-start">{{ item.FlightNo || "-" }}</td>
       <td class="px-4 py-2 text-start">{{ item.OriginCode || "-" }}</td>
       <td class="px-4 py-2 text-start">{{ item.DestCode || "-" }}</td>
       <td class="px-4 py-2 text-start">{{ item.ETD || "-" }}</td>
@@ -69,6 +70,7 @@
   <p class="text-lg text-blackColor/90 font-semibold">Dimensions</p>
 </div>
 
+@if(dimensions.length > 0){
 <table class="w-full border-collapse mb-8">
   <thead>
     <tr class="text-blackColor/90 font-semibold bg-blackColor/5">
@@ -85,3 +87,11 @@
     </tr>
   </tbody>
 </table>
+}@else{
+<div>
+  <p class="text-blackColor/50 text-sm px-5 flex">
+    <mat-icon class="text-blackColor/50 text-[18px]">search</mat-icon>
+    No dimensions found.
+  </p>
+</div>
+}

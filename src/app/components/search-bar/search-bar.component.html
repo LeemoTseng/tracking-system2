@@ -1,94 +1,95 @@
-<div class="searchGroup w-full flex items-center justify-between pt-0 pb-10">
+<!-- Search -->
+<div class="searchGroup w-full flex items-center justify-between p-0">
   <div class="flex">
     <div class="search relative border rounded-md border-1 border-[#b9b9b9]">
-      <div class="border flex p-1 searchContent rounded-md">
+      <div class="border flex searchContent rounded-md">
         <!-- tracking number -->
         <div
           class="inputTrackingNum flex flex-nowrap justify-center items-center relative pr-3 pl-1"
         >
           <mat-icon
-            class="text-blackColor/80 mr-1 text-[20px]"
+            class="text-blackColor/80 mr-1 pr-3 text-[20px]"
             style="width: 20px; height: 20px"
             >search</mat-icon
           >
+
           <input
-            class="cursor-text w-full focus:outline-none focus:ring-transparent text-blackColor py-1"
+            [(ngModel)]="trackingNumber"
+            class="cursor-text w-full pr-6 focus:outline-none focus:ring-transparent text-blackColor py-1"
             type="text"
             placeholder="Tracking number"
           />
+
+          <div class="relative">
+            <select
+              [(ngModel)]="numberType"
+              class="relative cursor-pointer focus:outline-none"
+              name=""
+              id=""
+            >
+              @for (item of numberTypeOptions; track $index) {
+              <option [value]="item.value">{{ item.viewValue }}</option>
+              }
+            </select>
+            <div
+              class="diver absolute -top-[5px] -left-5 bg-[#b9b9b9] h-[35px] w-[1px]"
+            ></div>
+          </div>
           <div
-            class="diver absolute -top-[3px] right-0 bg-[#b9b9b9] h-[40px] w-[1px]"
+            class="diver absolute -top-[1px] right-0 bg-[#b9b9b9] h-[35px] w-[1px]"
           ></div>
         </div>
 
         <!-- datepicker - Start date -->
         <div class="startDate relative flex">
           <input
+            [(ngModel)]="startDate"
             type="date"
-            class="cursor-pointer w-full px-2 focus:outline-none focus:ring-transparent text-blackColor placeholder-transparent bg-white"
+            class="w-full px-2 focus:outline-none focus:ring-transparent text-blackColor placeholder-transparent bg-white"
           />
         </div>
-        <div>
-          <mat-icon
-            class="text-blackColor/80 mx-3 py-1 text-[20px]"
-            style="width: 20px; height: 20px"
-          >
-            arrow_forward
-          </mat-icon>
-        </div>
+        <mat-icon
+          class="text-blackColor/80 mx-3 pt-[7px] text-[20px]"
+          style="width: 20px; height: 30px"
+        >
+          arrow_forward
+        </mat-icon>
         <!-- datepicker - End date -->
         <div class="endDate relative flex">
           <input
+            [(ngModel)]="endDate"
             type="date"
-            class="cursor-pointer w-full mr-2 focus:outline-none focus:ring-transparent text-blackColor placeholder-transparent bg-white"
+            class="w-full mr-2 focus:outline-none focus:ring-transparent text-blackColor placeholder-transparent bg-white"
           />
           <div
-            class="diver absolute -top-[3px] right-0 bg-[#b9b9b9] h-[40px] w-[1px]"
+            class="diver absolute -top-[1px] right-0 bg-[#b9b9b9] h-[35px] w-[1px]"
           ></div>
         </div>
 
-        <div
-          mat-button
-          [matMenuTriggerFor]="processMenu"
-          style="background-color: white"
-          class="cursor-pointer text-nowrap flex items-center gap-2"
+        <!-- search status -->
+        <select
+          [(ngModel)]="searchStatus"
+          name="All"
+          id="searchStatus"
+          class="searchStatus cursor-pointer focus:outline-none px-3 border-none bg-transparent"
         >
-          <div class="flex items-center gap-1 cursor-pointer">
-            <p class="mx-auto px-3 cursor-pointer">{{ searchStatus }}</p>
-            <mat-icon class="cursor-pointer">arrow_drop_down</mat-icon>
-          </div>
-
-          <mat-menu #processMenu="matMenu">
-            <button mat-menu-item class="cursor-pointer">
-              <p class="cursor-pointer">All</p>
-            </button>
-            <button mat-menu-item class="cursor-pointer">
-              <p class="cursor-pointer">ETD</p>
-            </button>
-            <button mat-menu-item><p class="cursor-pointer">ETA</p></button>
-          </mat-menu>
-        </div>
+          @for (item of searchStatusOptions; track $index) {
+          <option [value]="item.value">{{ item.viewValue }}</option>
+          }
+        </select>
 
         <!-- Search btn -->
       </div>
-      @if (false) {
-      <p class="absolute -bottom-[30px] left-0 text-sm text-blackColor">
-        Please enter at least one condition.
-      </p>
-      } @else{
       <p
         class="absolute -bottom-[30px] left-0 text-sm text-blackColor/80 text-nowrap"
-      >
-        Search from August 8, 2024, to August 8, 2024, including 'THI2240231',
-        sorted from newest to oldest, all items.
-        <span class="font-bold">{{ searchStatus }}</span>
-      </p>
-      }
+        [innerHTML]="searchResult"
+      ></p>
     </div>
     <div
+      (click)="searchClicked()"
       matRipple
       [matRippleColor]="rippleColor"
-      class="cursor-pointer hover:bg-blackColor/90 bg-blackColor/80 text-white font-medium px-10 pt-3 rounded-md ml-3 border-transparent"
+      class="cursor-pointer hover:bg-blackColor/90 bg-blackColor/80 text-white font-medium px-10 pt-[6px] rounded-md ml-3 border-transparent"
     >
       Search
     </div>
@@ -96,27 +97,21 @@
 
   <!-- btn group -->
   <div class="btnGroup flex items-center gap-5">
+    @for (item of sortByOptions; track $index) { @if (sortBy === item.value) {
     <div
+      (click)="switchStatus(item.value)"
+      mat-raised-button
       matRipple
-      [matRippleColor]="rippleColor"
-      mat-button
-      [matMenuTriggerFor]="menu"
       class="btn-outline cursor-pointer text-nowrap flex items-center gap-2"
       style="width: fit-content"
     >
-      <mat-icon>sort</mat-icon>
-      <p class="cursor-pointer">Order</p>
+      <mat-icon class="cursor-pointer">{{ item.icon }}</mat-icon>
+      <p class="cursor-pointer">{{ item.viewValue }}</p>
     </div>
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item>Ascending by date</button>
-      <button mat-menu-item>Decending by date</button>
-    </mat-menu>
+    }}
     <div
       mat-raised-button
-      matTooltipPosition="above"
-      matTooltip="Export all items as CSV"
       matRipple
-      [matRippleColor]="rippleColor"
       class="btn-outline cursor-pointer text-nowrap flex items-center gap-2"
       style="width: fit-content"
     >
@@ -124,4 +119,41 @@
       <p class="cursor-pointer">Export</p>
     </div>
   </div>
+</div>
+
+<!-- Paginations -->
+
+<!-- btn -->
+<div class="flex items-center justify-end space-x-2 mt-4">
+  <!-- back -->
+  <button
+    (click)="changePage(currentPage - 1)"
+    [disabled]="currentPage === 1"
+    class="disabled:opacity-50 hover:bg-gray-100 rounded-md cursor-pointer px-1 py-1 hover:none disabled:cursor-default"
+  >
+    <mat-icon class="cursor-pointer">chevron_left</mat-icon>
+  </button>
+
+  <!-- paginations -->
+  @for (item of pages; track $index) {
+  <div class="text-blackColor/80 pb-2">
+    <span (click)="changePage(item)" class="px-2 py-1 pb-2">
+      {{ item }}
+    </span>
+    / {{ totalPages }} pages
+  </div>
+  }
+
+  <!-- nect page -->
+  <button
+    matRipple
+    [matRippleColor]="rippleColor"
+    (click)="changePage(currentPage + 1)"
+    [disabled]="currentPage === totalPages"
+    class="disabled:opacity-50 hover:bg-gray-100 rounded-md cursor-pointer px-1 py-1 hover:none disabled:cursor-default"
+  >
+    <mat-icon class="disabled:cursor-default cursor-pointer"
+      >chevron_right</mat-icon
+    >
+  </button>
 </div>

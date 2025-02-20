@@ -3,7 +3,10 @@
 <div class="bg-blackColor/5 pb-[150px]">
   <div class="container mx-auto max-w-screen-xl p-3">
     <!-- Bakc to list -->
-    <div class="py-3 w-fit h-fit flex items-center cursor-pointer group">
+    <div
+      (click)="backToLink()"
+      class="py-3 w-fit h-fit flex items-center cursor-pointer group"
+    >
       <mat-icon
         class="cursor-pointer text-blackColor group-hover:text-primary group-hover:font-bold transition-all"
         >arrow_back</mat-icon
@@ -16,19 +19,26 @@
       </p>
     </div>
     <!-- Empty state -->
-    @if(false){
+    @if(!hasData){
     <div class="h-[100vh]">
       <div
-        class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center items-center"
+        class="absolute pt-[130px] top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center items-center"
       >
+        @if(loading){
+
+        <div
+          class="w-10 h-10 border-4 border-blackColor/50 border-t-transparent rounded-full animate-spin"
+        ></div>
+
+        }@else {
         <span
           class="cursor-default hover:rotate-180 hover:text-blue-400 hover:transition-all duration-[2.5s] material-symbols-outlined text-blackColor/50 text-[60px]"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            height="24px"
+            height="50px"
             viewBox="0 -960 960 960"
-            width="24px"
+            width="50px"
             fill="currentColor"
           >
             <path
@@ -36,13 +46,21 @@
             />
           </svg>
         </span>
-
-        <p class="text-blackColor/50 text-xl font-semibold ml-3">
-          Please enter a tracking number.
-        </p>
+        <p
+          class="text-blackColor/50 text-xl font-semibold text-center"
+          [innerHTML]="errorMessages"
+        ></p>
+        <button
+          (click)="backToLink()"
+          matRipple
+          style="width: fit-content; margin: 0; margin-top: 20px"
+          class="btn-outline hover:bg-blackColor/5 transition-all"
+        >
+          Back to list</button
+        >}
       </div>
     </div>
-    }
+    } @else{
     <!-- Shipment processes -->
     <div class="bg-white rounded-md">
       <div class="flex justify-between items-center pr-3 pt-2">
@@ -51,12 +69,15 @@
       </div>
 
       <!-- Shipment details(processes) -->
-      <app-shipment-details></app-shipment-details>
+      <app-shipment-details [data]="data"></app-shipment-details>
     </div>
     <div class="bg-white rounded-md mt-3">
       <!-- Shipment other details -->
-      <app-shipment-other-info></app-shipment-other-info>
+      <app-shipment-other-info
+        [trackingNumber]="trackingNumber"
+      ></app-shipment-other-info>
     </div>
+    }
   </div>
 </div>
 

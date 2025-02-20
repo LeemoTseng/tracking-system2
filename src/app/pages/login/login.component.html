@@ -20,7 +20,8 @@
           (keydown.enter)="sendTrackingNumber()"
           [(ngModel)]="trackingNumber"
           (input)="checkValid($event)"
-          class="input cursor-text border"
+          [style]="alertMessage != '' ? 'border: 1px solid #ff3434' : ''"
+          class="input cursor-text border border-red-500"
           placeholder="ex.12345678"
           type="text"
         />

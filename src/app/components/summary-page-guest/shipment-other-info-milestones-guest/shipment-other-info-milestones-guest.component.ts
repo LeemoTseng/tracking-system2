@@ -31,6 +31,7 @@ export class ShipmentOtherInfoMilestonesGuestComponent {
 
   shipmentData: any = [];
   milestones: any = [];
+  milestonesCols: string[] = ['Booking Creation', 'Cargo Arrive Terminal', 'ETD', 'ATD', 'ETA', 'ATA', 'Document Release', 'Release', 'Airport Pickup', 'Delivered', 'POD'];
   dimensions: any = [];
   unit: any = {}
 
@@ -64,7 +65,7 @@ export class ShipmentOtherInfoMilestonesGuestComponent {
         this.flightSegments = res.data.FlightSegments;
         this.dimensions = this.objToAry(res.data.ShipmentDetails.Dimensions[0])
         console.log('this.dimensions', this.dimensions)
-
+        console.log('this.shipmentData.data.Milestone', this.shipmentData.data.Milestone)
         this.milestones = this.objToAry(this.shipmentData.data.Milestone); // 要補上 key, value 有額外的內容要篩掉
         this.milestones = this.getMilestoneDateFile(this.milestones) // 要補上 key, value 有額外的內容要篩掉
 
@@ -95,6 +96,7 @@ export class ShipmentOtherInfoMilestonesGuestComponent {
 
   // get milestones Date and Time
   getMilestoneDateFile(milestones: any) {
+    console.log('milestones', milestones)
     const newMilestones = milestones.map((item: any) => ({
       name: item.key,
       value: item.value,
@@ -102,7 +104,6 @@ export class ShipmentOtherInfoMilestonesGuestComponent {
       ImageUrls: item.value && item.value.ImageUrls ? item.value.ImageUrls : []
     }));
     return newMilestones;
-
   }
 
   // Replace Chinese to number date (YYYY-MM-DD HH:mm format)

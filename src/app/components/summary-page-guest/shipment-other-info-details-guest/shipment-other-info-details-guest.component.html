@@ -18,60 +18,8 @@
   <div class="border-b-[1px] border-blackColor/20 py-5"></div>
 </div>
 }@else {
-<div class="grid grid-cols-[1.3fr_1fr_1fr] gap-3">
+<div class="grid grid-cols-[0.7fr_1fr] gap-3">
   <!------------- 1 ------------->
-  <div class="col-imgBox w-full">
-    @if (shipmentDetails.ShipmentInfo.ImageUrl) {
-    <img
-      class="w-full h-full rounded-md object-cover overflow-hidden bg-blackColor/10"
-      [src]="shipmentDetails.ShipmentInfo.ImageUrl"
-      alt=""
-    />} @else if (!dimensionX||!dimensionY||!dimensionZ) {
-    <div class="img w-full h-full">
-      <div class="imgbox rounded-md bg-blackColor/10">
-        <img
-          class="object-cover w-full h-full rounded-md"
-          src="https://picsum.photos/id/650/100/100"
-          alt=""
-        />
-      </div>
-    </div>
-    } @else {
-    <div class="cube">
-      <div class="flex items-center p-1 gap-x-2 bg-white rounded-md">
-        <p class="text-lg font-bold text-blackColor">Mock package</p>
-
-        <mat-icon
-          class="material-icons-outlined text-blackColor/40 text-lg"
-          matTooltip="It can simulate the cargo dimensions for reference only."
-          matTooltipPosition="right"
-        >
-          help
-        </mat-icon>
-      </div>
-      <div class="cube-box">
-        <app-cube
-          [length]="dimensionX"
-          [width]="dimensionZ"
-          [height]="dimensionY"
-        >
-        </app-cube>
-      </div>
-      <div class="info relative -top-[400px]">
-        <p class="text-sm text-blackColor/70 font-bold">
-          Length <span class="text-blackColor/40">{{ dimensionX }} cm</span>
-        </p>
-        <p class="text-sm text-blackColor/70 font-bold">
-          Height <span class="text-blackColor/40">{{ dimensionY }} cm</span>
-        </p>
-        <p class="text-sm text-blackColor/70 font-bold">
-          Width <span class="text-blackColor/40">{{ dimensionZ }} cm</span>
-        </p>
-      </div>
-    </div>
-    }
-  </div>
-  <!------------- 2 ------------->
   <div class="col-left p-1">
     <table>
       <tbody>
@@ -248,7 +196,7 @@
       </tbody>
     </table>
   </div>
-  <!------------- 3 ------------->
+  <!------------- 2 ------------->
   <ul>
     <li class="p-1">
       <p class="text-lg font-bold">Origin</p>

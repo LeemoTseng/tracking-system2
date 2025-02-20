@@ -1,7 +1,7 @@
 @if (isSkeletonLoading) {
 <div class="skeleton-loading p-10">
   <div class="grid grid-cols-4 gap-5">
-    @for (item of [1,2, 3,4]; track $index) {
+    @for (item of [1,2,3,4]; track $index) {
     <div class="flex flex-col gap-5">
       <div [class]="skeletonClass"></div>
     </div>
@@ -105,7 +105,9 @@
   <!-- completed -->
   <div class="completed">
     <mat-icon
-      [class]="lastStatus == 'ATA' ? 'text-primary' : 'text-blackColor/40'"
+      [class]="
+        lastStatus == 'Completed' ? 'text-primary' : 'text-blackColor/40'
+      "
       class="material-symbols-outlined text-[45px] transition-all duration-300 text-blackColor/40"
       style="height: 50px; width: 60px"
       >task_alt</mat-icon

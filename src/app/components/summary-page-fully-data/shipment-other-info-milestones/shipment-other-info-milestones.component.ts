@@ -1,8 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { MatRipple } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from '../../../.environments/environment.prod';
 
 @Component({
@@ -16,11 +16,17 @@ export class ShipmentOtherInfoMilestonesComponent {
   /*--------- Inject ---------*/
   http = inject(HttpClient);
 
+  /*--------- @Iutput ---------*/
+  @Input() trackingNumber: string = '';
+
 
   /*--------- Variables ---------*/
 
   milestoneCols = ['Order', 'Milestone', 'Date and Time', 'Files']
-  flightCols = ['Flight No.', 'From', 'To', 'ETD', 'ATD', 'ETA', 'ATA']
+  milestonRows = [
+    'Booking Creation', 'Cargo Arrive Terminal', 'ETD', 'ATD', 'ETA', 'ATA', 'Document Release', 'Release', 'Airport Pickup', 'Delivered', 'POD'];
+  milestoneColsGuest = ['Order', 'Milestone', 'Date and Time', 'Files']
+  flightCols = ['', 'Flight No.', 'From', 'To', 'ETD', 'ATD', 'ETA', 'ATA']
   // dimensionCols =[ 'Length', 'Width', 'Height', 'Pkg Qty', 'VW']
 
   shipmentData: any = [];
@@ -32,38 +38,52 @@ export class ShipmentOtherInfoMilestonesComponent {
 
   /*--------- Data import ---------*/
 
+  baseAPI = environment.baseAPI;
 
-  shipmentDataAPI = environment.shipmentDataAPI;
-  flightsDataAPI = environment.flightsDataAPI;
+  // get milestones Date and Time
+  getMilestonesData(trackingNumber: string): Observable<any[]> {
+    const token = this.getCookie('authToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
 
-  getShipmentData(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.shipmentDataAPI}/data`);
+    const params = new HttpParams()
+      .set('trackingNo', trackingNumber)
+
+    return this.http.get<any[]>(`${this.baseAPI}TrackingApi/milestones`, { headers, params });
   }
-  getFlightsData(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.flightsDataAPI}/data`);
-  }
-
 
   /*--------- Functions ---------*/
 
   ngOnInit() {
-    this.getFlightsData().subscribe({
+    this.getMilestonesData(this.trackingNumber).subscribe({
       next: (res: any) => {
-        this.flightSegments = res.FlightSegments;
-        this.dimensions = this.objToAry(res.Dimensions[0])
+        this.shipmentData = res.data;
+        console.log('shipmentData', this.shipmentData)
+
+        //milestones info
+        // this.milestones = this.mapMilestones(this.objToAry(this.shipmentData.Milestone));
+        this.milestones = this.aryMilestones(this.shipmentData.Milestones)
+        console.log('this.milestones', this.milestones)
+
+        // Flight Info
+        if (this.shipmentData.FlightSegments.length > 0) {
+          this.flightSegments = this.shipmentData.FlightSegments;
+        } else {
+          this.flightSegments = []
+        }
+
+        // Dimension Info
+        if (this.shipmentData.Dimensions.length > 0) {
+          this.dimensions = this.objToAry(this.shipmentData.Dimensions[0])
+        } else {
+          this.dimensions = []
+        }
       },
       error: (err) => { console.log(err) },
       complete: () => { }
     })
 
-    this.getShipmentData().subscribe({
-      next: (res) => {
-        this.shipmentData = res;
-        this.milestones = this.objToAry(this.shipmentData.Milestone);
-        this.milestones = this.getMilestoneDateFile(this.milestones)
-        this.unit = this.shipmentData.ShipmentDetails.Package
-      }
-    })
   }
 
   // Obj to Ary
@@ -72,34 +92,111 @@ export class ShipmentOtherInfoMilestonesComponent {
       key,
       value
     }));
-
     return ary;
   }
 
-  // get milestones Date and Time
-  getMilestoneDateFile(milestones: any) {
-    const newMilestones = milestones.map((item: any) => ({
-      name: item.key,
-      value: item.value,
-      DateTime: this.replaceChineseToEnglish(item.value && item.value.DateTime ? item.value.DateTime : '-'),
-      ImageUrls: item.value && item.value.ImageUrls ? item.value.ImageUrls : []
-    }));
-    return newMilestones;
+
+
+
+  aryMilestones(milestones: any) {
+    // 'Booking Creation', 'Cargo Arrive Terminal', 'ETD', 'ATD', 'ETA', 'ATA', 'Document Release', 'Release', 'Airport Pickup', 'Delivered', 'POD'];
+
+    const list:any = [];
+
+    this.milestonRows.forEach((item: any) => {
+      if (milestones.BookingCreation !== null) {
+        list.push({
+          name: item,
+          dateTime: milestones.BookingCreation ? milestones.BookingCreation.DateTime : '-',
+          ImageUrls: []
+        })
+      } else if (milestones.CargoArrive !== null) {
+        list.push({
+          name: item,
+          dateTime: milestones.CargoArrive.DateTime ? milestones.CargoArrive.DateTime : '-',
+          ImageUrls: milestones.CargoArrive.ImageUrls ? milestones.CargoArrive.ImageUrls : []
+        })
+      } else if (milestones.ETD != null) {
+        list.push({
+          name: item,
+          dateTime: milestones.ETD ? milestones.ETD.DateTime : '-',
+          ImageUrls: []
+        })
+      }
+      else if (milestones.ATD != null) {
+        list.push({
+          name: item,
+          dateTime: milestones.ATD ? milestones.ATD.DateTime : '-',
+          ImageUrls: []
+        })
+      }
+      else if (milestones.ETA != null) {
+        list.push({
+          name: item,
+          dateTime: milestones.ETA ? milestones.ETA.DateTime : '-',
+          ImageUrls: []
+
+        })
+      }
+      else if (milestones.ATA != null) {
+        list.push({
+          name: item,
+          dateTime: milestones.ATA ? milestones.ATA.DateTime : '-',
+          ImageUrls: []
+
+        })
+      }
+      else if (milestones.DocReleaseDate != null) {
+        list.push({
+          name: item,
+          dateTime: milestones.DocReleaseDate ? milestones.DocReleaseDate : '-',
+          ImageUrls: []
+
+        })
+      }
+      else if (milestones.ReleaseDate != null) {
+        list.push({
+          name: item,
+          dateTime: milestones.ReleaseDate ? milestones.ReleaseDate : '-',
+          ImageUrls: []
+
+        })
+      }
+      else if (milestones.AirportPickup != null) {
+        list.push({
+          name: item,
+          dateTime: milestones.AirportPickup ? milestones.AirportPickup.DateTime : '-',
+          ImageUrls: milestones.AirportPickup ? milestones.AirportPickup.ImageUrls : []
+        })
+      }
+      else if (milestones.Delivered != null) {
+        list.push({
+          name: item,
+          dateTime: milestones.Delivered ? milestones.Delivered.DateTime : '-',
+          ImageUrls: milestones.Delivered ? milestones.Delivered.ImageUrls : []
+
+        })
+      }
+      else if (milestones.POD != null) {
+        list.push({
+          name: item,
+          dateTime: milestones.POD ? milestones.POD.DateTime : '-',
+          ImageUrls: milestones.POD ? milestones.POD.ImageUrls : []
+
+        })
+      }
+    })
+    return list;
 
   }
 
-  // Replace Chinese to number date (YYYY-MM-DD HH:mm format)
-  replaceChineseToEnglish(str: string): string {
-    if (!str) return str;
 
-    const match = str.match(/(\d{4})年(\d{1,2})月(\d{1,2})日\s+(\d{1,2}):(\d{1,2})/);
-    if (!match) return str;
 
-    const [, year, month, day, hour, minute] = match.map(Number);
-    const date = new Date(year, month - 1, day, hour, minute);
-    const formattedDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')} ${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
 
-    return formattedDate;
+  // Cookie
+  // get coolies
+  getCookie(name: string): string | null {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? match[2] : null;
   }
-
 }

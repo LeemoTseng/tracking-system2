@@ -6,10 +6,10 @@
     <tr class="w-full bg-[#f5f5f5]">
       <td width="3%" align="center"></td>
       <td width="12%" align="left" class="py-3 px-1">
-        <p class="text-blackColor font-semibold">MAWB No.</p>
+        <p class="text-blackColor font-semibold">HAWB No</p>
       </td>
       <td width="10%" align="left" class="py-3 px-1">
-        <p class="text-blackColor font-semibold">HAWB No.</p>
+        <p class="text-blackColor font-semibold">MAWB No.</p>
       </td>
       <td width="65%" align="left" class="py-3 px-1 flex gap-x-1 items-center">
         <p class="text-blackColor font-semibold">Milestones</p>
@@ -32,10 +32,12 @@
     <tr class="border-b border-blackColor/20">
       <td class="py-5 px-1 text-gray-400 text-sm">{{ $index + 1 }}</td>
       <td class="py-5 px-1">
-        <p class="breack-words break-all">123-4567890</p>
+        <p class="breack-words break-all">
+          {{ shipment.HAWBno }}
+        </p>
       </td>
       <td class="py-5 px-1">
-        <p class="breack-words break-all">123-4567890</p>
+        <p class="breack-words break-all">{{ shipment.MAWBno }}</p>
       </td>
       <td class="py-5 px-1" align="left">
         <div class="process">
@@ -99,6 +101,7 @@
       </td>
       <td class="py-5 px-1" align="center">
         <p
+          (click)="viewItemBtn(shipment.HAWBno)"
           matRipple
           routerLink="/shipment-list/details"
           class="btn-outline text-nowrap"

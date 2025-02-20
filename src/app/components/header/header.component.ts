@@ -49,11 +49,13 @@ export class HeaderComponent {
   // on init
 
   ngOnInit() {
-    this.getUrlAndRender()
-    this.userToken = this.cookieService.get('authToken');
-    if (this.userToken !== '') {
+    if (this.userToken =='') {
+      this.userToken = this.cookieService.get('authToken');
       this.account = this.cookieService.get('account');
+    } else{
+      this.userToken='';
     }
+    this.getUrlAndRender();
   }
 
   // Getter and Setter
@@ -82,6 +84,14 @@ export class HeaderComponent {
     if (this.url == "/shipment-summary-guest" ) {
       this.selectedMenu = "Shipment Summary"
       if (this.userToken == ""){
+        this.toggleLogin = false;
+      }
+    }else if (this.url == "/shipment-summary"){
+      this.selectedMenu = "Shipment List"
+      if (this.userToken !== ""){
+        this.toggleLogin = false;
+      }else{
+        this.router.navigate(['/login']);
 
       }
     } else {
