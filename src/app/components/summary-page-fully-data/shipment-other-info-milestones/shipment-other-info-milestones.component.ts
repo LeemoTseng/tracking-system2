@@ -1,7 +1,7 @@
 import { Component, inject, Input } from '@angular/core';
 import { MatRipple } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from '../../../.environments/environment.prod';
 
@@ -13,6 +13,9 @@ import { environment } from '../../../.environments/environment.prod';
 })
 export class ShipmentOtherInfoMilestonesComponent {
 
+  /*--------- style settings ---------*/
+  skeletonClass: string = 'w-full h-5 rounded bg-gradient-to-r from-gray-50 via-gray-100 to-gray-50 bg-[length:200%_100%] animate-[shimmer_1.5s_infinite_linear]';
+
   /*--------- Inject ---------*/
   http = inject(HttpClient);
 
@@ -22,7 +25,11 @@ export class ShipmentOtherInfoMilestonesComponent {
 
   /*--------- Variables ---------*/
 
-  milestoneCols = ['Order', 'Milestone', 'Date and Time', 'Files']
+  // skeleton loader
+  isSkeletonLoading: boolean = true;
+
+  //data
+  milestoneCols = ['', 'Milestone', 'Date and Time', 'Files']
   milestonRows = [
     'Booking Creation', 'Cargo Arrive Terminal', 'ETD', 'ATD', 'ETA', 'ATA', 'Document Release', 'Release', 'Airport Pickup', 'Delivered', 'POD'];
   milestoneColsGuest = ['Order', 'Milestone', 'Date and Time', 'Files']
@@ -43,15 +50,22 @@ export class ShipmentOtherInfoMilestonesComponent {
   // get milestones Date and Time
   getMilestonesData(trackingNumber: string): Observable<any[]> {
     const token = this.getCookie('authToken');
+
+    if (!token) {
+      console.error('No auth token found');
+      return throwError(() => new Error('No auth token found'));
+    }
+
     const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     });
 
-    const params = new HttpParams()
-      .set('trackingNo', trackingNumber)
+    const params = new HttpParams().set('trackingNo', trackingNumber);
 
     return this.http.get<any[]>(`${this.baseAPI}TrackingApi/milestones`, { headers, params });
   }
+
 
   /*--------- Functions ---------*/
 
@@ -61,10 +75,7 @@ export class ShipmentOtherInfoMilestonesComponent {
         this.shipmentData = res.data;
         console.log('shipmentData', this.shipmentData)
 
-        //milestones info
-        // this.milestones = this.mapMilestones(this.objToAry(this.shipmentData.Milestone));
-        this.milestones = this.aryMilestones(this.shipmentData.Milestones)
-        console.log('this.milestones', this.milestones)
+        this.milestones = this.aryMilestones(this.shipmentData.Milestone);
 
         // Flight Info
         if (this.shipmentData.FlightSegments.length > 0) {
@@ -74,14 +85,21 @@ export class ShipmentOtherInfoMilestonesComponent {
         }
 
         // Dimension Info
-        if (this.shipmentData.Dimensions.length > 0) {
+
+        if (this.shipmentData.Dimensions !== null) {
           this.dimensions = this.objToAry(this.shipmentData.Dimensions[0])
         } else {
           this.dimensions = []
         }
+        this.isSkeletonLoading = false;
+
+
       },
-      error: (err) => { console.log(err) },
-      complete: () => { }
+      error: (err) => {
+        console.log(err);
+        this.isSkeletonLoading = false;
+      },
+      complete: () => { this.isSkeletonLoading = false }
     })
 
   }
@@ -101,96 +119,97 @@ export class ShipmentOtherInfoMilestonesComponent {
   aryMilestones(milestones: any) {
     // 'Booking Creation', 'Cargo Arrive Terminal', 'ETD', 'ATD', 'ETA', 'ATA', 'Document Release', 'Release', 'Airport Pickup', 'Delivered', 'POD'];
 
-    const list:any = [];
+    const list: any = [];
+    console.log('other-info-milestones', milestones)
 
-    this.milestonRows.forEach((item: any) => {
-      if (milestones.BookingCreation !== null) {
+    this.milestonRows.forEach((row: any) => {
+      if (row === 'Booking Creation') {
         list.push({
-          name: item,
-          dateTime: milestones.BookingCreation ? milestones.BookingCreation.DateTime : '-',
-          ImageUrls: []
-        })
-      } else if (milestones.CargoArrive !== null) {
-        list.push({
-          name: item,
-          dateTime: milestones.CargoArrive.DateTime ? milestones.CargoArrive.DateTime : '-',
-          ImageUrls: milestones.CargoArrive.ImageUrls ? milestones.CargoArrive.ImageUrls : []
-        })
-      } else if (milestones.ETD != null) {
-        list.push({
-          name: item,
-          dateTime: milestones.ETD ? milestones.ETD.DateTime : '-',
-          ImageUrls: []
-        })
+          Milestone: row,
+          DateTime: milestones?.BookingCreation ?? '',
+          Imgs: [],
+        });
       }
-      else if (milestones.ATD != null) {
+      else if (row === 'Cargo Arrive Terminal') {
         list.push({
-          name: item,
-          dateTime: milestones.ATD ? milestones.ATD.DateTime : '-',
-          ImageUrls: []
-        })
+          Milestone: row,
+          DateTime: milestones?.CargoArrive?.DateTime ?? '',
+          Imgs: milestones?.CargoArrive?.ImageUrls ?? [],
+        });
       }
-      else if (milestones.ETA != null) {
+       else if (row === 'ETD') {
         list.push({
-          name: item,
-          dateTime: milestones.ETA ? milestones.ETA.DateTime : '-',
-          ImageUrls: []
+          Milestone: row,
+          DateTime: milestones?.ETD ?? '',
+          Imgs: [],
+        });
+      }
+      else if (row === 'ATD') {
+        list.push({
+          Milestone: row,
+          DateTime: milestones?.ATD ?? '',
+          Imgs: [],
+        });
+      }
+      else if (row === 'ETA') {
+        list.push({
+          Milestone: row,
+          DateTime: milestones?.ETA ?? '',
+          Imgs: [],
+        });
+      }
+      else if (row === 'ATA') {
+        list.push({
+          Milestone: row,
+          DateTime: milestones?.ATA ?? '',
+          Imgs: [],
+        });
+      }
+      else if (row === 'Document Release') {
+        if (milestones.DocReleaseDate != null && milestones.DocReleaseDate != '' && milestones.DocReleaseDate != 'undefined') {
+          list.push({
+            Milestone: row,
+            DateTime: milestones?.DocReleaseDate ?? '',
+            Imgs: [],
+          });
+        }
+      }
+      else if (row === 'Release') {
+        if (milestones.ReleaseDate != null && milestones.ReleaseDate !=''&& milestones.ReleaseDate !='undefined' ) {
+          list.push({
+            Milestone: row,
+            DateTime: milestones?.ReleaseDate ?? '',
+            Imgs: [],
+          });
+        }
+      }
+      else if (row === 'Airport Pickup') {
+        list.push({
+          Milestone: row,
+          DateTime: milestones?.AirportPickup?.DateTime ?? '',
+          Imgs: milestones?.AirportPickup?.ImageUrls ?? [],
+        });
+      }
+      else if (row === 'Delivered') {
+        list.push({
+          Milestone: row,
+          DateTime: milestones?.Delivered?.DateTime ?? '',
+          Imgs: milestones?.Delivered?.ImageUrls ?? [],
+        });
+      }
+      else if (row === 'POD') {
+        list.push({
+          Milestone: row,
+          DateTime: milestones?.Pod?.DateTime ?? '',
+          Imgs: milestones?.Pod?.ImageUrls ?? [],
+        });
+      }
+    });
 
-        })
-      }
-      else if (milestones.ATA != null) {
-        list.push({
-          name: item,
-          dateTime: milestones.ATA ? milestones.ATA.DateTime : '-',
-          ImageUrls: []
 
-        })
-      }
-      else if (milestones.DocReleaseDate != null) {
-        list.push({
-          name: item,
-          dateTime: milestones.DocReleaseDate ? milestones.DocReleaseDate : '-',
-          ImageUrls: []
-
-        })
-      }
-      else if (milestones.ReleaseDate != null) {
-        list.push({
-          name: item,
-          dateTime: milestones.ReleaseDate ? milestones.ReleaseDate : '-',
-          ImageUrls: []
-
-        })
-      }
-      else if (milestones.AirportPickup != null) {
-        list.push({
-          name: item,
-          dateTime: milestones.AirportPickup ? milestones.AirportPickup.DateTime : '-',
-          ImageUrls: milestones.AirportPickup ? milestones.AirportPickup.ImageUrls : []
-        })
-      }
-      else if (milestones.Delivered != null) {
-        list.push({
-          name: item,
-          dateTime: milestones.Delivered ? milestones.Delivered.DateTime : '-',
-          ImageUrls: milestones.Delivered ? milestones.Delivered.ImageUrls : []
-
-        })
-      }
-      else if (milestones.POD != null) {
-        list.push({
-          name: item,
-          dateTime: milestones.POD ? milestones.POD.DateTime : '-',
-          ImageUrls: milestones.POD ? milestones.POD.ImageUrls : []
-
-        })
-      }
-    })
     return list;
 
   }
-
-
 
 
   // Cookie

@@ -35,11 +35,18 @@
         </div>
       </div>
       <!-- mutiple search bar -->
-      <app-search-bar></app-search-bar>
+      <app-search-bar
+        [totalPages]="totalPages"
+        (searchContentOutput)="getSearchListData($event)"
+      ></app-search-bar>
 
       <!-- shipment list -->
       <div class="shipmentList">
-        <app-list-table [selectedMenuInner]="selectedMenu"></app-list-table>
+        <app-list-table
+          (totalPages)="getTotalPages($event)"
+          [selectedMenuInner]="selectedMenu"
+          [searchContentsData]="searchListData"
+        ></app-list-table>
       </div>
     </div>
   </div>

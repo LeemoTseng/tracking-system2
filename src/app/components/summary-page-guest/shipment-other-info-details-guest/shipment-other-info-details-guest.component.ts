@@ -7,7 +7,7 @@ import { CubeComponent } from '../../cube/cube.component';
 
 @Component({
   selector: 'app-shipment-other-info-details-guest',
-  imports: [MatIconModule, CubeComponent],
+  imports: [MatIconModule],
   templateUrl: './shipment-other-info-details-guest.component.html',
   styleUrl: './shipment-other-info-details-guest.component.css'
 })
@@ -34,12 +34,6 @@ export class ShipmentOtherInfoDetailsGuestComponent {
   shipmentData: any = [];
   shipmentDetails: any = [];
 
-  // 3D render
-  dimensionX: number = 0;
-  dimensionY: number = 0;
-  dimensionZ: number = 0;
-
-  // tracking number
 
   /*--------- Data import ---------*/
 
@@ -67,7 +61,6 @@ export class ShipmentOtherInfoDetailsGuestComponent {
 
         this.shipmentData = res;
         this.shipmentDetails = this.shipmentData.data.ShipmentDetails;
-        this.dimensionsApplied(this.shipmentDetails.Dimensions)
 
       },
       error: (err) => {
@@ -104,16 +97,6 @@ export class ShipmentOtherInfoDetailsGuestComponent {
     });
   }
 
-  // dimensions
-
-  dimensionsApplied(dimensionAry:any) {
-    if (dimensionAry.length > 0) {
-      this.dimensionX = dimensionAry[0].Length;
-      this.dimensionY = dimensionAry[0].Height;
-      this.dimensionZ = dimensionAry[0].Width;
-    }
-
-  }
 
 
 

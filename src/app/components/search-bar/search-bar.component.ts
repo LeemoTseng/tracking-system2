@@ -1,11 +1,9 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatRipple, MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { environment } from '../../.environments/environment.prod';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-search-bar',
@@ -16,21 +14,17 @@ import { Observable } from 'rxjs';
 export class SearchBarComponent {
 
   /* --------- Inject ---------*/
-  http = inject(HttpClient)
-
 
 
   /* --------- style settings---------*/
   rippleColor: string = 'rgba(255, 255, 255, 0.2)';
 
 
-  /* --------- Output ---------*/
+  /* --------- Output / Onput ---------*/
   @Output() searchContentOutput = new EventEmitter<object>();
+  @Input() totalPages: number = 1;
 
   /* --------- variables---------*/
-
-  // data import
-  searchDataGuestAPI = environment.baseAPI;
 
 
   // input
@@ -39,11 +33,11 @@ export class SearchBarComponent {
   searchStatus: number = 0
   startDate: string = ''
   endDate: string = ''
-  sortBy: string = ''
+  sortBy: string = 'new_to_old'
 
   // pagination
   currentPage = 1;
-  totalPages: number = 20;
+  // totalPages: number = 5;
 
   // error message and search result
   errorMessage: string = 'Error message'
@@ -67,33 +61,12 @@ export class SearchBarComponent {
 
   // dropdown options
   sortByOptions = [
-    { value: 'new_to_old', viewValue: 'New to old', icon: 'arrow_downward' },
-    { value: 'old_to_new', viewValue: 'Old to new', icon: 'arrow_upward' },
+    { value: 'old_to_new', viewValue: 'New to old', icon: 'arrow_downward' },
+    { value: 'new_to_old', viewValue: 'Old to new', icon: 'arrow_upward' },
   ]
-  // send data
 
-  // dataSent = {
-  //   "StartDate": `${this.startDate}`,
-  //   "EndDate": `${this.endDate}`,
-  //   "DateType": `${this.searchStatusOptions[this.searchStatus].value}`,
-  //   "Status": "All", // 未確定傳入是蛇摸資料
-  //   "NumberType": `${this.numberTypeOptions[this.numberType].value}`,
-  //   "TrackingNo": `${this.trackingNumber}`,
-  //   "SortBy": `${this.sortBy}`,
-  //   "Page": `${this.currentPage}`,
-  //   "PageSize": `${this.totalPages}`
-  // }
-    dataSent = {
-  "StartDate": "2025-02-18",
-  "EndDate": "2025-02-18",
-  "DateType": 0,
-  "Status": "All",
-  "NumberType": 0,
-  "TrackingNo": "THI012402943",
-  "SortBy": "new_to_old",
-  "Page": 1,
-  "PageSize": 5
-}
+  // send data
+  dataSent = {}
 
 
   /* --------- functions---------*/
@@ -103,16 +76,38 @@ export class SearchBarComponent {
 
   // search clicked
   searchClicked() {
-    this.searchResultText();
-    this.searchContentChange();
-    this.postSearchData(this.dataSent).subscribe({
-      next:(res)=>{
-        console.log('res',res)
-      },
-      error:(err)=>{console.error('err', err)},
-      complete:()=>{}
-    })
 
+    this.dataSent = {
+
+      "StartDate": this.startDate,
+      "EndDate": this.endDate,
+      // "DateType": this.searchStatusOptions[this.searchStatus].value,
+      "DateType": 1,
+      "Status": "",
+      "NumberType": this.numberTypeOptions[this.numberType].value,
+      "TrackingNo": this.trackingNumber,
+      "SortBy": this.sortBy,
+      "Page": 1,
+      "PageSize": 5
+
+      /*
+         "StartDate": "2025-01-01",
+         "EndDate": "2025-02-28",
+         "DateType": 1,
+         "Status": "",
+         "NumberType": 0,
+         "TrackingNo": "",
+         "SortBy": "new_to_old",
+         "Page": 1,
+         "PageSize": 5
+ */
+    };
+
+    this.currentPage = 1;
+    this.searchResultText();
+
+    // send data to shipment-list
+    this.searchContentOutput.emit(this.dataSent)
 
   }
 
@@ -135,33 +130,34 @@ export class SearchBarComponent {
     return this.searchResult
 
   }
-  // output search content
-  searchContentSend() {
-    this.searchContentOutput.emit(this.dataSent)
-  }
-
-  postSearchData(searchContent: object): Observable<any[]> {
-    return this.http.post<any[]>(`${this.searchDataGuestAPI}TrackingApi/search`, searchContent, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      })
-    });
-  }
 
 
 
   switchStatus(value: string) {
+    this.dataSent = {
+      "StartDate": this.startDate,
+      "EndDate": this.endDate,
+      // "DateType": this.searchStatusOptions[this.searchStatus].value,
+      "DateType": 1,
+      "Status": "",
+      "NumberType": this.numberTypeOptions[this.numberType].value,
+      "TrackingNo": this.trackingNumber,
+      "SortBy": this.sortBy,
+      "Page": 1,
+      "PageSize": 5
+    };
     if (value === 'new_to_old') {
       this.sortBy = 'old_to_new'
     } else {
       this.sortBy = 'new_to_old'
+
     }
-  }
+    this.currentPage = 1;
 
-
-  searchContentChange() {
     this.searchContentOutput.emit(this.dataSent)
+
   }
+
 
   // Pagination
   get pages(): number[] {
@@ -192,9 +188,25 @@ export class SearchBarComponent {
   changePage(page: number) {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
-      console.log('Current Page:', this.currentPage);
+      this.dataSent = {
+        "StartDate": this.startDate,
+        "EndDate": this.endDate,
+        // "DateType": this.searchStatusOptions[this.searchStatus].value,
+        "DateType": 1,
+        "Status": "",
+        "NumberType": this.numberTypeOptions[this.numberType].value,
+        "TrackingNo": this.trackingNumber,
+        "SortBy": this.sortBy,
+        "Page": this.currentPage,
+        "PageSize": 5
+      };
+      this.searchContentOutput.emit(this.dataSent)
+      
+
     }
   }
+
+
 
 
 }

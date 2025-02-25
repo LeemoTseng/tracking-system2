@@ -14,11 +14,8 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class ShipmentListComponent {
 
-
   /*--------- Inject ---------*/
   cookieService = inject(CookieService);
-
-
 
   /*--------- Variables ---------*/
 
@@ -27,8 +24,20 @@ export class ShipmentListComponent {
   menuItems = ['All Cargos', 'On-Going', 'Completed'];
   selectedMenu: string = 'All Cargos';
 
+  searchListData = {}
+  totalPages:number = 0;
+
 
   /*--------- Data import ---------*/
+
+  getSearchListData(item:any){
+    // console.log('shipment-list-list-data', item)
+    this.searchListData = item
+  }
+
+  getTotalPages(totalPages: number) {
+    this.totalPages = totalPages;
+  }
 
 
 
@@ -42,13 +51,8 @@ export class ShipmentListComponent {
   }
 
 
-
-
-
-
   // select menu
   menuSelected(menu: string) {
-    console.log('menu', menu);
     this.selectedMenu = menu;
   }
 

@@ -75,17 +75,17 @@ export class ShipmentDetailsComponent {
   ngOnInit() {
     // console.log('Data:', this.data);
     if (this.data.code != '0') {
-
       this.shipmentInfo = this.data.data.ShipmentDetails.ShipmentInfo;
+
       this.milestones = this.data.data.Milestone
-      this.lastStatus = this.isCompleteStatus();
+      this.lastStatus = this.isCompleteStatus(this.data.data.MilestoneNode);
 
       this.processList = this.processListData();
 
       // 完成記得刪掉 setTimeout
       setTimeout(() => {
         this.isSkeletonLoading = false;
-      },200)
+      }, 200)
 
 
     } else {
@@ -98,27 +98,35 @@ export class ShipmentDetailsComponent {
   // Import data from shipment-data.service.ts
   processListData() {
     const processListCopy = JSON.parse(JSON.stringify(this.processList));
+
     processListCopy.forEach((item: any) => {
       if (item.title === 'Booking Creation') {
-        if (this.milestones.BookingCreation = 'null') {
-          item.dateTime = this.replaceChineseToEnglish(this.milestones.AirportPickup.DateTime)
+        if (this.milestones.BookingCreation == 'null' && this.milestones.AirportPickup == 'null') {
+          item.dateTime = ''
+        } else if (this.milestones.BookingCreation == 'null' && this.milestones.AirportPickup != 'null') {
+          item.dateTime = this.replaceChineseToEnglish(this.milestones.AirportPickup)
         } else {
           item.dateTime = this.replaceChineseToEnglish(this.milestones.BookingCreation)
+
         }
       } else if (item.title === 'ETD') {
         item.dateTime = this.replaceChineseToEnglish(this.milestones.ETD.DateTime)
+
         item.originCode = this.milestones.ETD.OriginCode
         item.destCode = this.milestones.ETD.DestCode
         item.flightNo = this.milestones.ETD.FlightNo
       } else if (item.title === 'ATD') {
         item.dateTime = this.replaceChineseToEnglish(this.milestones.ATD)
+
       } else if (item.title === 'ETA') {
         item.dateTime = this.replaceChineseToEnglish(this.milestones.ETA.DateTime)
+
         item.originCode = this.milestones.ETA.OriginCode
         item.destCode = this.milestones.ETA.DestCode
         item.flightNo = this.milestones.ETA.FlightNo
       } else if (item.title === 'ATA') {
         item.dateTime = this.replaceChineseToEnglish(this.milestones.ATA)
+
       }
     }
 
@@ -127,18 +135,18 @@ export class ShipmentDetailsComponent {
   }
 
   // complete status setting
-  isCompleteStatus(): string {
+  isCompleteStatus(MilestoneNode: string): string {
     let calLastStatus = 'Booking Creation'
-    if (this.data.data.MilestoneNode === 'BookingCreation') {
+    if (MilestoneNode === 'BookingCreation') {
       calLastStatus = 'Booking Creation'
     } else if (
-      this.data.data.MilestoneNode === 'ETD' ||
-      this.data.data.MilestoneNode === 'ATD' ||
-      this.data.data.MilestoneNode === 'ETA' ||
-      this.data.data.MilestoneNode === 'ATA'
+      MilestoneNode === 'ETD' ||
+      MilestoneNode === 'ATD' ||
+      MilestoneNode === 'ETA' ||
+      MilestoneNode === 'ATA'
     ) {
-      calLastStatus = this.data.data.MilestoneNode
-    } else if (this.data.data.MilestoneNode === 'Pod') {
+      calLastStatus = MilestoneNode
+    } else if (MilestoneNode === 'Pod') {
       calLastStatus = 'Completed'
     }
     return calLastStatus
@@ -197,7 +205,7 @@ export class ShipmentDetailsComponent {
   }
 
   getLineClass(title: string): string {
-    const completedStatuses = ["Booking Creation", "ETD", "ATD", "ETA", "ATA","Completed"];
+    const completedStatuses = ["Booking Creation", "ETD", "ATD", "ETA", "ATA", "Completed"];
     // 1️⃣ 若 `title` 與 `lastStatus` 完全相同，則標記為 `bg-primary`
     if (this.lastStatus === title) {
       return "bg-primary";

@@ -1,6 +1,6 @@
 <!-- <button (click)="test()">test</button> -->
 
-@if (true) {
+@if (shipmentList.length>0) {
 <table class="w-full table-fixed border-b border-blackColor/30">
   <thead>
     <tr class="w-full bg-[#f5f5f5]">
@@ -28,35 +28,30 @@
   </thead>
 
   <tbody>
-    @for (shipment of items; track $index) {
+    @for (shipment of shipmentList; track $index) {
     <tr class="border-b border-blackColor/20">
       <td class="py-5 px-1 text-gray-400 text-sm">{{ $index + 1 }}</td>
       <td class="py-5 px-1">
         <p class="breack-words break-all">
-          {{ shipment.HAWBno }}
+          {{ shipment.HAWBNo || "-" }}
         </p>
       </td>
       <td class="py-5 px-1">
-        <p class="breack-words break-all">{{ shipment.MAWBno }}</p>
+        <p class="breack-words break-all">{{ shipment.MAWBNo || "-" }}</p>
       </td>
       <td class="py-5 px-1" align="left">
         <div class="process">
           <div class="text flex flex-col items-left">
             <div class="flex justify-between py-3 pt-5">
               <!-- Status -->
-              @for (item of allStatus; track $index) {
+              <!-- Booked -->
               <div class="status w-full">
                 <div class="processLine flex items-center relative pb-3">
                   <div
-                    [class.bg-gray-300]="
-                      $index > findNowStatusIndex(allStatus, shipment.nowStatus)
-                    "
-                    [class.bg-primary]="
-                      $index < findNowStatusIndex(allStatus, shipment.nowStatus)
-                    "
-                    class="point absolute min-w-[15px] h-[15px] rounded-full"
+                    [ngClass]="getStatusClass(shipment.MilestoneNode, 'Booked')"
+                    class="point bg-gray-300 absolute min-w-[15px] h-[15px] rounded-full"
                   ></div>
-                  @if (item === shipment.nowStatus) {
+                  @if (shipment.MilestoneNode == 'BookingCreation') {
                   <p class="flightIcon absolute bg-white z-10 rounded-full">
                     <span class="material-symbols-outlined text-primary">
                       travel
@@ -64,44 +59,167 @@
                   </p>
                   }
                   <div
-                    [hidden]="$index === $count - 1"
-                    [class.bg-gray-300]="
-                      $index >
-                        findNowStatusIndex(allStatus, shipment.nowStatus) ||
-                      $index ==
-                        findNowStatusIndex(allStatus, shipment.nowStatus)
-                    "
-                    [class.bg-primary]="
-                      $index < findNowStatusIndex(allStatus, shipment.nowStatus)
-                    "
-                    class="line absolute w-[110%] h-[2px]"
+                    [ngClass]="getStatusClass(shipment.MilestoneNode, 'Booked')"
+                    class="line bg-gray-300 absolute w-[110%] h-[2px]"
                   ></div>
                 </div>
                 <p
-                  [class.text-gray-300]="
-                    $index > findNowStatusIndex(allStatus, shipment.nowStatus)
-                  "
-                  [class.text-primary]="
-                    $index <
-                      findNowStatusIndex(allStatus, shipment.nowStatus) ||
-                    $index == findNowStatusIndex(allStatus, shipment.nowStatus)
-                  "
-                  class="font-medium text-primary"
+                  class="font-medium"
+                  [ngClass]="getLineClass(shipment.MilestoneNode, 'Booked')"
                 >
-                  {{ item }}
+                  Booked
                 </p>
                 <p class="text-[12px] text-blackColor/60">
-                  Aug 22, 2000, 04:32
+                  {{ shipment.Milestone.BookingCreation || "-" }}
                 </p>
               </div>
-              }
+              <!-- ETD -->
+              <div class="status w-full">
+                <div class="processLine flex items-center relative pb-3">
+                  <div
+                    [ngClass]="getStatusClass(shipment.MilestoneNode, 'ETD')"
+                    class="point bg-gray-300 absolute min-w-[15px] h-[15px] rounded-full"
+                  ></div>
+                  @if (shipment.MilestoneNode === 'ETD') {
+                  <p class="flightIcon absolute bg-white z-10 rounded-full">
+                    <span class="material-symbols-outlined text-primary">
+                      travel
+                    </span>
+                  </p>
+                  }
+                  <div
+                    [ngClass]="getStatusClass(shipment.MilestoneNode, 'ETD')"
+                    class="line bg-gray-300 absolute w-[110%] h-[2px]"
+                  ></div>
+                </div>
+                <p
+                  class="font-medium"
+                  [ngClass]="getLineClass(shipment.MilestoneNode, 'Booked')"
+                >
+                  ETD
+                </p>
+                <p class="text-[12px] text-blackColor/60">
+                  {{ shipment.Milestone.ETD || "-" }}
+                </p>
+              </div>
+              <!-- ATD -->
+              <div class="status w-full">
+                <div class="processLine flex items-center relative pb-3">
+                  <div
+                    [ngClass]="getStatusClass(shipment.MilestoneNode, 'ATD')"
+                    class="point bg-gray-300 absolute min-w-[15px] h-[15px] rounded-full"
+                  ></div>
+                  @if (shipment.MilestoneNode === 'ATD') {
+                  <p class="flightIcon absolute bg-white z-10 rounded-full">
+                    <span class="material-symbols-outlined text-primary">
+                      travel
+                    </span>
+                  </p>
+                  }
+                  <div
+                    [ngClass]="getStatusClass(shipment.MilestoneNode, 'ATD')"
+                    class="line bg-gray-300 absolute w-[110%] h-[2px]"
+                  ></div>
+                </div>
+                <p
+                  class="font-medium"
+                  [ngClass]="getLineClass(shipment.MilestoneNode, 'Booked')"
+                >
+                  ATD
+                </p>
+                <p class="text-[12px] text-blackColor/60">
+                  {{ shipment.Milestone.ATD || "-" }}
+                </p>
+              </div>
+              <!-- ETA -->
+              <div class="status w-full">
+                <div class="processLine flex items-center relative pb-3">
+                  <div
+                    [ngClass]="getStatusClass(shipment.MilestoneNode, 'ETA')"
+                    class="point bg-gray-300 absolute min-w-[15px] h-[15px] rounded-full"
+                  ></div>
+                  @if (shipment.MilestoneNode === 'ETA') {
+                  <p class="flightIcon absolute bg-white z-10 rounded-full">
+                    <span class="material-symbols-outlined text-primary">
+                      travel
+                    </span>
+                  </p>
+                  }
+                  <div
+                    [ngClass]="getStatusClass(shipment.MilestoneNode, 'ETA')"
+                    class="line bg-gray-300 absolute w-[110%] h-[2px]"
+                  ></div>
+                </div>
+                <p
+                  class="font-medium"
+                  [ngClass]="getLineClass(shipment.MilestoneNode, 'Booked')"
+                >
+                  ETA
+                </p>
+                <p class="text-[12px] text-blackColor/60">
+                  {{ shipment.Milestone.ETA || "-" }}
+                </p>
+              </div>
+              <!-- ATA -->
+              <div class="status w-full">
+                <div class="processLine flex items-center relative pb-3">
+                  <div
+                    [ngClass]="getStatusClass(shipment.MilestoneNode, 'ATA')"
+                    class="point bg-gray-300 absolute min-w-[15px] h-[15px] rounded-full"
+                  ></div>
+                  @if (shipment.MilestoneNode === 'ATA') {
+                  <p class="flightIcon absolute bg-white z-10 rounded-full">
+                    <span class="material-symbols-outlined text-primary">
+                      travel
+                    </span>
+                  </p>
+                  }
+                  <div
+                    [ngClass]="getStatusClass(shipment.MilestoneNode, 'ATA')"
+                    class="line bg-gray-300 absolute w-[110%] h-[2px]"
+                  ></div>
+                </div>
+                <p
+                  class="font-medium"
+                  [ngClass]="getLineClass(shipment.MilestoneNode, 'Booked')"
+                >
+                  ATA
+                </p>
+                <p class="text-[12px] text-blackColor/60">
+                  {{ shipment.Milestone.ATA || "-" }}
+                </p>
+              </div>
+              <!-- Completed -->
+              <div class="status w-full">
+                <div class="processLine flex items-center relative pb-3">
+                  <div
+                    [ngClass]="
+                      getStatusClass(shipment.MilestoneNode, 'Completed')
+                    "
+                    class="point bg-gray-300 absolute min-w-[15px] h-[15px] rounded-full"
+                  ></div>
+                  @if (shipment.MilestoneNode === 'Pod') {
+                  <p class="flightIcon absolute bg-white z-10 rounded-full">
+                    <span class="material-symbols-outlined text-primary">
+                      travel
+                    </span>
+                  </p>
+                  }
+                </div>
+                <p
+                  class="font-medium"
+                  [ngClass]="getLineClass(shipment.MilestoneNode, 'Completed')"
+                >
+                  Completed
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </td>
       <td class="py-5 px-1" align="center">
         <p
-          (click)="viewItemBtn(shipment.HAWBno)"
+          (click)="viewItemBtn(shipment.HAWBNo)"
           matRipple
           routerLink="/shipment-list/details"
           class="btn-outline text-nowrap"

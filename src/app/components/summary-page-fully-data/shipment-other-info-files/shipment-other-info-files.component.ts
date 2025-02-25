@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { environment } from '../../../.environments/environment.prod';
 import { Observable } from 'rxjs';
 import { ViewImgComponent } from '../../view-img/view-img.component';
-import { CookieService } from 'ngx-cookie-service';
+
 
 @Component({
   selector: 'app-shipment-other-info-files',
@@ -19,7 +19,7 @@ export class ShipmentOtherInfoFilesComponent {
   http = inject(HttpClient);
   
   /*--------- @Iutput ---------*/
-    @Input() trackingNumber: string = '';
+  @Input() trackingNumber: string = '';
   
 
   /*--------- style settings ---------*/
@@ -30,16 +30,14 @@ export class ShipmentOtherInfoFilesComponent {
   /*--------- Data import ---------*/
   filesDataAPI = environment.baseAPI
 
-  trackingNo: string = 'THI132400003';
 
-
-  getFilesData(trackingNo: string): Observable<any[]> {
+  getFilesData(trackingNumber: string): Observable<any[]> {
     const token = this.getCookie('authToken');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
 
-    const params = new HttpParams().set('trackingNo', trackingNo);
+    const params = new HttpParams().set('trackingNo', trackingNumber);
 
     return this.http.get<any[]>(`${this.filesDataAPI}TrackingApi/fileList`, { headers, params });
   }
@@ -66,8 +64,8 @@ export class ShipmentOtherInfoFilesComponent {
 
   ngOnInit(): void {
 
-    console.log(this.filesDataAPI)
-    this.getFilesData(this.trackingNo).subscribe({
+    // 測試用：this.getFilesData('THI132400003').subscribe({
+      this.getFilesData(this.trackingNumber).subscribe({
       next: (res) => {
         // files
         this.allFiles = res

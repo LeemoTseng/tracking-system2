@@ -25,8 +25,11 @@ export class ShipmentOtherInfoMilestonesGuestComponent {
   // skeleton loader
   isSkeletonLoading: boolean = true;
 
-  milestoneCols = ['Order', 'Milestone', 'Date and Time', 'Files']
+  milestoneCols = ['Order', 'Milestone', 'Date and Time']
+  milestonRows = [
+    'Booking Creation', 'Cargo Arrive Terminal', 'ETD', 'ATD', 'ETA', 'ATA', 'Document Release', 'Release', 'Airport Pickup', 'Delivered', 'POD'];
   flightCols = ['Flight No.', 'From', 'To', 'ETD', 'ATD', 'ETA', 'ATA']
+
   // dimensionCols =[ 'Length', 'Width', 'Height', 'Pkg Qty', 'VW']
 
   shipmentData: any = [];
@@ -62,15 +65,11 @@ export class ShipmentOtherInfoMilestonesGuestComponent {
         this.shipmentData = res;
 
         // flight segments
-        this.flightSegments = res.data.FlightSegments;
-        this.dimensions = this.objToAry(res.data.ShipmentDetails.Dimensions[0])
-        console.log('this.dimensions', this.dimensions)
-        console.log('this.shipmentData.data.Milestone', this.shipmentData.data.Milestone)
-        this.milestones = this.objToAry(this.shipmentData.data.Milestone); // 要補上 key, value 有額外的內容要篩掉
-        this.milestones = this.getMilestoneDateFile(this.milestones) // 要補上 key, value 有額外的內容要篩掉
+        this.flightSegments = this.shipmentData.data.FlightSegments;
+        this.milestones = this.aryMilestones(this.shipmentData.data.Milestone)
 
         this.unit = this.shipmentData.data.ShipmentDetails.Package
-        
+
         // isSkeletonLoading
         this.isSkeletonLoading = false;
 
@@ -95,15 +94,81 @@ export class ShipmentOtherInfoMilestonesGuestComponent {
   }
 
   // get milestones Date and Time
-  getMilestoneDateFile(milestones: any) {
-    console.log('milestones', milestones)
-    const newMilestones = milestones.map((item: any) => ({
-      name: item.key,
-      value: item.value,
-      DateTime: this.replaceChineseToEnglish(item.value && item.value.DateTime ? item.value.DateTime : '-'),
-      ImageUrls: item.value && item.value.ImageUrls ? item.value.ImageUrls : []
-    }));
-    return newMilestones;
+  aryMilestones(milestones: any) {
+    // 'Booking Creation', 'Cargo Arrive Terminal', 'ETD', 'ATD', 'ETA', 'ATA', 'Document Release', 'Release', 'Airport Pickup', 'Delivered', 'POD'];
+
+    const list: any = [];
+
+    this.milestonRows.forEach((row: any) => {
+      if (row === 'Booking Creation') {
+        list.push({
+          Milestone: row,
+          DateTime: milestones?.BookingCreation ?? '',
+        });
+      }
+      else if (row === 'Cargo Arrive Terminal') {
+        list.push({
+          Milestone: row,
+          DateTime: milestones?.CargoArrive?.DateTime ?? '',
+        });
+      }
+      else if (row === 'ATD') {
+        list.push({
+          Milestone: row,
+          DateTime: milestones?.ATD ?? '',
+        });
+      }
+      else if (row === 'ETA') {
+        list.push({
+          Milestone: row,
+          DateTime: milestones?.ETA?.DateTime ?? '',
+        });
+      }
+      else if (row === 'ATA') {
+        list.push({
+          Milestone: row,
+          DateTime: milestones?.ATA ?? '',
+        });
+      }
+      else if (row === 'Document Release') {
+        if (milestones.DocReleaseDate != null && milestones.DocReleaseDate != '' && milestones.DocReleaseDate != 'undefined') {
+          list.push({
+            Milestone: row,
+            DateTime: milestones?.DocReleaseDate ?? '',
+          });
+        }
+      }
+      else if (row === 'Release') {
+        if (milestones.ReleaseDate != null && milestones.ReleaseDate !=''&& milestones.ReleaseDate !='undefined' ) {
+          list.push({
+            Milestone: row,
+            DateTime: milestones?.ReleaseDate ?? '',
+          });
+        }
+      }
+      else if (row === 'Airport Pickup') {
+        list.push({
+          Milestone: row,
+          DateTime: milestones?.AirportPickup?.DateTime ?? '',
+        });
+      }
+      else if (row === 'Delivered') {
+        list.push({
+          Milestone: row,
+          DateTime: milestones?.Delivered?.DateTime ?? '',
+        });
+      }
+      else if (row === 'POD') {
+        list.push({
+          Milestone: row,
+          DateTime: milestones?.Pod?.DateTime ?? '',
+        });
+      }
+    });
+
+
+    return list;
+
   }
 
   // Replace Chinese to number date (YYYY-MM-DD HH:mm format)

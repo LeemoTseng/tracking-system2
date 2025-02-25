@@ -19,6 +19,7 @@
             type="text"
             placeholder="Tracking number"
           />
+          <!-- tracking Type -->
 
           <div class="relative">
             <select
@@ -69,7 +70,7 @@
         <!-- search status -->
         <select
           [(ngModel)]="searchStatus"
-          name="All"
+          name="searchStatus"
           id="searchStatus"
           class="searchStatus cursor-pointer focus:outline-none px-3 border-none bg-transparent"
         >
@@ -106,7 +107,9 @@
       style="width: fit-content"
     >
       <mat-icon class="cursor-pointer">{{ item.icon }}</mat-icon>
-      <p class="cursor-pointer">{{ item.viewValue }}</p>
+      <p class="cursor-pointer">
+        {{ item.viewValue }}
+      </p>
     </div>
     }}
     <div
