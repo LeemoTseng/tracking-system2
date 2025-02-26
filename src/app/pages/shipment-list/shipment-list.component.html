@@ -54,3 +54,17 @@
   <app-footer></app-footer>
   <div></div>
 </div>
+
+<!-- Arrow to top -->
+<!-- upToTop -->
+<div
+  (click)="scrollToTop()"
+  [class]="
+    isShowArrow
+      ? 'opacity-100 translate-y-[190px] bg-primary/30 hover:bg-primary text-white cursor-pointer'
+      : 'opacity-0 cursor-default'
+  "
+  class="upToTop z-10 transition-all duration-200 fixed bottom-[250px] right-1/2 -translate-x-1/2 drop-shadow-xl h-[60px] w-[60px] p-[18px] rounded-full hover:scale-[1.2]"
+>
+  <mat-icon class="cursor-pointer">arrow_upward</mat-icon>
+</div>

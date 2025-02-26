@@ -100,9 +100,8 @@ export class ShipmentSummaryComponent {
   }
 
   ngOnInit() {
-      // this.trackingNumber = this.trackingNumberService.getData()();
-    console.log('app-shipment-summary','trackingNumber',this.trackingNumber)
-   }
+    window.scrollTo(0, 0);
+  }
 
   // get data from API
   getDetailsData(trackingNo: string): Observable<any[]> {
@@ -127,5 +126,7 @@ export class ShipmentSummaryComponent {
     const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
     return match ? match[2] : null;
   }
+
+
 
 }

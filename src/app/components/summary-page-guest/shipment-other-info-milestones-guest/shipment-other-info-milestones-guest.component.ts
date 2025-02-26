@@ -112,6 +112,12 @@ export class ShipmentOtherInfoMilestonesGuestComponent {
           DateTime: milestones?.CargoArrive?.DateTime ?? '',
         });
       }
+             else if (row === 'ETD') {
+        list.push({
+          Milestone: row,
+          DateTime: milestones?.ETD.DateTime ?? '',
+        });
+      }
       else if (row === 'ATD') {
         list.push({
           Milestone: row,
@@ -121,7 +127,7 @@ export class ShipmentOtherInfoMilestonesGuestComponent {
       else if (row === 'ETA') {
         list.push({
           Milestone: row,
-          DateTime: milestones?.ETA?.DateTime ?? '',
+          DateTime: milestones?.ETA.DateTime ?? '',
         });
       }
       else if (row === 'ATA') {

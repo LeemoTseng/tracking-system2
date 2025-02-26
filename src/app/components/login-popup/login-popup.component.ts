@@ -132,8 +132,8 @@ export class LoginPopupComponent {
 
   closePopup() {
     this.toggleLoginChange.emit(false);
+    this.router.navigate(['/login']);
   }
-
 
 
 }

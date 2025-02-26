@@ -79,13 +79,13 @@ export class SearchBarComponent {
 
     this.dataSent = {
 
-      "StartDate": this.startDate,
-      "EndDate": this.endDate,
+      "StartDate": this.startDate || null,
+      "EndDate": this.endDate || null,
       // "DateType": this.searchStatusOptions[this.searchStatus].value,
       "DateType": 1,
       "Status": "",
       "NumberType": this.numberTypeOptions[this.numberType].value,
-      "TrackingNo": this.trackingNumber,
+      "TrackingNo": this.trackingNumber || null,
       "SortBy": this.sortBy,
       "Page": 1,
       "PageSize": 5
@@ -138,7 +138,7 @@ export class SearchBarComponent {
       "StartDate": this.startDate,
       "EndDate": this.endDate,
       // "DateType": this.searchStatusOptions[this.searchStatus].value,
-      "DateType": 1,
+      // "DateType": 1,
       "Status": "",
       "NumberType": this.numberTypeOptions[this.numberType].value,
       "TrackingNo": this.trackingNumber,
@@ -188,28 +188,63 @@ export class SearchBarComponent {
   changePage(page: number) {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
-      this.dataSent = {
-        "StartDate": this.startDate,
-        "EndDate": this.endDate,
-        // "DateType": this.searchStatusOptions[this.searchStatus].value,
-        "DateType": 1,
-        "Status": "",
-        "NumberType": this.numberTypeOptions[this.numberType].value,
-        "TrackingNo": this.trackingNumber,
-        "SortBy": this.sortBy,
-        "Page": this.currentPage,
-        "PageSize": 5
-      };
-      this.searchContentOutput.emit(this.dataSent)
-      
-
+    } else {
+      this.currentPage = 1; // 預防錯誤輸入
     }
+
+    this.dataSent = {
+      "StartDate": this.startDate,
+      "EndDate": this.endDate,
+      "Status": "",
+      "NumberType": this.numberTypeOptions[this.numberType].value,
+      "TrackingNo": this.trackingNumber,
+      "SortBy": this.sortBy,
+      "Page": this.currentPage,
+      "PageSize": 5
+    };
+
+    this.searchContentOutput.emit(this.dataSent);
   }
+
+
+  renderPage(item: any) {
+    const pageNumber = Number(item); // 確保轉換為數字
+    if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= this.totalPages) {
+      this.currentPage = pageNumber;
+    } else {
+      this.currentPage = 1;
+    }
+
+    this.dataSent = {
+      "StartDate": this.startDate,
+      "EndDate": this.endDate,
+      "Status": "",
+      "NumberType": this.numberTypeOptions[this.numberType].value,
+      "TrackingNo": this.trackingNumber,
+      "SortBy": this.sortBy,
+      "Page": this.currentPage,
+      "PageSize": 5
+    };
+
+    this.searchContentOutput.emit(this.dataSent);
+  }
+
+onPageInputChange(value: string) {
+  const filteredValue = value.replace(/\D/g, '');
+  
+  const pageNumber = filteredValue ? Number(filteredValue) : 1;
+
+  this.currentPage = pageNumber > this.totalPages ? this.totalPages : pageNumber;
+}
+
+
+
 
 
 
 
 }
+
 
 
 /*{

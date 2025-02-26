@@ -1,14 +1,15 @@
-import { Component, inject } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { HeaderComponent } from '../../components/header/header.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { ListTableComponent } from '../../components/list-table/list-table.component';
 import { SearchBarComponent } from '../../components/search-bar/search-bar.component';
 import { CookieService } from 'ngx-cookie-service';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @Component({
   selector: 'app-shipment-list',
-  imports: [SearchBarComponent, HeaderComponent, ListTableComponent, FooterComponent],
+  imports: [SearchBarComponent, HeaderComponent, ListTableComponent, FooterComponent, MatIconModule],
   templateUrl: './shipment-list.component.html',
   styleUrl: './shipment-list.component.css'
 })
@@ -25,12 +26,17 @@ export class ShipmentListComponent {
   selectedMenu: string = 'All Cargos';
 
   searchListData = {}
-  totalPages:number = 0;
+  totalPages: number = 0;
+
+  // Scroll to top
+  isShowArrow: boolean = false;
+  scrollY = 0;
+
 
 
   /*--------- Data import ---------*/
 
-  getSearchListData(item:any){
+  getSearchListData(item: any) {
     // console.log('shipment-list-list-data', item)
     this.searchListData = item
   }
@@ -47,7 +53,7 @@ export class ShipmentListComponent {
     const authToken = this.cookieService.get('authToken');
     if (authToken) {
       this.account = this.cookieService.get('account');
-    } 
+    }
   }
 
 
@@ -57,10 +63,22 @@ export class ShipmentListComponent {
   }
 
 
+  // Scroll to top
+  scrollToTop() {
+    window.scrollTo(0, 0);
+  }
 
+  @HostListener('window:scroll', ['$event'])
+  onWindowScroll(): void {
+    this.scrollY = window.scrollY;
+    if (this.scrollY > 200) {
+      this.isShowArrow = true;
 
-  /*--------- Getters and Setters ---------*/
-  // select menu
+    }
+    if (this.scrollY < 200) {
+      this.isShowArrow = false;
+    }
+  }
 
 
 

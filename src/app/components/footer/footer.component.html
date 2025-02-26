@@ -9,13 +9,16 @@
         </div>
         <div class="contact flex">
           <p
-            (click)="togglePrivatePolicy()"
+            (click)="openPrivatePolicy()"
             class="text-white font-normal underline cursor-pointer"
           >
             Private policy
           </p>
           @if (isShowPrivatePolicy) {
-          <app-private-policy></app-private-policy>
+          <app-private-policy
+            [receivedData]="isShowPrivatePolicy"
+            (closePopup)="closePrivatePolicy($event)"
+          ></app-private-policy>
           }
         </div>
       </div>

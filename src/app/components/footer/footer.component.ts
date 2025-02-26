@@ -15,19 +15,13 @@ export class FooterComponent {
   isShowPrivatePolicy: boolean = false;
 
 
-  /*----------- Send data to Inner -----------*/
-
-  togglePrivatePolicy() {
-    this.isShowPrivatePolicy = !this.isShowPrivatePolicy;
+  openPrivatePolicy() {
+    this.isShowPrivatePolicy = true;
   }
 
-  /*----------- Get data from inner -----------*/
-  receivePrivatePolicy(e: boolean) {
+  closePrivatePolicy(e: boolean) {
     this.isShowPrivatePolicy = e;
   }
-  sendPrivatePolicy() {
-    this.isShowPrivatePolicy = !this.isShowPrivatePolicy;
-    console.log('sent', this.isShowPrivatePolicy);
-  }
+
 
 }

@@ -34,7 +34,7 @@ export class HeaderComponent {
   /*--------- style settings ---------*/
 
   menuDisabled: boolean = false;
-  rippleColor:string ='rgba(0, 0, 0, 0.02)';
+  rippleColor: string = 'rgba(0, 0, 0, 0.02)';
 
   /*--------- items ---------*/
   menuList: any[] = [
@@ -49,11 +49,11 @@ export class HeaderComponent {
   // on init
 
   ngOnInit() {
-    if (this.userToken =='') {
+    if (this.userToken == '') {
       this.userToken = this.cookieService.get('authToken');
       this.account = this.cookieService.get('account');
-    } else{
-      this.userToken='';
+    } else {
+      this.userToken = '';
     }
     this.getUrlAndRender();
   }
@@ -81,17 +81,27 @@ export class HeaderComponent {
 
   getUrlAndRender() {
     this.url = this.router.url;
-    if (this.url == "/shipment-summary-guest" ) {
+    if (this.url == "/shipment-summary-guest") {
       this.selectedMenu = "Shipment Summary"
-      if (this.userToken == ""){
+      if (this.userToken == "") {
         this.toggleLogin = false;
       }
-    }else if (this.url == "/shipment-summary"){
+    } else if (this.url == "/shipment-list") {
       this.selectedMenu = "Shipment List"
-      if (this.userToken !== ""){
+      if (this.userToken !== "") {
         this.toggleLogin = false;
-      }else{
-        this.router.navigate(['/login']);
+      } else {
+        this.toggleLogin = true;
+        // this.router.navigate(['/login']);
+      }
+    } else if (this.url == "/shipment-summary") {
+      this.selectedMenu = "Shipment List"
+      if (this.userToken !== "") {
+        this.toggleLogin = false;
+      } else {
+        this.toggleLogin = true;
+
+        // this.router.navigate(['/login']);
 
       }
     } else {
@@ -99,17 +109,17 @@ export class HeaderComponent {
     }
   }
 
-  logoutBtn(){
+  logoutBtn() {
     this.toggleLogout = true;
   }
-  toggleLogoutChange(event: boolean){
+  toggleLogoutChange(event: boolean) {
     this.toggleLogout = event;
   }
 
-  loginBtn(){
+  loginBtn() {
     this.toggleLogin = true;
   }
-  toggleLoginChange(event: boolean){
+  toggleLoginChange(event: boolean) {
     this.toggleLogin = event;
   }
 

@@ -2,7 +2,6 @@ import { Component, effect, EventEmitter, inject, Input, Output, SimpleChanges }
 import { MatRipple, MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { TrackingNumberService } from '../../services/tracking-number.service';
 import { FormsModule } from '@angular/forms';
 import { ViewDetailsTrackingNumberService } from '../../services/view-details-tracking-number.service';
 import { Router } from '@angular/router';
@@ -33,6 +32,10 @@ export class ListTableComponent {
 
   /*--------- Variables ---------*/
 
+  // Style
+  isSkeletonLoading: boolean = true;
+  skeletonClass: string = 'w-full h-10 rounded bg-gradient-to-r from-gray-50 via-gray-100 to-gray-0 bg-[length:200%_100%] animate-[shimmer_1.5s_infinite_linear]';
+
   // table related
   itemsCols: string[] = ['', 'MAWB No.', 'HAWB No.', 'Milestones', '', '', '', ''];
   allStatus: string[] = ['Booked', 'ETD', 'ATD', 'ETA', 'ATA', 'Completed'];
@@ -44,8 +47,8 @@ export class ListTableComponent {
   // firstData
   firstData = {
     "StartDate": "2024-01-01",
-    "EndDate": "2024-05-01",
-    "DateType": 1,
+    "EndDate": "2024-12-28",
+    // "DateType": 1,
     "Status": "",
     "NumberType": 0,
     "TrackingNo": "",
@@ -54,7 +57,8 @@ export class ListTableComponent {
     "PageSize": 5
   }
 
-  totalPage:number = 0;
+  totalPage: number = 0;
+  currentPage: number = 1;
 
   // Variables
   isInit: boolean = false;
@@ -76,7 +80,7 @@ export class ListTableComponent {
 
   ngOnInit() {
     this.renderItems(this.firstData);
-    console.log('this.firstData',this.firstData)
+    console.log('this.firstData', this.firstData)
     this.isInit = true;
   }
 
@@ -87,15 +91,18 @@ export class ListTableComponent {
     //   console.log('this.renderItems',this.searchContentsData)
     // }
     if (changes['searchContentsData']) {
-      console.log('this.renderItems',this.searchContentsData)
+
+      // console.log('this.renderItems', this.searchContentsData)
       this.renderItems(this.searchContentsData);
 
     }
   }
 
   // render 
-  renderItems(obj: {}) {
+  renderItems(obj: any) {
     console.log('obj', obj)
+    this.currentPage = obj.Page;
+    this.isSkeletonLoading = true;
     this.postSearchData(obj).subscribe({
       next: (res) => {
         console.log('res', res)
@@ -103,9 +110,13 @@ export class ListTableComponent {
         this.totalPage = res.data.TotalCount;
         this.totalPages.emit(this.totalPage);
 
+        this.isSkeletonLoading = false
+
       },
       error: (err) => {
         console.log('err', err);
+        this.isSkeletonLoading = false
+
       },
       complete: () => { }
     });
@@ -134,7 +145,6 @@ export class ListTableComponent {
   }
 
 
-  // Output send
 
 
 

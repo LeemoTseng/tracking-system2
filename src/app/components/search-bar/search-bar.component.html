@@ -141,7 +141,13 @@
   @for (item of pages; track $index) {
   <div class="text-blackColor/80 pb-2">
     <span (click)="changePage(item)" class="px-2 py-1 pb-2">
-      {{ item }}
+      <input
+        (keyup.enter)="renderPage(currentPage)"
+        class="w-[50px] border outline-none text-center"
+        type="text"
+        [ngModel]="currentPage"
+        (ngModelChange)="onPageInputChange($event)"
+      />
     </span>
     / {{ totalPages }} pages
   </div>
