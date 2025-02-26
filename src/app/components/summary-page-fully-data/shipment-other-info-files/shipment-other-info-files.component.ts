@@ -19,7 +19,9 @@ export class ShipmentOtherInfoFilesComponent {
   http = inject(HttpClient);
   
   /*--------- @Iutput ---------*/
-  @Input() trackingNumber: string = '';
+  // @Input() trackingNumber: string = '';
+  // trackingNumber: string = 'THI132400003'; //測檔案用
+  trackingNumber: string = 'TECSHA126236'; // 測圖片用
   
 
   /*--------- style settings ---------*/
@@ -41,6 +43,8 @@ export class ShipmentOtherInfoFilesComponent {
 
     return this.http.get<any[]>(`${this.filesDataAPI}TrackingApi/fileList`, { headers, params });
   }
+
+  // getFile
 
 
   /*--------- Variables ---------*/

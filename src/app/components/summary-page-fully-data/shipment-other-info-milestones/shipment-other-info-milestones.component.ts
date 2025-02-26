@@ -20,7 +20,8 @@ export class ShipmentOtherInfoMilestonesComponent {
   http = inject(HttpClient);
 
   /*--------- @Iutput ---------*/
-  @Input() trackingNumber: string = '';
+  // @Input() trackingNumber: string = '';
+  trackingNumber: string = 'THI132400003'; // 測試用
 
 
   /*--------- Variables ---------*/

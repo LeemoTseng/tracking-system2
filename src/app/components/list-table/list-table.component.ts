@@ -45,15 +45,30 @@ export class ListTableComponent {
   trackingNumber: string = '';
 
   // firstData
+
   firstData = {
-    "StartDate": "2024-01-01",
-    "EndDate": "2024-12-28",
-    // "DateType": 1,
-    "Status": "",
+
+  // 正式用資料
+  //   "StartDate": null,
+  //   "EndDate": null,
+  //   "DateType": 0,
+  //   "Status": 0,
+  //   "NumberType": 0,
+  //   "TrackingNo": "",
+  //   "SortBy": "new_to_old",
+  //   "Page": 2,
+  //   "PageSize": 5
+  // }
+
+  // 測試用資料
+    "StartDate": "2025-01-01",
+    "EndDate": "2025-02-28",
+    "DateType": 1,
+    "Status": 0,
     "NumberType": 0,
-    "TrackingNo": "",
+    "TrackingNo": "456",
     "SortBy": "new_to_old",
-    "Page": 2,
+    "Page": 1,
     "PageSize": 5
   }
 
@@ -107,7 +122,7 @@ export class ListTableComponent {
       next: (res) => {
         console.log('res', res)
         this.shipmentList = res.data.Shipments;
-        this.totalPage = res.data.TotalCount;
+        this.totalPage = res.data.TotalPages;
         this.totalPages.emit(this.totalPage);
 
         this.isSkeletonLoading = false
@@ -129,7 +144,6 @@ export class ListTableComponent {
     */
   }
 
-
   postSearchData(searchContent: object): Observable<any> {
     const token = this.getCookie('authToken');
     const headers = new HttpHeaders({
@@ -143,9 +157,6 @@ export class ListTableComponent {
       { headers }
     );
   }
-
-
-
 
 
   // view items

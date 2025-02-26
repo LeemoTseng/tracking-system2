@@ -17,7 +17,8 @@ import { ViewDetailsTrackingNumberService } from '../../../services/view-details
 export class ShipmentOtherInfoDetailsComponent {
   /*--------- @Input ---------*/
 
-  @Input() trackingNumber: string = ''
+  // @Input() trackingNumber: string = '' // 完成要記得解除註解
+  trackingNumber: string = 'THI132400003' // 測試用
 
   /*--------- Style settings ---------*/
 
@@ -49,6 +50,7 @@ export class ShipmentOtherInfoDetailsComponent {
 
   /*------- Data import -------*/
 
+  // get shipment details
   getDetailsData(trackingNo: string): Observable<any[]> {
     const token = this.getCookie('authToken');
     const headers = new HttpHeaders({

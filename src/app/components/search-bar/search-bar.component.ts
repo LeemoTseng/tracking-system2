@@ -53,10 +53,10 @@ export class SearchBarComponent {
   // dropdown options
 
   numberTypeOptions = [
+    { value: 0, viewValue: 'All' },
     { value: 1, viewValue: 'HAWB No.' },
     { value: 2, viewValue: 'MAWB No.' },
-    { value: 3, viewValue: 'PO No.' },
-    { value: 0, viewValue: 'All' },
+    { value: 3, viewValue: 'PO No.' }
   ]
 
   // dropdown options
@@ -78,29 +78,34 @@ export class SearchBarComponent {
   searchClicked() {
 
     this.dataSent = {
-
+      /**------ 測試完記得解除註解 --------- */
       "StartDate": this.startDate || null,
       "EndDate": this.endDate || null,
       // "DateType": this.searchStatusOptions[this.searchStatus].value,
       "DateType": 1,
-      "Status": "",
+      "Status": 0,
       "NumberType": this.numberTypeOptions[this.numberType].value,
       "TrackingNo": this.trackingNumber || null,
       "SortBy": this.sortBy,
       "Page": 1,
       "PageSize": 5
+      /**--------------------- */
 
-      /*
-         "StartDate": "2025-01-01",
-         "EndDate": "2025-02-28",
-         "DateType": 1,
-         "Status": "",
-         "NumberType": 0,
-         "TrackingNo": "",
-         "SortBy": "new_to_old",
-         "Page": 1,
-         "PageSize": 5
- */
+
+      /* ------ 測試用 --------- */
+
+      // "StartDate": "2025-01-01",
+      // "EndDate": "2025-02-28",
+      // "DateType": 1,
+      // "Status": 0,
+      // "NumberType": 0,
+      // "TrackingNo": "456",
+      // "SortBy": "new_to_old",
+      // "Page": 1,
+      // "PageSize": 5
+
+      /**--------------------- */
+
     };
 
     this.currentPage = 1;
@@ -139,7 +144,7 @@ export class SearchBarComponent {
       "EndDate": this.endDate,
       // "DateType": this.searchStatusOptions[this.searchStatus].value,
       // "DateType": 1,
-      "Status": "",
+      "Status": 0,
       "NumberType": this.numberTypeOptions[this.numberType].value,
       "TrackingNo": this.trackingNumber,
       "SortBy": this.sortBy,
@@ -189,20 +194,19 @@ export class SearchBarComponent {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
     } else {
-      this.currentPage = 1; // 預防錯誤輸入
+      this.currentPage = 1; // 輸入超過就會回到第一頁
     }
 
     this.dataSent = {
       "StartDate": this.startDate,
       "EndDate": this.endDate,
-      "Status": "",
+      "Status": 0,
       "NumberType": this.numberTypeOptions[this.numberType].value,
       "TrackingNo": this.trackingNumber,
       "SortBy": this.sortBy,
       "Page": this.currentPage,
       "PageSize": 5
     };
-
     this.searchContentOutput.emit(this.dataSent);
   }
 
@@ -218,7 +222,7 @@ export class SearchBarComponent {
     this.dataSent = {
       "StartDate": this.startDate,
       "EndDate": this.endDate,
-      "Status": "",
+      "Status": 0,
       "NumberType": this.numberTypeOptions[this.numberType].value,
       "TrackingNo": this.trackingNumber,
       "SortBy": this.sortBy,
@@ -229,13 +233,13 @@ export class SearchBarComponent {
     this.searchContentOutput.emit(this.dataSent);
   }
 
-onPageInputChange(value: string) {
-  const filteredValue = value.replace(/\D/g, '');
-  
-  const pageNumber = filteredValue ? Number(filteredValue) : 1;
+  onPageInputChange(value: string) {
+    const filteredValue = value.replace(/\D/g, '');
 
-  this.currentPage = pageNumber > this.totalPages ? this.totalPages : pageNumber;
-}
+    const pageNumber = filteredValue ? Number(filteredValue) : 1;
+
+    this.currentPage = pageNumber > this.totalPages ? this.totalPages : pageNumber;
+  }
 
 
 
