@@ -26,13 +26,20 @@
       <td class="px-4 py-2 text-start">{{ item.Milestone }}</td>
       <td class="px-4 py-2 text-start">{{ item.DateTime }}</td>
       <td class="px-4 py-2 text-start">
-        @if (item.Imgs.length !== 0) {<button
+        @if (item.Imgs.length !== 0) {
+        <button
+          (click)="getImg(item.Imgs)"
           matRipple
           class="btn-outline"
           style="width: fit-content"
         >
-          View Image</button
-        >}
+          View</button
+        >} @if (isViewImg){
+        <app-view-img
+          (closeClicked)="getClosedStatus($event)"
+          [imgList]="newImagesList"
+        ></app-view-img>
+        }
       </td>
     </tr>
     }

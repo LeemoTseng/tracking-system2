@@ -16,9 +16,14 @@ export class SearchBarComponent {
   /* --------- Inject ---------*/
 
 
+
+
   /* --------- style settings---------*/
   rippleColor: string = 'rgba(255, 255, 255, 0.2)';
-
+  placeHolderColor: string = 'placeholder:text-red-500';
+  placeHolderText: string = 'Tracking number';
+  isInputError: boolean = false;
+  loading: boolean = true;
 
   /* --------- Output / Onput ---------*/
   @Output() searchContentOutput = new EventEmitter<object>();
@@ -26,10 +31,9 @@ export class SearchBarComponent {
 
   /* --------- variables---------*/
 
-
   // input
   trackingNumber: string = ''
-  numberType: number = 1
+  numberType: number = 0
   searchStatus: number = 0
   startDate: string = ''
   endDate: string = ''
@@ -37,7 +41,6 @@ export class SearchBarComponent {
 
   // pagination
   currentPage = 1;
-  // totalPages: number = 5;
 
   // error message and search result
   errorMessage: string = 'Error message'
@@ -50,10 +53,11 @@ export class SearchBarComponent {
     { value: 1, viewValue: 'ETD' },
     { value: 2, viewValue: 'ETA' },
   ]
+
   // dropdown options
 
   numberTypeOptions = [
-    { value: 0, viewValue: 'All' },
+    { value: 0, viewValue: 'All Types' },
     { value: 1, viewValue: 'HAWB No.' },
     { value: 2, viewValue: 'MAWB No.' },
     { value: 3, viewValue: 'PO No.' }
@@ -66,101 +70,115 @@ export class SearchBarComponent {
   ]
 
   // send data
-  dataSent = {}
+  dataSent: { [key: string]: any } = {}
+  initData = {
+    "StartDate": this.startDate || null,
+    "EndDate": this.endDate || null,
+    // "DateType": this.searchStatusOptions[this.searchStatus].value,
+    "DateType": 1,
+    "Status": 0,
+    "NumberType": this.numberTypeOptions[this.numberType].value,
+    "TrackingNo": this.trackingNumber || null,
+    "SortBy": this.sortBy,
+    "Page": 1,
+    "PageSize": 5
+  }
 
 
   /* --------- functions---------*/
 
   ngOnInit() {
+    this.dataSent = this.initData
+    console.log('ngOnInit(){this.dataSent}', this.dataSent)
+    this.searchContentOutput.emit(this.dataSent)
   }
 
   // search clicked
   searchClicked() {
 
-    this.dataSent = {
-      /**------ 測試完記得解除註解 --------- */
-      "StartDate": this.startDate || null,
-      "EndDate": this.endDate || null,
-      // "DateType": this.searchStatusOptions[this.searchStatus].value,
-      "DateType": 1,
-      "Status": 0,
-      "NumberType": this.numberTypeOptions[this.numberType].value,
-      "TrackingNo": this.trackingNumber || null,
-      "SortBy": this.sortBy,
-      "Page": 1,
-      "PageSize": 5
-      /**--------------------- */
+    if (this.trackingNumber === '' && this.numberType != 0) {
 
+      this.isInputError = true;
+      this.searchResult = `
+      <div class=" w-fit text-red-500 px-2">
+      Please enter a tracking number when selecting a number type.
+      </div>
+      `;
 
-      /* ------ 測試用 --------- */
+    } else {
+      this.dataSent = {
+        "StartDate": this.startDate || null,
+        "EndDate": this.endDate || null,
+        "DateType": 1,
+        "Status": this.searchStatusOptions[this.searchStatus].value,
+        "NumberType": this.numberTypeOptions[this.numberType].value,
+        "TrackingNo": this.trackingNumber || null,
+        "SortBy": this.sortBy,
+        "Page": 1,
+        "PageSize": 5
+      }
+      this.currentPage = 1;
+      this.searchResultText();
 
-      // "StartDate": "2025-01-01",
-      // "EndDate": "2025-02-28",
-      // "DateType": 1,
-      // "Status": 0,
-      // "NumberType": 0,
-      // "TrackingNo": "456",
-      // "SortBy": "new_to_old",
-      // "Page": 1,
-      // "PageSize": 5
-
-      /**--------------------- */
-
-    };
-
-    this.currentPage = 1;
-    this.searchResultText();
-
-    // send data to shipment-list
-    this.searchContentOutput.emit(this.dataSent)
-
+      // send data to shipment-list/table-list
+      this.searchContentOutput.emit(this.dataSent)
+    }
   }
-
 
   // Search content
   searchResultText() {
     let text = ''
-    if (this.startDate !== '' && this.endDate !== '') {
-      text += `<span class="font-bold">Search date</span> ${this.startDate} - ${this.endDate}. `
-    }
+
     if (this.trackingNumber !== '') {
-      text += `<span class="font-bold">Tracking Number</span> ${this.trackingNumber}. `
+      text += `
+      <div class="hover:bg-blackColor/5 border rounded-full w-fit border-blackColor/50 px-2 py-[1px]">${this.numberTypeOptions[this.numberType].viewValue} ${this.trackingNumber}</div>
+      `
     }
-    if (this.numberType !== 0) {
-      text += `<span class="font-bold">Number Type</span> ${this.numberTypeOptions[this.numberType].viewValue}. `
+
+    if (this.startDate !== '' && this.endDate !== '') {
+      text += `
+      <div class="hover:bg-blackColor/5 border rounded-full w-fit border-blackColor/50 px-2 py-[1px]">${this.startDate} - ${this.endDate}</div>
+      `
     }
-    text += `<span class="font-bold">Status</span> ${this.searchStatusOptions[this.searchStatus].viewValue}. `
+    text += `
+    <div class="hover:bg-blackColor/5 border rounded-full w-fit border-blackColor/50 px-2 py-[1px]">Status: ${this.searchStatusOptions[this.searchStatus].viewValue}</div>
+    `
 
     this.searchResult = text
     return this.searchResult
 
   }
+  // search clear all
+  clearAll() {
+    this.searchResult = ''
+    this.trackingNumber = ''
+    this.numberType = 0
+    this.searchStatus = 0
+    this.startDate = ''
+    this.endDate = ''
+    this.sortBy = 'new_to_old'
+    this.currentPage = 1;
 
+    this.dataSent = this.initData
+    console.log('ngOnInit(){this.dataSent}', this.dataSent)
+    this.searchContentOutput.emit(this.dataSent)
+
+  }
 
 
   switchStatus(value: string) {
-    this.dataSent = {
-      "StartDate": this.startDate,
-      "EndDate": this.endDate,
-      // "DateType": this.searchStatusOptions[this.searchStatus].value,
-      // "DateType": 1,
-      "Status": 0,
-      "NumberType": this.numberTypeOptions[this.numberType].value,
-      "TrackingNo": this.trackingNumber,
-      "SortBy": this.sortBy,
-      "Page": 1,
-      "PageSize": 5
-    };
     if (value === 'new_to_old') {
       this.sortBy = 'old_to_new'
     } else {
       this.sortBy = 'new_to_old'
-
     }
     this.currentPage = 1;
 
-    this.searchContentOutput.emit(this.dataSent)
+    this.dataSent["Page"] = this.currentPage
+    this.dataSent["SortBy"] = this.sortBy
 
+    console.log('switchStatus(value: string)', this.dataSent)
+    this.searchContentOutput.emit(this.dataSent)
   }
 
 
@@ -189,59 +207,41 @@ export class SearchBarComponent {
     return pages;
   }
 
-
   changePage(page: number) {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
+      this.dataSent["Page"] = this.currentPage
     } else {
       this.currentPage = 1; // 輸入超過就會回到第一頁
     }
-
-    this.dataSent = {
-      "StartDate": this.startDate,
-      "EndDate": this.endDate,
-      "Status": 0,
-      "NumberType": this.numberTypeOptions[this.numberType].value,
-      "TrackingNo": this.trackingNumber,
-      "SortBy": this.sortBy,
-      "Page": this.currentPage,
-      "PageSize": 5
-    };
+    console.log('changePage(page: number)', this.dataSent)
     this.searchContentOutput.emit(this.dataSent);
-  }
 
+  }
 
   renderPage(item: any) {
     const pageNumber = Number(item); // 確保轉換為數字
     if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= this.totalPages) {
-      this.currentPage = pageNumber;
+      this.dataSent["Page"] = this.currentPage
+      this.searchContentOutput.emit(this.dataSent);
     } else {
       this.currentPage = 1;
     }
-
-    this.dataSent = {
-      "StartDate": this.startDate,
-      "EndDate": this.endDate,
-      "Status": 0,
-      "NumberType": this.numberTypeOptions[this.numberType].value,
-      "TrackingNo": this.trackingNumber,
-      "SortBy": this.sortBy,
-      "Page": this.currentPage,
-      "PageSize": 5
-    };
-
-    this.searchContentOutput.emit(this.dataSent);
   }
 
   onPageInputChange(value: string) {
     const filteredValue = value.replace(/\D/g, '');
 
     const pageNumber = filteredValue ? Number(filteredValue) : 1;
-
     this.currentPage = pageNumber > this.totalPages ? this.totalPages : pageNumber;
   }
 
 
+  spinnerAnimation() {
+    setTimeout(() => {
+      this.loading = false;
+    },300)
+  }
 
 
 

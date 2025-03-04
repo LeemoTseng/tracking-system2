@@ -4,10 +4,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { Observable, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from '../../../.environments/environment.prod';
+import { ViewImgComponent } from '../../view-img/view-img.component';
 
 @Component({
   selector: 'app-shipment-other-info-milestones',
-  imports: [MatIconModule, MatRipple],
+  imports: [MatIconModule, MatRipple, ViewImgComponent],
   templateUrl: './shipment-other-info-milestones.component.html',
   styleUrl: './shipment-other-info-milestones.component.css'
 })
@@ -21,10 +22,16 @@ export class ShipmentOtherInfoMilestonesComponent {
 
   /*--------- @Iutput ---------*/
   // @Input() trackingNumber: string = '';
-  trackingNumber: string = 'THI132400003'; // 測試用
+  // trackingNumber: string = 'THI132400003' // 測試檔案用
+  trackingNumber: string = 'TECSHA126236' // 測試圖片用
 
 
   /*--------- Variables ---------*/
+
+    // image viewer
+  isViewImg: boolean = false;
+  newImagesList: any[] = []
+
 
   // skeleton loader
   isSkeletonLoading: boolean = true;
@@ -212,11 +219,50 @@ export class ShipmentOtherInfoMilestonesComponent {
 
   }
 
+  // get img
+  getImg(list: string) {
+    console.log('list',list)
+    this.isViewImg = true;
+    this.newImagesList = list.split(',');
+    // this.postFilesData(guid).subscribe({
+    //   next: (res) => {
+    //     console.log(res)
+    //     // this.downloadFile(res, guid)
+    //   },
+    //   error: (err) => {
+    //     console.log(err)
+    //   },
+    //   complete: () => { }
+    // })
+
+  }
+
+    postFilesData(guid: string): Observable<any> {
+    console.log('postFilesData(guid: string):guid', guid)
+    const token = this.getCookie('authToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    const params = new HttpParams().set('guid', guid);
+      return this.http.get(`${this.baseAPI}TrackingApi/Download`, { 
+    headers, 
+    params, 
+    responseType: 'blob'  
+  });
+  }
+
 
   // Cookie
   // get coolies
   getCookie(name: string): string | null {
     const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
     return match ? match[2] : null;
+  }
+
+    // get close button
+
+  getClosedStatus(e: any) {
+    this.isViewImg = e;
+    console.log('getClosedStatus', e)
   }
 }

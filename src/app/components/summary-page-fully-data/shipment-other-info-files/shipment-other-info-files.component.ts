@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { environment } from '../../../.environments/environment.prod';
 import { Observable } from 'rxjs';
 import { ViewImgComponent } from '../../view-img/view-img.component';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -17,12 +18,14 @@ export class ShipmentOtherInfoFilesComponent {
 
   /*--------- Inject ---------*/
   http = inject(HttpClient);
-  
+  router = inject(Router);
+
+
   /*--------- @Iutput ---------*/
   // @Input() trackingNumber: string = '';
   // trackingNumber: string = 'THI132400003'; //測檔案用
   trackingNumber: string = 'TECSHA126236'; // 測圖片用
-  
+
 
   /*--------- style settings ---------*/
   skeletonClass: string = 'w-full h-5 rounded bg-gradient-to-r from-gray-50 via-gray-100 to-gray-50 bg-[length:200%_100%] animate-[shimmer_1.5s_infinite_linear]';
@@ -30,7 +33,7 @@ export class ShipmentOtherInfoFilesComponent {
   /*--------- Data output ---------*/
 
   /*--------- Data import ---------*/
-  filesDataAPI = environment.baseAPI
+  baseAPI = environment.baseAPI
 
 
   getFilesData(trackingNumber: string): Observable<any[]> {
@@ -41,7 +44,7 @@ export class ShipmentOtherInfoFilesComponent {
 
     const params = new HttpParams().set('trackingNo', trackingNumber);
 
-    return this.http.get<any[]>(`${this.filesDataAPI}TrackingApi/fileList`, { headers, params });
+    return this.http.get<any[]>(`${this.baseAPI}TrackingApi/fileList`, { headers, params });
   }
 
   // getFile
@@ -69,7 +72,7 @@ export class ShipmentOtherInfoFilesComponent {
   ngOnInit(): void {
 
     // 測試用：this.getFilesData('THI132400003').subscribe({
-      this.getFilesData(this.trackingNumber).subscribe({
+    this.getFilesData(this.trackingNumber).subscribe({
       next: (res) => {
         // files
         this.allFiles = res
@@ -159,25 +162,64 @@ export class ShipmentOtherInfoFilesComponent {
     return newName
   }
 
+
+
+
   // POST request to the API
-  postFilesData(type: string, guid: string) {
-    console.log(type, guid)
-    /*
-    postFilesData(data: any): Observable<any> {
-      return this.http.post<any>(`${this.filesDataAPI}/data`, data);
-    }
-    */
+
+  getFile(guid: string) {
+    this.postFilesData(guid).subscribe({
+      next: (res) => {
+        this.downloadFile(res, guid)
+      },
+      error: (err) => {
+        console.log(err)
+      },
+      complete: () => { }
+    })
   }
 
-  postImgData(guid: string) {
+  postFilesData(guid: string): Observable<any> {
+    console.log(guid)
+    const token = this.getCookie('authToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    const params = new HttpParams().set('guid', guid);
+      return this.http.get(`${this.baseAPI}TrackingApi/Download`, { 
+    headers, 
+    params, 
+    responseType: 'blob'  
+  });
+  }
+
+  downloadFile(data: Blob, fileName: string) {
+    const blob = new Blob([data], { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${fileName}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  }
+
+  getImg(guid: string) {
     console.log(guid)
     this.isViewImg = true;
+    this.postFilesData(guid).subscribe({
+      next: (res) => {
+        console.log(res)
+        
+        // this.downloadFile(res, guid)
+      },
+      error: (err) => {
+        console.log(err)
+      },
+      complete: () => { }
+    })
 
-    /*
-    postImgData(data: any): Observable<any> {
-      return this.http.post<any>(`${this.imagesDataAPI}/data`, data);
-    }
-    */
   }
 
   // get close button

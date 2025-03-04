@@ -33,12 +33,12 @@ export class ShipmentListComponent {
   scrollY = 0;
 
 
-
   /*--------- Data import ---------*/
 
   getSearchListData(item: any) {
-    // console.log('shipment-list-list-data', item)
     this.searchListData = item
+    this.searchListData = JSON.parse(JSON.stringify(this.searchListData)); // deep copy
+    console.log('shipment-list/getSearchListData(item: any)', this.searchListData)
   }
 
   getTotalPages(totalPages: number) {

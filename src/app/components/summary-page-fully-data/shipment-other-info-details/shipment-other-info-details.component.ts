@@ -18,7 +18,9 @@ export class ShipmentOtherInfoDetailsComponent {
   /*--------- @Input ---------*/
 
   // @Input() trackingNumber: string = '' // 完成要記得解除註解
-  trackingNumber: string = 'THI132400003' // 測試用
+  // trackingNumber: string = 'THI132400003' // 測試檔案用
+  trackingNumber: string = 'TECSHA126236' // 測試圖片用
+
 
   /*--------- Style settings ---------*/
 
@@ -65,27 +67,38 @@ export class ShipmentOtherInfoDetailsComponent {
 
   ngOnInit() {
     this.isSkeletonLoading = true;
-    this.getDetailsData(this.trackingNumber).subscribe((res) => {
-      console.log(res)
-      this.data = res;
-      this.shipmentData = this.data.data;
-      this.shipmentDetails = this.shipmentData.ShipmentDetails;
+    this.getDetailsData(this.trackingNumber).subscribe({
+      next: (res: any) => {
+        this.data = res;
+        this.shipmentData = this.data.data;
+        this.shipmentDetails = this.shipmentData.ShipmentDetails;
 
-      if (this.shipmentDetails.ShipmentInfo.PictureUrl !== null){
-        this.pictureUrl = this.shipmentDetails.ShipmentInfo.PictureUrl;
-      }else{
-        this.pictureUrl = '';
+        if (this.shipmentDetails.ShipmentInfo.PictureUrl !== null) {
+          const url = this.shipmentDetails.ShipmentInfo.PictureUrl;
+          this.postFilesData(url).subscribe({
+            next: (blob: Blob) => {
+              const url = URL.createObjectURL(blob);
+              this.pictureUrl = url;
+            },
+            error: (err: any) => {
+              console.error(err);
+            },
+            complete: () => { }
+          });
+        } else {
+          this.pictureUrl = '';
+        }
+
+        if (this.shipmentDetails.Dimensions.length > 0) {
+          this.dimensionX = this.shipmentDetails.Dimensions[0].Length;
+          this.dimensionY = this.shipmentDetails.Dimensions[0].Height;
+          this.dimensionZ = this.shipmentDetails.Dimensions[0].Width;
+        }
+        this.isSkeletonLoading = false;
+      },
+      error: (error: any) => {
+        this.isSkeletonLoading = false;
       }
-
-
-      if (this.shipmentDetails.Dimensions.length > 0) {
-        this.dimensionX = this.shipmentDetails.Dimensions[0].Length;
-        this.dimensionY = this.shipmentDetails.Dimensions[0].Height;
-        this.dimensionZ = this.shipmentDetails.Dimensions[0].Width;
-      }
-      this.isSkeletonLoading = false;
-    }, (error) => {
-      this.isSkeletonLoading = false;
     });
 
   }
@@ -113,6 +126,22 @@ export class ShipmentOtherInfoDetailsComponent {
       setTimeout(() => copiedMessage.remove(), 400);
     });
   }
+
+
+  postFilesData(guid: string): Observable<Blob> {
+    const token = this.getCookie('authToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    const params = new HttpParams().set('guid', guid);
+
+    return this.http.get(`${this.baseAPI}TrackingApi/Download`, {
+      headers,
+      params,
+      responseType: 'blob'
+    });
+  }
+
 
 
   // Cookie

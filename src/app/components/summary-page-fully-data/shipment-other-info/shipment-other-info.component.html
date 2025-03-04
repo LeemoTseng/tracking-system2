@@ -27,17 +27,14 @@
     </div>
     <div class="min-h-[600px]">
       @if (selectedMenu === 'Shipment Details') {
-      <app-shipment-other-info-details
-        [trackingNumber]="trackingNumber"
-      ></app-shipment-other-info-details>
+      <!-- [trackingNumber]="trackingNumber" -->
+      <app-shipment-other-info-details></app-shipment-other-info-details>
       } @if (selectedMenu === 'Files') {
-      <app-shipment-other-info-files
-        [trackingNumber]="trackingNumber"
-      ></app-shipment-other-info-files>
+      <!-- [trackingNumber]="trackingNumber" -->
+      <app-shipment-other-info-files></app-shipment-other-info-files>
       } @if (selectedMenu === 'Milestones') {
-      <app-shipment-other-info-milestones
-        [trackingNumber]="trackingNumber"
-      ></app-shipment-other-info-milestones>
+      <!-- [trackingNumber]="trackingNumber" -->
+      <app-shipment-other-info-milestones></app-shipment-other-info-milestones>
       }
     </div>
   </div>

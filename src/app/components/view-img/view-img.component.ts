@@ -1,7 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { environment } from '../../.environments/environment.prod';
 
 @Component({
   selector: 'app-view-img',
@@ -11,79 +14,99 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class ViewImgComponent {
 
-  /*--------- Input data ---------*/
-  
+  /*--------- Inject data ---------*/
+
   http = inject(HttpClient);
+  router = inject(Router);
 
   /*--------- Input data ---------*/
 
   @Input() imgList: any
 
+  /*------- Data import -------*/
+  baseAPI = environment.baseAPI
+
   /*--------- Output data ---------*/
 
   @Output() closeClicked = new EventEmitter<boolean>();
-  
+
   /*--------- Variables ---------*/
+  currentIndex: number = 0;
+  imageUrls: string[] = [];
+  loading: boolean = true;
 
-  currentIndex: number = 0
 
-  imgList2: any[] = [
-    {
-      id:1,
-      img: 'https://picsum.photos/id/684/1200/1200',
-      name: 'snow'
-    },
-    {
-      id:2,
-      img: 'https://picsum.photos/id/685/600/900',
-      name: 'mountain'
-    },
-    {
-      id:3,
-      img: 'https://picsum.photos/id/699/600/430',
-      name: 'grass'
-    }
-  ]
-
-  
-  /*--------- Data import ---------*/
+  /*--------- Lifecycle ---------*/
+  ngOnInit(): void {
+    console.log('imgList', this.imgList);
+    this.preloadImages();
+  }
 
   /*--------- Functions ---------*/
-
-  ngOnInit(): void {
-    console.log('imgList', this.imgList)
+  preloadImages() {
+    this.imgList.forEach((item: any, index: number) => {
+      this.postFilesData(item.Guid).subscribe({      
+        next: (blob) => {
+          const url = URL.createObjectURL(blob);
+          this.imageUrls[index] = url;
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error(err);
+          this.loading = false;
+        },
+        complete: () => {}
+      });
+    });
   }
 
   closeImg(e: any) {
-
     this.currentIndex = 0
   }
 
+  // imge data
   get currentImg() {
-    //this.postImgData(this.imgList[this.currentIndex].Guid)
-    return this.imgList2[this.currentIndex];
-    
+    return {
+      img: this.imageUrls[this.currentIndex] || '', // 取得對應的 Blob URL
+      name: this.imgList[this.currentIndex]?.Name || 'Image'
+    };
   }
 
   nextImg() {
-    this.currentIndex = (this.currentIndex + 1) % this.imgList2.length;
+    this.currentIndex = (this.currentIndex + 1) % this.imgList.length;
   }
 
   prevImg() {
-    this.currentIndex = (this.currentIndex - 1 + this.imgList2.length) % this.imgList2.length;
+    this.currentIndex = (this.currentIndex - 1 + this.imgList.length) % this.imgList.length;
+  }
+
+  sendCloseClicked() {
+    this.closeClicked.emit(false);
+    console.log('sendCloseClicked')
   }
 
 
-  /*
-    postImgData(data: any): Observable<any> {
-      return this.http.post<any>(`${this.imagesDataAPI}/data`, data);
-    }
-      獲得Img檔案
-  */
 
-  sendCloseClicked(){
-    this.closeClicked.emit(false);
-    console.log('sendCloseClicked')
+  postFilesData(guid: string): Observable<Blob> {
+    console.log('guid', guid);
+    const token = this.getCookie('authToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    const params = new HttpParams().set('guid', guid);
+
+    return this.http.get(`${this.baseAPI}TrackingApi/Download`, {
+      headers,
+      params,
+      responseType: 'blob'
+    });
+  }
+
+
+  // get coolies
+  getCookie(name: string): string | null {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? match[2] : null;
   }
 
 }

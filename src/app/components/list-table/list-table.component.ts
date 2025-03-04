@@ -24,7 +24,6 @@ export class ListTableComponent {
   router = inject(Router);
   http = inject(HttpClient)
 
-
   /*--------- get data from outter ---------*/
   @Input() selectedMenuInner: string = 'All Cargos';
   @Input() searchContentsData: object = {};
@@ -44,39 +43,14 @@ export class ListTableComponent {
   // trackingNumber
   trackingNumber: string = '';
 
-  // firstData
-
-  firstData = {
-
-  // 正式用資料
-  //   "StartDate": null,
-  //   "EndDate": null,
-  //   "DateType": 0,
-  //   "Status": 0,
-  //   "NumberType": 0,
-  //   "TrackingNo": "",
-  //   "SortBy": "new_to_old",
-  //   "Page": 2,
-  //   "PageSize": 5
-  // }
-
-  // 測試用資料
-    "StartDate": "2025-01-01",
-    "EndDate": "2025-02-28",
-    "DateType": 1,
-    "Status": 0,
-    "NumberType": 0,
-    "TrackingNo": "456",
-    "SortBy": "new_to_old",
-    "Page": 1,
-    "PageSize": 5
-  }
+  // pagination
 
   totalPage: number = 0;
   currentPage: number = 1;
 
   // Variables
   isInit: boolean = false;
+  hasData: boolean = false;
 
 
   /*--------- Data import ---------*/
@@ -94,54 +68,58 @@ export class ListTableComponent {
   /*--------- Functions ---------*/
 
   ngOnInit() {
-    this.renderItems(this.firstData);
-    console.log('this.firstData', this.firstData)
+    console.log('list-table/ngOnInit()', this.searchContentsData)
+    this.renderItems(this.searchContentsData);
+    // console.log('this.initData', this.initData)
     this.isInit = true;
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.isInit) return;
-    // if (changes['selectedMenuInner']) {
-    //   this.renderItems(this.searchContentsData);
-    //   console.log('this.renderItems',this.searchContentsData)
-    // }
-    if (changes['searchContentsData']) {
-
-      // console.log('this.renderItems', this.searchContentsData)
+    if (changes['selectedMenuInner']) {
       this.renderItems(this.searchContentsData);
-
+    }
+    if (changes['searchContentsData']) {
+      this.renderItems(this.searchContentsData);
+      console.log('list-table/this.renderItems', this.searchContentsData)
     }
   }
 
   // render 
   renderItems(obj: any) {
-    console.log('obj', obj)
+    console.log('list-table/renderItems(obj: any)', obj.Page)
     this.currentPage = obj.Page;
     this.isSkeletonLoading = true;
     this.postSearchData(obj).subscribe({
       next: (res) => {
-        console.log('res', res)
-        this.shipmentList = res.data.Shipments;
-        this.totalPage = res.data.TotalPages;
-        this.totalPages.emit(this.totalPage);
 
-        this.isSkeletonLoading = false
+        if (res.code == 1) {
+          this.hasData = true;
+          this.shipmentList = res.data.Shipments;
+          if (this.shipmentList.length === 0) {
+            this.hasData = false;
+            this.isSkeletonLoading = false;
+          }else{
+          this.totalPage = res.data.TotalPages;
+          this.totalPages.emit(this.totalPage);
+          this.isSkeletonLoading = false}
+        } else {
+          console.log('has no data')
+          this.isSkeletonLoading = false
+          this.hasData = false;
+        }
+
 
       },
       error: (err) => {
-        console.log('err', err);
+        console.log('has no data')
+        this.isSkeletonLoading = false
+        this.hasData = false;
         this.isSkeletonLoading = false
 
       },
       complete: () => { }
     });
-
-    // 根據selectedMenuInner去render對應的items
-    /* 處理資料：
-      1. nowStatus要處理為六個狀態
-      2. 檢查是否要轉換成陣列？
-      3. get data functions
-    */
   }
 
   postSearchData(searchContent: object): Observable<any> {
@@ -204,7 +182,7 @@ export class ListTableComponent {
     }
 
   }
-  getLineClass(MilestoneNode: string, nowStatus: string): any {
+  getTextClass(MilestoneNode: string, nowStatus: string): any {
 
     if (MilestoneNode === 'Pod') {
       return "text-primary"

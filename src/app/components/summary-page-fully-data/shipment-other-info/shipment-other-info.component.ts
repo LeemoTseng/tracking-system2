@@ -24,10 +24,12 @@ export class ShipmentOtherInfoComponent {
 
   /*--------- Inject ---------*/
   userService = inject(ShipmentDataService);
-  router = inject(Router);
-  http = inject(HttpClient);
+
 
   /*------- style settings -------*/
+
+
+
 
   /*------- Variables -------*/
 

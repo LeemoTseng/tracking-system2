@@ -15,9 +15,10 @@
 
           <input
             [(ngModel)]="trackingNumber"
+            [placeholder]="placeHolderText"
+            [class]="isInputError ? '' : 'border-red-500'"
             class="cursor-text w-full pr-6 focus:outline-none focus:ring-transparent text-blackColor py-1"
             type="text"
-            placeholder="Tracking number"
           />
           <!-- tracking Type -->
 
@@ -81,10 +82,21 @@
 
         <!-- Search btn -->
       </div>
-      <p
-        class="absolute -bottom-[30px] left-0 text-sm text-blackColor/80 text-nowrap"
-        [innerHTML]="searchResult"
-      ></p>
+      <div class="flex gap-2 absolute -bottom-[35px]">
+        <div
+          class="flex gap-2 text-sm text-blackColor/80 text-nowrap"
+          [innerHTML]="searchResult"
+        ></div>
+        @if(searchResult !==''){
+        <div
+          (click)="clearAll()"
+          class="cursor-pointer text-blackColor/50 hover:bg-blackColor/5 border rounded-full w-fit px-5"
+        >
+          Clear
+        </div>
+
+        }
+      </div>
     </div>
     <div
       (click)="searchClicked()"
@@ -127,6 +139,7 @@
 <!-- Paginations -->
 
 <!-- btn -->
+@if (pages.length > 0) {
 <div class="flex items-center justify-end space-x-2 mt-4">
   <!-- back -->
   <button
@@ -166,3 +179,29 @@
     >
   </button>
 </div>
+} @else {
+<div class="flex items-center justify-end space-x-2 mt-4">
+  <!-- back -->
+  <button
+    [disabled]="true"
+    class="disabled:opacity-50 rounded-md px-1 py-1 hover:none disabled:cursor-default"
+  >
+    <mat-icon class="">chevron_left</mat-icon>
+  </button>
+
+  <!-- paginations -->
+  <div class="text-blackColor/80 pb-2">
+    <span class="px-2 py-1 pb-2">1</span>
+    / 1 pages
+  </div>
+
+  <!-- nect page -->
+  <button
+    [disabled]="true"
+    class="disabled:opacity-50 rounded-md px-1 py-1 hover:none disabled:cursor-default"
+  >
+    <mat-icon class="disabled:cursor-default">chevron_right</mat-icon>
+  </button>
+</div>
+
+}

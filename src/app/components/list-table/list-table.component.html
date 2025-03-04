@@ -36,7 +36,7 @@
     }
   </div>
 </div>
-} @else { @if (shipmentList.length>0) {
+} @else { @if (hasData) {
 <table class="w-full table-fixed border-b border-blackColor/30">
   <thead>
     <tr class="w-full bg-[#f5f5f5]">
@@ -103,7 +103,7 @@
                 </div>
                 <p
                   class="font-medium"
-                  [ngClass]="getLineClass(shipment.MilestoneNode, 'Booked')"
+                  [ngClass]="getTextClass(shipment.MilestoneNode, 'Booked')"
                 >
                   Booked
                 </p>
@@ -132,7 +132,7 @@
                 </div>
                 <p
                   class="font-medium"
-                  [ngClass]="getLineClass(shipment.MilestoneNode, 'Booked')"
+                  [ngClass]="getTextClass(shipment.MilestoneNode, 'Booked')"
                 >
                   ETD
                 </p>
@@ -161,7 +161,7 @@
                 </div>
                 <p
                   class="font-medium"
-                  [ngClass]="getLineClass(shipment.MilestoneNode, 'Booked')"
+                  [ngClass]="getTextClass(shipment.MilestoneNode, 'Booked')"
                 >
                   ATD
                 </p>
@@ -190,7 +190,7 @@
                 </div>
                 <p
                   class="font-medium"
-                  [ngClass]="getLineClass(shipment.MilestoneNode, 'Booked')"
+                  [ngClass]="getTextClass(shipment.MilestoneNode, 'Booked')"
                 >
                   ETA
                 </p>
@@ -219,7 +219,7 @@
                 </div>
                 <p
                   class="font-medium"
-                  [ngClass]="getLineClass(shipment.MilestoneNode, 'Booked')"
+                  [ngClass]="getTextClass(shipment.MilestoneNode, 'Booked')"
                 >
                   ATA
                 </p>
@@ -246,7 +246,7 @@
                 </div>
                 <p
                   class="font-medium"
-                  [ngClass]="getLineClass(shipment.MilestoneNode, 'Completed')"
+                  [ngClass]="getTextClass(shipment.MilestoneNode, 'Completed')"
                 >
                   Completed
                 </p>
@@ -271,7 +271,7 @@
   </tbody>
 </table>
 }@else{
-<div class="w-full h-[300px] flex justify-center items-center">
-  <p class="text-blackColor/50 text-2xl">No data.</p>
+<div class="w-full h-[500px] flex justify-center items-center">
+  <p class="text-blackColor/50 text-2xl">No data found.</p>
 </div>
 } }

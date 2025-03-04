@@ -6,7 +6,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { ShipmentDetailsComponent } from '../../components/summary-page-fully-data/shipment-details/shipment-details.component';
 import { ShipmentOtherInfoComponent } from '../../components/summary-page-fully-data/shipment-other-info/shipment-other-info.component';
 import { CommonModule } from '@angular/common';
-import { TrackingNumberService } from '../../services/tracking-number.service';
 import { MatRipple, MatRippleModule } from '@angular/material/core';
 import { environment } from '../../.environments/environment.prod';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
@@ -39,7 +38,7 @@ export class ShipmentSummaryComponent {
   /*------- Variables -------*/
 
   // trackingNumber: string = ''; // 完成要記得解除註解
-  trackingNumber: string = 'THI132400003'; // 測試用
+  trackingNumber: string = 'THI132400003'; // 測試檔案用
   data: any = {};
   errorMessages: string = '';
 
@@ -63,7 +62,8 @@ export class ShipmentSummaryComponent {
       // if (this.trackingNumber) { 
       // this.getDetailsData(this.trackingNumber) 
       /**-------------------------------- */
-      this.getDetailsData('THI132400003') // 測試用
+      this.getDetailsData('THI132400003') // 測試檔案用
+      // this.getDetailsData('TECSHA126236') // 測試圖片用
         .pipe(timeout(15000),
           catchError(err => {
             console.error('API Timeout or Error:', err);

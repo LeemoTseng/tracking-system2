@@ -35,7 +35,7 @@
       <td class="px-4 py-2 text-start w-auto">{{ item.Name }}</td>
       <td class="align-center px-4 py-2 text-center w-[250px]">
         @if (item.Guid) {<button
-          (click)="postFilesData(item.Type, item.Guid)"
+          (click)="getFile(item.Guid)"
           matRipple
           class="btn-outline"
           style="width: fit-content"
@@ -83,25 +83,19 @@
     @for (item of newImagesList; track $index) {
     <tr class="text-blackColor/70 font-normal border-b">
       @if ($index === 0 || item.Type !== newImagesList[$index - 1].Type) {
-      <td class="px-4 py-2 text-start w-auto">
-        {{ $index + 1 }}
-      </td>
+      <td class="px-4 py-2 text-start w-auto">{{ $index + 1 }}</td>
       } @if ($index === 0 || item.Type !== newImagesList[$index - 1].Type) {
       <td class="px-4 py-2 text-start w-auto">
         {{ item.Type }}
       </td>
       } @if ($index === 0 || item.Type !== newImagesList[$index - 1].Type) {
       <td class="px-4 py-2 text-start w-auto truncate">
-        {{
-          item.Name + ", " + item[$index + 1] + ", " ||
-            "" + item[$index + 2] ||
-            ""
-        }}
+        {{ item.Name + ", ..." }}
       </td>
       } @if ($index === 0 || item.Type !== newImagesList[$index - 1].Type) {
       <td class="align-center px-4 py-2 text-center w-[250px]">
         <button
-          (click)="postImgData(item.Guid)"
+          (click)="getImg(item.Guid)"
           matRipple
           class="btn-outline"
           style="width: fit-content"
