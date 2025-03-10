@@ -98,7 +98,7 @@
                   }
                   <div
                     [ngClass]="getStatusClass(shipment.MilestoneNode, 'Booked')"
-                    class="line bg-gray-300 absolute w-[110%] h-[2px]"
+                    class="line absolute w-[110%] h-[2px]"
                   ></div>
                 </div>
                 <p
@@ -257,7 +257,7 @@
       </td>
       <td class="py-5 px-1" align="center">
         <p
-          (click)="viewItemBtn(shipment.HAWBNo)"
+          (click)="viewItemBtn(shipment.HAWBNo, shipment.MAWBNo)"
           matRipple
           routerLink="/shipment-list/details"
           class="btn-outline text-nowrap"

@@ -70,9 +70,15 @@ export class HeaderComponent {
 
   // select menu
   selectMenu(menu: string, route: string) {
-    this.navigateTo(route)
-    this.selectedMenu = menu;
+    if (this.selectedMenu === menu) {
+      window.location.reload();
+    } else {
+      this.navigateTo(route);
+      this.selectedMenu = menu;
+    }
   }
+
+
 
   // router
   navigateTo(route: string) {
@@ -90,6 +96,7 @@ export class HeaderComponent {
       this.selectedMenu = "Shipment List"
       if (this.userToken !== "") {
         this.toggleLogin = false;
+
       } else {
         this.toggleLogin = true;
         // this.router.navigate(['/login']);

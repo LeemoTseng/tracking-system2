@@ -21,7 +21,7 @@
     <p class="text-blackColor/50 font-medium">HAWB No.</p>
     <p class="text-2xl font-semibold">{{ shipmentInfo.HAWBNo }}</p>
   </div>
-  <div id="HAWBno">
+  <div id="MAWB">
     <p class="text-blackColor/50 font-medium">MAWB No.</p>
     <p class="text-2xl font-semibold">{{ shipmentInfo.MAWBNo }}</p>
   </div>
@@ -37,9 +37,11 @@
       <span>{{ shipmentInfo.DestCode }}</span>
     </p>
   </div>
-  <div matRipple style="width: 130px; height: fit-content" class="btn-outline">
-    Export
-  </div>
+  <app-export-btn
+    [trackingNumber]="trackingNumber"
+    exportElementId="export-content"
+    fileName="shipment-data.pdf"
+  ></app-export-btn>
 </div>
 } @if (isSkeletonLoading) {
 <div class="skeleton-loading p-10">

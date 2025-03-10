@@ -17,9 +17,9 @@ import { ViewDetailsTrackingNumberService } from '../../../services/view-details
 export class ShipmentOtherInfoDetailsComponent {
   /*--------- @Input ---------*/
 
-  // @Input() trackingNumber: string = '' // 完成要記得解除註解
+  @Input() trackingNumber: string = '' // 完成要記得解除註解
   // trackingNumber: string = 'THI132400003' // 測試檔案用
-  trackingNumber: string = 'TECSHA126236' // 測試圖片用
+  // trackingNumber: string = 'TECSHA126236' // 測試圖片用
 
 
   /*--------- Style settings ---------*/
@@ -143,6 +143,10 @@ export class ShipmentOtherInfoDetailsComponent {
   }
 
 
+  // send deatils for export
+  sendDetailsForExport() {
+    
+  }
 
   // Cookie
   // get coolies

@@ -1,0 +1,5 @@
+<div (click)="exportToPDF()" matRipple class="btn-outline">Export</div>
+
+<div #exportTemplate style="display: none">
+  <app-export-template [trackingNumber]="trackingNumber"></app-export-template>
+</div>

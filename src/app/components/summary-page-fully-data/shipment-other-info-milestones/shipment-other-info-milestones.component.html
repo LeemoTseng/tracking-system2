@@ -10,7 +10,15 @@
   <div [class]="skeletonClass"></div>
   }
 </div>
-}@else{
+}@else{ @if (isError) {
+<div>
+  <p class="text-blackColor/50 text-sm px-5 flex">
+    <mat-icon class="text-blackColor/50 text-[18px]">search</mat-icon>
+    No Milestones found.
+  </p>
+</div>
+
+}@else {
 <table class="w-full border-collapse mb-8 table-auto">
   <thead>
     <tr class="text-blackColor/90 font-semibold bg-blackColor/5">
@@ -45,7 +53,7 @@
     }
   </tbody>
 </table>
-}
+} }
 
 <!---------- Flight ---------->
 <div class="title flex items-center gap-2">
@@ -59,7 +67,7 @@
   <div [class]="skeletonClass"></div>
   }
 </div>
-}@else{ @if(flightSegments != []){
+}@else{ @if(flightSegments != [] && !isError){
 <table class="w-full border-collapse mb-8 table-auto">
   <thead>
     <tr class="text-blackColor/90 font-semibold bg-blackColor/5">
@@ -105,7 +113,7 @@
   <div [class]="skeletonClass"></div>
   }
 </div>
-}@else{ @if(dimensions.length > 0){
+}@else{ @if(dimensions.length > 0 && !isError){
 <table class="w-full border-collapse mb-8">
   <thead>
     <tr class="text-blackColor/90 font-semibold bg-blackColor/5">

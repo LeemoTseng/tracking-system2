@@ -2,13 +2,14 @@ import { Component, inject, Input } from '@angular/core';
 import { MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../.environments/environment.prod';
+import { ExportBtnComponent } from '../../export-btn/export-btn.component';
+import { ExportTemplateComponent } from '../../export-template/export-template.component';
 
 @Component({
   selector: 'app-shipment-details',
-  imports: [MatIconModule, MatRippleModule, CommonModule],
+  imports: [MatIconModule, MatRippleModule, 
+    CommonModule, ExportBtnComponent],
   templateUrl: './shipment-details.component.html',
   styleUrl: './shipment-details.component.css'
 })
@@ -57,6 +58,8 @@ export class ShipmentDetailsComponent {
 
   /*------- Data import -------*/
 
+  trackingNumber: string = '';
+
   shipmentData: any = [];
   shipmentInfo: any = {};
   milestones: any = {};
@@ -73,8 +76,15 @@ export class ShipmentDetailsComponent {
   /*------- Functions -------*/
 
   ngOnInit() {
-    // console.log('Data:', this.data);
     if (this.data.code != '0') {
+
+      if (this.data.data.ShipmentSummary.HAWBNo !== '') {
+        this.trackingNumber = this.data.data.ShipmentSummary.HAWBNo
+      }
+      else {
+        this.trackingNumber = this.data.data.ShipmentSummary.MAWBNo
+      }
+
       this.shipmentInfo = this.data.data.ShipmentDetails.ShipmentInfo;
 
       this.milestones = this.data.data.Milestone

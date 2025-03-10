@@ -5,6 +5,7 @@ import { Observable, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from '../../../.environments/environment.prod';
 import { ViewImgComponent } from '../../view-img/view-img.component';
+import { ExportTemplateService } from '../../../services/export-template.service';
 
 @Component({
   selector: 'app-shipment-other-info-milestones',
@@ -15,20 +16,22 @@ import { ViewImgComponent } from '../../view-img/view-img.component';
 export class ShipmentOtherInfoMilestonesComponent {
 
   /*--------- style settings ---------*/
-  skeletonClass: string = 'w-full h-5 rounded bg-gradient-to-r from-gray-50 via-gray-100 to-gray-50 bg-[length:200%_100%] animate-[shimmer_1.5s_infinite_linear]';
+  skeletonClass: string = 'w-full h-5 rounded bg-gradient-to-r from-gray-50 via-gray-100 to-gray-50 bg-[length:200%_100%] animate-[shimmer_1s_infinite_linear]';
+  isError: boolean = false;
 
   /*--------- Inject ---------*/
   http = inject(HttpClient);
+  exportTemplate = inject(ExportTemplateService)
 
   /*--------- @Iutput ---------*/
-  // @Input() trackingNumber: string = '';
+  @Input() trackingNumber: string = '';
   // trackingNumber: string = 'THI132400003' // 測試檔案用
-  trackingNumber: string = 'TECSHA126236' // 測試圖片用
+  // trackingNumber: string = 'TECSHA126236' // 測試圖片用
 
 
   /*--------- Variables ---------*/
 
-    // image viewer
+  // image viewer
   isViewImg: boolean = false;
   newImagesList: any[] = []
 
@@ -78,29 +81,36 @@ export class ShipmentOtherInfoMilestonesComponent {
   /*--------- Functions ---------*/
 
   ngOnInit() {
+
     this.getMilestonesData(this.trackingNumber).subscribe({
       next: (res: any) => {
-        this.shipmentData = res.data;
-        console.log('shipmentData', this.shipmentData)
 
-        this.milestones = this.aryMilestones(this.shipmentData.Milestone);
-
-        // Flight Info
-        if (this.shipmentData.FlightSegments.length > 0) {
-          this.flightSegments = this.shipmentData.FlightSegments;
+        if (res.code != 1) {
+          console.error(res.message);
+          this.isSkeletonLoading = false;
+          this.isError = true;
         } else {
-          this.flightSegments = []
+          this.shipmentData = res.data;
+          this.milestones = this.aryMilestones(this.shipmentData.Milestone);
+
+          // Flight Info
+          if (this.shipmentData.FlightSegments.length > 0) {
+            this.flightSegments = this.shipmentData.FlightSegments;
+
+          } else {
+            this.flightSegments = []
+          }
+
+          // Dimension Info
+
+          if (this.shipmentData.Dimensions !== null) {
+            this.dimensions = this.objToAry(this.shipmentData.Dimensions[0])
+          } else {
+            this.dimensions = []
+          }
+          this.isSkeletonLoading = false;
+
         }
-
-        // Dimension Info
-
-        if (this.shipmentData.Dimensions !== null) {
-          this.dimensions = this.objToAry(this.shipmentData.Dimensions[0])
-        } else {
-          this.dimensions = []
-        }
-        this.isSkeletonLoading = false;
-
 
       },
       error: (err) => {
@@ -114,11 +124,14 @@ export class ShipmentOtherInfoMilestonesComponent {
 
   // Obj to Ary
   objToAry(obj: any) {
-    const ary = Object.entries(obj).map(([key, value]) => ({
+    if (!obj || typeof obj !== 'object') {
+      return [];
+    }
+
+    return Object.entries(obj).map(([key, value]) => ({
       key,
       value
     }));
-    return ary;
   }
 
 
@@ -128,7 +141,6 @@ export class ShipmentOtherInfoMilestonesComponent {
     // 'Booking Creation', 'Cargo Arrive Terminal', 'ETD', 'ATD', 'ETA', 'ATA', 'Document Release', 'Release', 'Airport Pickup', 'Delivered', 'POD'];
 
     const list: any = [];
-    console.log('other-info-milestones', milestones)
 
     this.milestonRows.forEach((row: any) => {
       if (row === 'Booking Creation') {
@@ -145,7 +157,7 @@ export class ShipmentOtherInfoMilestonesComponent {
           Imgs: milestones?.CargoArrive?.ImageUrls ?? [],
         });
       }
-       else if (row === 'ETD') {
+      else if (row === 'ETD') {
         list.push({
           Milestone: row,
           DateTime: milestones?.ETD ?? '',
@@ -183,7 +195,7 @@ export class ShipmentOtherInfoMilestonesComponent {
         }
       }
       else if (row === 'Release') {
-        if (milestones.ReleaseDate != null && milestones.ReleaseDate !=''&& milestones.ReleaseDate !='undefined' ) {
+        if (milestones.ReleaseDate != null && milestones.ReleaseDate != '' && milestones.ReleaseDate != 'undefined') {
           list.push({
             Milestone: row,
             DateTime: milestones?.ReleaseDate ?? '',
@@ -214,43 +226,42 @@ export class ShipmentOtherInfoMilestonesComponent {
       }
     });
 
-
     return list;
 
   }
 
   // get img
-  getImg(list: string) {
-    console.log('list',list)
+  getImg(list: any) {
+    if (Array.isArray(list)) {
+      this.newImagesList = list.map(item => ({
+        ...item,
+        Name: item.FileName
+      }));
+    } else {
+      this.newImagesList = [{
+        ...list,
+        Name: list.FileName
+      }];
+    }
+
     this.isViewImg = true;
-    this.newImagesList = list.split(',');
-    // this.postFilesData(guid).subscribe({
-    //   next: (res) => {
-    //     console.log(res)
-    //     // this.downloadFile(res, guid)
-    //   },
-    //   error: (err) => {
-    //     console.log(err)
-    //   },
-    //   complete: () => { }
-    // })
 
   }
 
-    postFilesData(guid: string): Observable<any> {
-    console.log('postFilesData(guid: string):guid', guid)
+
+  postFilesData(guid: string): Observable<any> {
+
     const token = this.getCookie('authToken');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
     const params = new HttpParams().set('guid', guid);
-      return this.http.get(`${this.baseAPI}TrackingApi/Download`, { 
-    headers, 
-    params, 
-    responseType: 'blob'  
-  });
+    return this.http.get(`${this.baseAPI}TrackingApi/Download`, {
+      headers,
+      params,
+      responseType: 'blob'
+    });
   }
-
 
   // Cookie
   // get coolies
@@ -259,10 +270,9 @@ export class ShipmentOtherInfoMilestonesComponent {
     return match ? match[2] : null;
   }
 
-    // get close button
+  // get close button
 
   getClosedStatus(e: any) {
     this.isViewImg = e;
-    console.log('getClosedStatus', e)
   }
 }

@@ -22,10 +22,9 @@ export class ShipmentOtherInfoFilesComponent {
 
 
   /*--------- @Iutput ---------*/
-  // @Input() trackingNumber: string = '';
+  @Input() trackingNumber: string = '';
   // trackingNumber: string = 'THI132400003'; //測檔案用
-  trackingNumber: string = 'TECSHA126236'; // 測圖片用
-
+  // trackingNumber: string = 'TECSHA126236'; // 測圖片用
 
   /*--------- style settings ---------*/
   skeletonClass: string = 'w-full h-5 rounded bg-gradient-to-r from-gray-50 via-gray-100 to-gray-50 bg-[length:200%_100%] animate-[shimmer_1.5s_infinite_linear]';

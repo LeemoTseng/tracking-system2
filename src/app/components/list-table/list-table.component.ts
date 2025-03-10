@@ -1,5 +1,5 @@
-import { Component, effect, EventEmitter, inject, Input, Output, SimpleChanges } from '@angular/core';
-import { MatRipple, MatRippleModule } from '@angular/material/core';
+import { Component, EventEmitter, inject, Input, Output, SimpleChanges } from '@angular/core';
+import { MatRipple } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
@@ -68,9 +68,7 @@ export class ListTableComponent {
   /*--------- Functions ---------*/
 
   ngOnInit() {
-    console.log('list-table/ngOnInit()', this.searchContentsData)
     this.renderItems(this.searchContentsData);
-    // console.log('this.initData', this.initData)
     this.isInit = true;
   }
 
@@ -81,18 +79,16 @@ export class ListTableComponent {
     }
     if (changes['searchContentsData']) {
       this.renderItems(this.searchContentsData);
-      console.log('list-table/this.renderItems', this.searchContentsData)
     }
   }
 
   // render 
   renderItems(obj: any) {
-    console.log('list-table/renderItems(obj: any)', obj.Page)
     this.currentPage = obj.Page;
     this.isSkeletonLoading = true;
     this.postSearchData(obj).subscribe({
       next: (res) => {
-
+        console.log('res',res)
         if (res.code == 1) {
           this.hasData = true;
           this.shipmentList = res.data.Shipments;
@@ -104,7 +100,9 @@ export class ListTableComponent {
           this.totalPages.emit(this.totalPage);
           this.isSkeletonLoading = false}
         } else {
-          console.log('has no data')
+          if (res.status === 401) {
+            this.router.navigate(['/login']);
+          }
           this.isSkeletonLoading = false
           this.hasData = false;
         }
@@ -112,7 +110,7 @@ export class ListTableComponent {
 
       },
       error: (err) => {
-        console.log('has no data')
+        console.log('err',err)
         this.isSkeletonLoading = false
         this.hasData = false;
         this.isSkeletonLoading = false
@@ -140,9 +138,17 @@ export class ListTableComponent {
   // view items
   //Click and view the details of the item
 
-  viewItemBtn(trackingNumber: string) {
-    this.trackingNumberService.setData(trackingNumber);
-    this.router.navigate(['/shipment-summary']);
+  viewItemBtn(HAWBNo: string, MAWBNo:string) {
+    console.log(HAWBNo, MAWBNo)
+    if (HAWBNo !== ''){
+      this.trackingNumber = HAWBNo;
+      this.trackingNumberService.setData(this.trackingNumber);
+      this.router.navigate(['/shipment-summary']);
+    }else{
+      this.trackingNumber = MAWBNo;
+      this.trackingNumberService.setData(this.trackingNumber);
+      this.router.navigate(['/shipment-summary']);
+    }
   }
 
 
@@ -160,49 +166,42 @@ export class ListTableComponent {
 
 
   // Status class implementation
-  getStatusClass(MilestoneNode: string, nowStatus: string): any {
-
-    if (MilestoneNode === 'Pod') {
-      return "bg-primary"
-    }
-    if (MilestoneNode === 'ATA') {
-      if (nowStatus === 'Completed') {
-        return "bg-gray-300"
-      } else {
-        return "bg-primary"
-      }
-    }
-    if (MilestoneNode === 'ETA') {
-      if (nowStatus === 'Completed' || nowStatus === 'ATA') {
-        return "bg-gray-300"
-      } else {
-        return "bg-primary"
-      }
-
-    }
-
+getStatusClass(MilestoneNode: string | null, nowStatus: string): any {
+  if (!MilestoneNode) {
+    return "bg-gray-300"; // 當 MilestoneNode 為 null 時，使用預設灰色樣式
   }
-  getTextClass(MilestoneNode: string, nowStatus: string): any {
 
-    if (MilestoneNode === 'Pod') {
-      return "text-primary"
-    }
-    if (MilestoneNode === 'ATA') {
-      if (nowStatus === 'Completed') {
-        return "text-gray-300"
-      } else {
-        return "text-primary"
-      }
-    }
-    if (MilestoneNode === 'ETA') {
-      if (nowStatus === 'Completed' || nowStatus === 'ATA') {
-        return "text-gray-300"
-      } else {
-        return "text-primary"
-      }
-
-    }
+  if (MilestoneNode === 'Pod') {
+    return "bg-primary";
   }
+  if (MilestoneNode === 'ATA') {
+    return nowStatus === 'Completed' ? "bg-gray-300" : "bg-primary";
+  }
+  if (MilestoneNode === 'ETA') {
+    return (nowStatus === 'Completed' || nowStatus === 'ATA') ? "bg-gray-300" : "bg-primary";
+  }
+
+  return "bg-gray-300"; 
+}
+
+getTextClass(MilestoneNode: string | null, nowStatus: string): any {
+  if (!MilestoneNode) {
+    return "text-gray-400"; // 當 MilestoneNode 為 null 時，使用預設樣式
+  }
+
+  if (MilestoneNode === 'Pod') {
+    return "text-primary";
+  }
+  if (MilestoneNode === 'ATA') {
+    return nowStatus === 'Completed' ? "text-gray-300" : "text-primary";
+  }
+  if (MilestoneNode === 'ETA') {
+    return (nowStatus === 'Completed' || nowStatus === 'ATA') ? "text-gray-300" : "text-primary";
+  }
+
+  return "text-gray-400"; 
+}
+
 
 
 

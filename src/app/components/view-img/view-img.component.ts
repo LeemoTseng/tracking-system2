@@ -42,6 +42,7 @@ export class ViewImgComponent {
     this.preloadImages();
   }
 
+  
   /*--------- Functions ---------*/
   preloadImages() {
     this.imgList.forEach((item: any, index: number) => {
@@ -67,7 +68,7 @@ export class ViewImgComponent {
   // imge data
   get currentImg() {
     return {
-      img: this.imageUrls[this.currentIndex] || '', // 取得對應的 Blob URL
+      img: this.imageUrls[this.currentIndex] || '',
       name: this.imgList[this.currentIndex]?.Name || 'Image'
     };
   }
@@ -82,7 +83,6 @@ export class ViewImgComponent {
 
   sendCloseClicked() {
     this.closeClicked.emit(false);
-    console.log('sendCloseClicked')
   }
 
 

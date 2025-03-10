@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { ShipmentDetailsComponent } from '../../components/summary-page-fully-data/shipment-details/shipment-details.component';
 import { ShipmentOtherInfoComponent } from '../../components/summary-page-fully-data/shipment-other-info/shipment-other-info.component';
 import { CommonModule } from '@angular/common';
-import { MatRipple, MatRippleModule } from '@angular/material/core';
+import { MatRippleModule } from '@angular/material/core';
 import { environment } from '../../.environments/environment.prod';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, Observable, throwError, timeout } from 'rxjs';
@@ -37,8 +37,8 @@ export class ShipmentSummaryComponent {
 
   /*------- Variables -------*/
 
-  // trackingNumber: string = ''; // 完成要記得解除註解
-  trackingNumber: string = 'THI132400003'; // 測試檔案用
+  trackingNumber: string = ''; // 完成要記得解除註解
+  // trackingNumber: string = 'THI132400003'; // 測試檔案用
   data: any = {};
   errorMessages: string = '';
 
@@ -59,11 +59,11 @@ export class ShipmentSummaryComponent {
     this.trackingNumber = this.trackingNumberService.getData()();
     effect(() => {
       /* ------- 測試完記得解除註解 ------- */
-      // if (this.trackingNumber) { 
-      // this.getDetailsData(this.trackingNumber) 
+      if (this.trackingNumber) { 
+      this.getDetailsData(this.trackingNumber) 
       /**-------------------------------- */
-      this.getDetailsData('THI132400003') // 測試檔案用
-      // this.getDetailsData('TECSHA126236') // 測試圖片用
+      // this.getDetailsData('THI132400003') // 測試檔案用
+        // this.getDetailsData('TECSHA126236') // 測試圖片用
         .pipe(timeout(15000),
           catchError(err => {
             console.error('API Timeout or Error:', err);
@@ -75,10 +75,16 @@ export class ShipmentSummaryComponent {
         .subscribe({
           next: (res) => {
             if (!this.data && !this.data.ok) {
-              this.loading = false;
-              this.hasData = false;
-              this.errorMessages = `${this.trackingNumber} not found.<br/>  Please check your tracking number.`;
-              return;
+              if (this.data.status === 401) {
+                this.router.navigate(['/login']);
+              } else {
+                this.loading = false;
+                this.hasData = false;
+                this.errorMessages = `${this.trackingNumber} not found.<br/>  Please check your tracking number.`;
+                return;
+
+              }
+
             } else {
               this.hasData = true;
               this.data = res;
@@ -95,11 +101,11 @@ export class ShipmentSummaryComponent {
           complete: () => { }
         })
       /* ------- 測試完記得解除註解 ------- */
-      // } else { 
-      //   this.hasData = false;
-      //   this.loading = false;
-      //   this.errorMessages = `There is no data`;
-      // }
+      } else { 
+        this.hasData = false;
+        this.loading = false;
+        this.errorMessages = `There is no data`;
+      }
       /**-------------------------------- */
     });
   }

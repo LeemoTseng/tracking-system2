@@ -16,8 +16,6 @@ export class SearchBarComponent {
   /* --------- Inject ---------*/
 
 
-
-
   /* --------- style settings---------*/
   rippleColor: string = 'rgba(255, 255, 255, 0.2)';
   placeHolderColor: string = 'placeholder:text-red-500';
@@ -30,6 +28,10 @@ export class SearchBarComponent {
   @Input() totalPages: number = 1;
 
   /* --------- variables---------*/
+
+  // date picker
+  minDate: string = ''
+  maxDate: string = ''
 
   // input
   trackingNumber: string = ''
@@ -89,41 +91,94 @@ export class SearchBarComponent {
 
   ngOnInit() {
     this.dataSent = this.initData
-    console.log('ngOnInit(){this.dataSent}', this.dataSent)
     this.searchContentOutput.emit(this.dataSent)
+
+    // within 3 months
+    // today
+    const today = new Date();
+    // three months before
+    const threeMonthsBefore = new Date();
+    threeMonthsBefore.setMonth(today.getMonth() - 3);
+
+    if (threeMonthsBefore.getDate() !== today.getDate()) {
+      threeMonthsBefore.setDate(threeMonthsBefore.getDate() - (threeMonthsBefore.getDate() - 1));
+    }
+
+
+
+    // earliest of the start date
+    threeMonthsBefore.setHours(0, 0, 0, 0);
+
+    // can be seleceted date
+    this.minDate = threeMonthsBefore.toISOString().split('T')[0];
+    this.maxDate = '';
   }
 
   // search clicked
   searchClicked() {
+    // 檢查是否有填入日期
+    if ((this.startDate && !this.endDate) || (this.startDate && this.endDate)) {
+      const today = new Date();
+      const threeMonthsBefore = new Date(today);
+      threeMonthsBefore.setMonth(today.getMonth() - 3);
+
+      if (threeMonthsBefore.getDate() !== today.getDate()) {
+        threeMonthsBefore.setDate(threeMonthsBefore.getDate() - (threeMonthsBefore.getDate() - 1));
+      }
+
+        // +1
+      threeMonthsBefore.setDate(threeMonthsBefore.getDate() - 1);
+      threeMonthsBefore.setHours(0, 0, 0, 0);
+
+      const startDateObj = this.startDate ? new Date(this.startDate) : null;
+      console.log(startDateObj)
+      const endDateObj = this.endDate ? new Date(this.endDate) : null;
+
+
+      if ((startDateObj && startDateObj < threeMonthsBefore) ||
+        (endDateObj && endDateObj <= threeMonthsBefore)) {
+
+        const searchStartDate = new Date(threeMonthsBefore);
+        searchStartDate.setDate(searchStartDate.getDate() +1); 
+        this.searchResult = `
+            <div class="w-fit text-red-500 px-2">
+            The search range is within the last three months starting from ${searchStartDate.toISOString().split('T')[0]}
+            </div>
+          `;
+
+        return;
+      }
+    }
+
 
     if (this.trackingNumber === '' && this.numberType != 0) {
-
       this.isInputError = true;
       this.searchResult = `
-      <div class=" w-fit text-red-500 px-2">
+      <div class="w-fit text-red-500 px-2">
       Please enter a tracking number when selecting a number type.
       </div>
-      `;
-
-    } else {
-      this.dataSent = {
-        "StartDate": this.startDate || null,
-        "EndDate": this.endDate || null,
-        "DateType": 1,
-        "Status": this.searchStatusOptions[this.searchStatus].value,
-        "NumberType": this.numberTypeOptions[this.numberType].value,
-        "TrackingNo": this.trackingNumber || null,
-        "SortBy": this.sortBy,
-        "Page": 1,
-        "PageSize": 5
-      }
-      this.currentPage = 1;
-      this.searchResultText();
-
-      // send data to shipment-list/table-list
-      this.searchContentOutput.emit(this.dataSent)
+    `;
+      return;
     }
+
+    this.dataSent = {
+      "StartDate": this.startDate || null,
+      "EndDate": this.endDate || null,
+      "DateType": 1,
+      "Status": this.searchStatusOptions[this.searchStatus].value,
+      "NumberType": this.numberTypeOptions[this.numberType].value,
+      "TrackingNo": this.trackingNumber || null,
+      "SortBy": this.sortBy,
+      "Page": 1,
+      "PageSize": 5
+    };
+    this.currentPage = 1;
+    this.searchResultText();
+
+    // 發送搜尋資料
+    this.searchContentOutput.emit(this.dataSent);
   }
+
 
   // Search content
   searchResultText() {
@@ -160,7 +215,6 @@ export class SearchBarComponent {
     this.currentPage = 1;
 
     this.dataSent = this.initData
-    console.log('ngOnInit(){this.dataSent}', this.dataSent)
     this.searchContentOutput.emit(this.dataSent)
 
   }
@@ -177,7 +231,6 @@ export class SearchBarComponent {
     this.dataSent["Page"] = this.currentPage
     this.dataSent["SortBy"] = this.sortBy
 
-    console.log('switchStatus(value: string)', this.dataSent)
     this.searchContentOutput.emit(this.dataSent)
   }
 
@@ -212,15 +265,14 @@ export class SearchBarComponent {
       this.currentPage = page;
       this.dataSent["Page"] = this.currentPage
     } else {
-      this.currentPage = 1; // 輸入超過就會回到第一頁
+      this.currentPage = 1;
     }
-    console.log('changePage(page: number)', this.dataSent)
     this.searchContentOutput.emit(this.dataSent);
 
   }
 
   renderPage(item: any) {
-    const pageNumber = Number(item); // 確保轉換為數字
+    const pageNumber = Number(item);
     if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= this.totalPages) {
       this.dataSent["Page"] = this.currentPage
       this.searchContentOutput.emit(this.dataSent);
@@ -240,7 +292,7 @@ export class SearchBarComponent {
   spinnerAnimation() {
     setTimeout(() => {
       this.loading = false;
-    },300)
+    }, 300)
   }
 
 
