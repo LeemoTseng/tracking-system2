@@ -2,13 +2,13 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './pages/login/login.component';
 
 export const routes: Routes = [
-    { path: '', component: LoginComponent },
+  { path: '', redirectTo: '/en/login', pathMatch: 'full' }, // 預設導向 /en
+  { path: ':lang', children: [  
     { path: 'login', component: LoginComponent },
     { path: 'shipment-summary', loadComponent: () => import('./pages/shipment-summary/shipment-summary.component').then(m => m.ShipmentSummaryComponent) },
     { path: 'shipment-summary-guest', loadComponent: () => import('./pages/shipment-summary-guest/shipment-summary-guest.component').then(m => m.ShipmentSummaryGuestComponent) },
-    { path: 'shipment-list', loadComponent: () => import('./pages/shipment-list/shipment-list.component').then(m => m.ShipmentListComponent),
-
-    
-    },
-
+    { path: 'shipment-list', loadComponent: () => import('./pages/shipment-list/shipment-list.component').then(m => m.ShipmentListComponent) },
+    { path: '', redirectTo: 'login', pathMatch: 'full' } // 預設導向當前語言的 login
+  ]},
+  { path: '**', redirectTo: '/en/login' } 
 ];

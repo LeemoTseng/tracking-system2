@@ -2,7 +2,9 @@
   <div class="logo flex">
     <img class="object-contain w-[100px]" src="t3ex-logo.svg" alt="logo" />
     <div class="greeting pt-3 pl-3">
-      <p class="text-2xl font-semibold">Tracking your shipment...</p>
+      <p class="text-2xl font-semibold" [translate]="'LOGIN.HEADER'">
+        {{ "LOGIN.HEADER" | translate }}
+      </p>
     </div>
   </div>
 
@@ -10,10 +12,10 @@
     <!-- Input tracking number -->
     <div class="trackingNum p-10 border-r-2 flex flex-col justify-center">
       <p class="text-2xl font-semibold">
-        Track your shipment with tracking number
+        {{ "LOGIN.SIMPLE_QUERY_TITLE" | translate }}
       </p>
       <p class="text-blackColor/50 text-sm pb-5">
-        Enter the tracking number to track your shipment
+        {{ "LOGIN.SUBTITLE" | translate }}
       </p>
       <div class="inputBox relative">
         <input
@@ -39,13 +41,15 @@
     <!---------- Login ---------->
     @if (!this.isLogin) {
     <div class="popUp frame flex flex-col bg-white p-10 rounded-md">
-      <p class="text-2xl font-semibold">Air Cargo Tracking System</p>
-      <p class="text-blackColor/50">Welcome back to our air tracking system</p>
+      <p class="text-2xl font-semibold">
+        {{ "LOGIN.LOGIN_TITLE" | translate }}
+      </p>
+      <p class="text-blackColor/50">{{ "LOGIN.LOGIN_SUBTITLE" | translate }}</p>
       <!-- account -->
       <div class="inputBox pt-5">
-        <label for="account" class="text-sm font-semibold" for="account"
-          >Account</label
-        >
+        <label for="account" class="text-sm font-semibold" for="account">{{
+          "LOGIN.ACCOUNT" | translate
+        }}</label>
         <input
           (input)="typeAccount($event)"
           [style]="typing ? '' : 'border: 1px solid #ff3434'"
@@ -58,9 +62,9 @@
       </div>
       <!-- password -->
       <div class="inputBox pt-2">
-        <label for="password" class="text-sm font-semibold" for="password"
-          >Password</label
-        >
+        <label for="password" class="text-sm font-semibold" for="password">{{
+          "LOGIN.PASSWORD" | translate
+        }}</label>
         <input
           (input)="typeAccount($event)"
           [style]="typing ? '' : 'border: 1px solid #ff3434'"
@@ -78,17 +82,17 @@
         <div class="pt-10 flex justify-between items-center">
           <div class="remember">
             <input [(ngModel)]="rememberMe" type="checkbox" id="remember" />
-            <label class="pl-2 cursor-pointer" for="remember"
-              >Remember me</label
-            >
+            <label class="pl-2 cursor-pointer" for="remember">{{
+              "LOGIN.REMEMBER_ME" | translate
+            }}</label>
           </div>
           <select
-            name=""
-            id=""
+            (change)="changeLanguage($event)"
             class="border rounded-sm py-1 px-5 focus:border-blackColor focus:outline-none"
           >
-            <option value="chinese">中文</option>
-            <option value="eng">English</option>
+            <option value="en">English</option>
+            <option value="tw">繁體中文</option>
+            <option value="cn">簡體中文</option>
           </select>
         </div>
 
@@ -116,7 +120,9 @@
           [matRippleColor]="rippleColor"
           style="margin-top: 30px"
         >
-          <div (click)="checkLogin()" class="cursor-pointer">Login</div>
+          <div (click)="checkLogin()" class="cursor-pointer">
+            {{ "LOGIN.LOGIN" | translate }}
+          </div>
         </div>
         }
       </div>
@@ -124,11 +130,16 @@
     }@else {
     <div class="h-[450px] flex flex-col justify-center items-center">
       <div class="w-[450px]">
-        <p class="text-blackColor text-2xl font-semibold">Hi {{ account }},</p>
-        <p class="text-blackColor text-xl">Welcome back!</p>
+        <p class="text-blackColor text-2xl font-semibold">
+          {{ "LOGIN.GREETING" | translate }}
+          {{ account }},
+        </p>
+        <p class="text-blackColor text-xl">
+          {{ "LOGIN.WELCOME_BACK" | translate }}
+        </p>
         <div
           class="cursor-pointer w-fit py-2 px-5 bg-black/70 text-white rounded-md"
-          routerLink="/shipment-list"
+          [routerLink]="['/', currentLang, 'shipment-list']"
           matRipple
           [matRippleColor]="rippleColor"
           style="margin-top: 30px"

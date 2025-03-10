@@ -1,0 +1,16 @@
+{
+  "LOGIN": {
+    "HEADER": "Tracking your shipment...",
+    "SIMPLE_QUERY_TITLE": "Track your shipment with tracking number",
+    "SUBTITLE": "Enter the tracking number to track your shipment",
+    "LOGIN_TITLE":"Air Cargo Tracking System",
+    "LOGIN_SUBTITLE":"Welcome back to our air tracking system",
+    "ACCOUNT":"Account",
+    "PASSWORD":"Password",
+    "REMEMBER_ME": "Remember me",
+    "LOGIN": "Login",
+    "GREETING":"Hi",
+    "WELCOME_BACK": "Welcome back!",
+    "BTN_VIEW":"View your all shipments"
+  }
+}

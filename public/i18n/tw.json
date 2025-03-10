@@ -1,0 +1,16 @@
+{
+  "LOGIN": {
+    "HEADER": "貨物追蹤系統",
+    "SIMPLE_QUERY_TITLE": "以單號追蹤您的貨物",
+    "SUBTITLE": "請輸入完整的單號以追蹤您的貨物",
+    "LOGIN_TITLE":"貨物追蹤系統",
+    "LOGIN_SUBTITLE":"請輸入帳號密碼以追蹤您的貨物",
+    "ACCOUNT":"帳號",
+    "PASSWORD":"密碼",
+    "REMEMBER_ME": "記住我",
+    "LOGIN": "登入",
+    "GREETING":"您好，",
+    "WELCOME_BACK": "歡迎回來！",
+    "BTN_VIEW":"檢視您所有貨物"
+  }
+}

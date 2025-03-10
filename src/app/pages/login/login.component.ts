@@ -2,24 +2,28 @@ import { Component, inject } from '@angular/core';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { MatIconModule } from '@angular/material/icon'
 import { MatRippleModule } from '@angular/material/core';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LoginService } from '../../services/login.service';
 import { CookieService } from 'ngx-cookie-service';
 import { TrackingNumberService } from '../../services/tracking-number.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
   imports: [FooterComponent, MatIconModule, MatRippleModule,
-    CommonModule, FormsModule, RouterLink],
+    CommonModule, FormsModule, RouterLink, TranslateModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
 
   /*------- Inject -------*/
+
+  route = inject(ActivatedRoute);
   router = inject(Router)
+  translate = inject(TranslateService);
   authService = inject(LoginService);
   cookieService = inject(CookieService);
 
@@ -28,8 +32,12 @@ export class LoginComponent {
 
 
   /*------- Variables -------*/
+
+  // language
+currentLang: string = 'en';
+
   //loading
-  loading:boolean = false;
+  loading: boolean = false;
 
   // tracking number
   trackingNumber: string = '';
@@ -51,46 +59,66 @@ export class LoginComponent {
 
 
   /*------- Data import -------*/
-  
+
   // services
   trackingNumberService = inject(TrackingNumberService);
-
-
 
   /*------- Functions -------*/
 
   ngOnInit() {
+  const availableLangs = ['en', 'tw', 'cn'];
+  this.translate.addLangs(availableLangs);
+  this.translate.setDefaultLang('en');
+
+  // update language
+  this.route.params.subscribe(params => {
+    let lang = params['lang'] || 'en';
+
+    if (lang === 'tw') lang = 'tw';
+    if (lang === 'cn') lang = 'cn';
+
+    if (!availableLangs.includes(lang)) {
+      lang = 'en';
+      this.router.navigate(['/en']);
+    }
+    this.currentLang = params['lang'];
+    this.translate.use(lang);
+  });
+
+
+
+
     // check if user is already logged in
     const rememberMeCookie = this.cookieService.get('rememberMe');
     const authToken = this.cookieService.get('authToken');
     if (rememberMeCookie === 'true') {
       this.rememberMe = rememberMeCookie === 'true';
       this.account = this.cookieService.get('account');
-    }else{
+    } else {
       this.rememberMe = false;
       this.account = '';
     }
 
-    if(authToken){
+    if (authToken) {
       this.isLogin = true;
-    }else{
+    } else {
       this.isLogin = false;
     }
-    
+
   }
 
   checkLogin() {
     this.loading = true;
     this.checkLoginInput(this.account, this.password);
-    if (!this.isLoginInput){
+    if (!this.isLoginInput) {
       this.loading = false;
       return;
-    } 
+    }
     this.authService.login(this.account, this.password, this.rememberMe).subscribe({
       next: (res) => {
         const token = res.data;
         const expirationDate = new Date();
-        expirationDate.setDate(expirationDate.getDate() + 7); 
+        expirationDate.setDate(expirationDate.getDate() + 7);
 
         this.cookieService.set('authToken', res.data, {
           path: '/',
@@ -142,7 +170,7 @@ export class LoginComponent {
     console.log(e.target.value);
     if (e.target.value === '') {
       this.isValidTrackingNum = false;
-      
+
       this.alertMessage = 'the tracking number cannot be empty';
     } else {
       this.isValidTrackingNum = true;
@@ -161,8 +189,22 @@ export class LoginComponent {
   }
 
   logout() {
-    this.authService.logout(); 
+    this.authService.logout();
   }
+
+  // Languages
+changeLanguage(event: Event) {
+  const target = event.target as HTMLSelectElement;
+  if (target) {
+    const lang = target.value;
+    this.translate.use(lang); 
+    this.router.navigate([`/${lang}`]); 
+  }
+}
+
+
+
+
 
 
 
