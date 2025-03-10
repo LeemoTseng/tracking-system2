@@ -103,8 +103,15 @@ export class ShipmentOtherInfoMilestonesComponent {
 
           // Dimension Info
 
+          // Dimension Info
           if (this.shipmentData.Dimensions !== null) {
-            this.dimensions = this.objToAry(this.shipmentData.Dimensions[0])
+
+            const dimensionsData = Array.isArray(this.shipmentData.Dimensions)
+              ? this.shipmentData.Dimensions
+              : [this.shipmentData.Dimensions];
+            this.dimensions = dimensionsData
+            console.log(this.dimensions);
+
           } else {
             this.dimensions = []
           }

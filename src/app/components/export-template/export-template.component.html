@@ -134,11 +134,17 @@
   </ul>
 </div>
 
-<!-- Milestones -->
+<!-- Milestones, flight, dimensions -->
 <div class="flex flex-col pb-8 border-b-[1px] border-blackColor/20">
   <div class="milestones flex flex-col w-full">
     <p class="text-xl font-bold pt-4 pb-2 mt-0 pr-2">Milestones</p>
 
+    @if (milestones.length == [] || milestones == null || milestones ==
+    undefined) {
+    <p style="color: gray" class="font-normal pb-4 mt-0">
+      No milestones available for this shipment.
+    </p>
+    } @else {
     <table class="border-collapse">
       <thead>
         <tr
@@ -160,6 +166,7 @@
         }
       </tbody>
     </table>
+    }
   </div>
   <!-- Flight Info -->
   <div class="dimensions flex flex-col w-full">
@@ -167,6 +174,12 @@
       <p class="text-xl font-bold pt-4 pb-2 mt-0 pr-2">Flight</p>
       <p class="text-xl font-bold pt-4 pb-2 mt-0 pr-2">Information</p>
     </div>
+    @if (flightSegments.length == [] || flightSegments == null || flightSegments
+    == undefined) {
+    <p style="color: gray" class="font-normal pb-4 mt-0">
+      No flight information available for this shipment.
+    </p>
+    } @else {
     <table class="w-full border-collapse table-auto">
       <thead>
         <tr
@@ -184,7 +197,7 @@
         </tr>
       </thead>
       <tbody>
-        @for (item of flightSegments; track $index) {
+        @for (item of flightSegments.slice(0,3); track $index) {
         <tr class="text-blackColor/70 font-normal border-b">
           <td class="px-1 pb-4 text-start">{{ item.SeqNo }}</td>
           <td class="px-1 pb-4 text-start">{{ item.FlightNo }}</td>
@@ -198,11 +211,18 @@
         }
       </tbody>
     </table>
+    }
   </div>
 
   <!-- Dimensions -->
   <div class="dimensions flex flex-col w-full">
     <p class="text-xl font-bold pt-4 pb-2 mt-0 pr-2">Dimensions</p>
+    @if (dimensions.length == [] || dimensions == null || dimensions ==
+    undefined) {
+    <p style="color: gray" class="font-normal pb-4 mt-0">
+      No dimensions available for this shipment.
+    </p>
+    } @else {
     <table class="border-collapse">
       <thead>
         <tr
@@ -218,7 +238,7 @@
         </tr>
       </thead>
       <tbody>
-        @for (item of dimensions; track $index) {
+        @for (item of dimensions.slice(0,5); track $index) {
         <tr class="text-blackColor/70 font-normal border-b">
           <td class="px-1 pb-4 text-center w-[25px] font-semibold">
             {{ $index + 1 }}
@@ -242,10 +262,15 @@
         }
       </tbody>
     </table>
+    }
   </div>
 </div>
 
 <p class="text-sm" style="color: rgb(134, 134, 134)">
   *Cargo status is subject to change, and we recommend verifying the latest
   information through our system.
+</p>
+<p class="text-sm" style="color: rgb(134, 134, 134)">
+  © 2025. T3EX Global Holdings Corp. Unauthorized use or distribution is
+  prohibited.
 </p>

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, SimpleChanges } from '@angular/core';
 import { MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ExportTemplateService } from '../../services/export-template.service';
@@ -17,15 +17,16 @@ import { Observable, throwError } from 'rxjs';
 export class ExportTemplateComponent {
 
 
-
   /*--------- Inject ---------*/
   http = inject(HttpClient);
   templateService = inject(ExportTemplateService)
 
+  /*--------- style ---------*/
 
   /*--------- @Iutput ---------*/
   @Input() trackingNumber: string = '';
-
+  @Input() isLoading: boolean = false;
+  @Output() isLoadingOutput = new EventEmitter<boolean>();
 
   /*--------- data import ---------*/
   baseAPI = environment.baseAPI;
@@ -81,24 +82,17 @@ export class ExportTemplateComponent {
 
   shipmentDetails: any = [];
   ShipmentInfo: any = {};
-  Package: any = {}; 
-
-
-  processList = [{
-    title: '1',
-    icon: 'none',
-    dateTime: '2021-09-01 12:00',
-    flightNo: 'BR123',
-    originCode: 'TPE',
-    destCode: 'NRT',
-    imgUrls: ['https://via.placeholder.com/150', 'https://via.placeholder.com/150', 'https://via.placeholder.com/150'],
-
-  }];
-  lastStatus = '1';
+  Package: any = {};
 
 
   // today
   ngOnInit() {
+
+    // isLoading
+    this.isLoading = true;
+    this.isLoadingOutput.emit(this.isLoading);
+    console.log('isLoading1:', this.isLoading)
+
     // exported date
     const today = new Date();
     const formattedDate = today.toISOString().split('T')[0];
@@ -153,14 +147,31 @@ export class ExportTemplateComponent {
 
         }
 
+        // isLoading
+        this.isLoading = false;
+        this.isLoadingOutput.emit(this.isLoading);
+
       },
       error: (err) => {
         console.log(err);
 
+        // isLoading
+        this.isLoading = false;
+        this.isLoadingOutput.emit(this.isLoading);
+
       },
       complete: () => { }
     })
+
+
+    // isLoading
+    this.isLoading = false;
+    this.isLoadingOutput.emit(this.isLoading);
+    console.log('isLoading2:', this.isLoading)
   }
+
+
+
 
   // Milestones
   objToAry(obj: any) {

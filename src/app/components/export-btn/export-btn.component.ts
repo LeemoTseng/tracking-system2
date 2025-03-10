@@ -14,6 +14,10 @@ import { ExportTemplateComponent } from '../export-template/export-template.comp
 })
 export class ExportBtnComponent implements AfterViewInit {
 
+  /*--------- style ---------*/
+  isLoading: boolean = false;
+
+
   /*--------- 取得 `app-export-template` 元素 ---------*/
   @ViewChild('exportTemplate', { static: false }) exportTemplate!: ElementRef;
 
@@ -29,8 +33,9 @@ export class ExportBtnComponent implements AfterViewInit {
 
   /*--------- Function: 匯出 PDF ---------*/
   exportToPDF() {
+
     if (!this.exportTemplate) {
-      console.error("exportTemplate 未找到!");
+      console.error("exportTemplate勒???");
       return;
     }
 
@@ -51,5 +56,6 @@ export class ExportBtnComponent implements AfterViewInit {
       width: 190, 
       windowWidth: 800
     });
+
   }
 }
