@@ -70,20 +70,20 @@ currentLang: string = 'en';
   this.translate.addLangs(availableLangs);
   this.translate.setDefaultLang('en');
 
-  // update language
-  this.route.params.subscribe(params => {
-    let lang = params['lang'] || 'en';
+    // update language
+    this.route.params.subscribe(params => {
+      let lang = params['lang'] || 'en';
 
-    if (lang === 'tw') lang = 'tw';
-    if (lang === 'cn') lang = 'cn';
+      if (lang === 'tw') lang = 'tw';
+      if (lang === 'cn') lang = 'cn';
 
-    if (!availableLangs.includes(lang)) {
-      lang = 'en';
-      this.router.navigate(['/en']);
-    }
-    this.currentLang = params['lang'];
-    this.translate.use(lang);
-  });
+      if (!availableLangs.includes(lang)) {
+        lang = 'en';
+        this.router.navigate(['/en']);
+      }
+      this.currentLang = params['lang'];
+      this.translate.use(lang);
+    });
 
 
 
@@ -137,7 +137,9 @@ currentLang: string = 'en';
           secure: true,
           sameSite: 'Strict'
         });
-        this.router.navigate(['/shipment-list']);
+        // this.router.navigate(['/shipment-list']);
+        this.router.navigate(['/', this.currentLang, 'shipment-list']);
+        
       },
       error: (err) => {
         console.error('Login Failed:', err);

@@ -1,7 +1,22 @@
 {
   "LOGIN": {
-    "HEADER": "Tracking your shipment...",
-    "SIMPLE_QUERY_TITLE": "Track your shipment with tracking number",
-    "SUBTITLE": "Enter the tracking number to track your shipment"
+    "HEADER": "货物追踪系统",
+    "SIMPLE_QUERY_TITLE": "以单号追踪您的货物",
+    "SUBTITLE": "请输入完整的单号以追踪您的货物",
+    "LOGIN_TITLE": "货物追踪系统",
+    "LOGIN_SUBTITLE": "请输入账号密码以追踪您的货物",
+    "ACCOUNT": "账号",
+    "PASSWORD": "密码",
+    "REMEMBER_ME": "记住我",
+    "LOGIN": "登录",
+    "GREETING": "您好，",
+    "WELCOME_BACK": "欢迎回来！",
+    "BTN_VIEW": "查看您所有货物"
+  },
+  "HEADER": {
+    "LOGO_TITLE": "空运追踪系统",
+    "SHIPMENT_SUMMARY": "简易查询",
+    "SHIPMENT_LIST": "货物清单",
+    "LOGOUT": "登出"
   }
 }

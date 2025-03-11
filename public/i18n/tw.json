@@ -12,5 +12,11 @@
     "GREETING":"您好，",
     "WELCOME_BACK": "歡迎回來！",
     "BTN_VIEW":"檢視您所有貨物"
+  },
+  "HEADER":{
+    "LOGO_TITLE":"空運追蹤系統",
+    "SHIPMENT_SUMMARY":"簡易查詢",
+    "SHIPMENT_LIST":"貨物清單",
+    "LOGOUT":"登出"
   }
 }

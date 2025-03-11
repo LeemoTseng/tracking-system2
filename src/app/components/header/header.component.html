@@ -3,41 +3,70 @@
     <div routerLink="/login" class="logo cursor-pointer flex pb-2 items-center">
       <img class="object-contain h-[30px]" src="t3ex-logo.svg" alt="logo" />
       <p class="cursor-pointer text-xl pl-2 font-semibold text-blackColor">
-        Tracking System
+        {{ "HEADER.LOGO_TITLE" | translate }}
       </p>
     </div>
     <div class="item">
       <ul class="flex gap-5">
         @for (item of menuList; track $index) {
         <li
-          (click)="selectMenu(item.name, item.routerLink)"
           [class]="
-            selectedMenu === item.name
-              ? 'text-blackColor'
+            selectedMenu === item.key
+              ? 'text-blackColor border-b-2 border-primary'
               : 'text-blackColor/70'
           "
+          (click)="navigateTo(item.key, item.route)"
           class="cursor-pointer font-medium hover:text-blackColor/90 px-3 mr-1"
         >
-          {{ item.name }}
+          {{ "HEADER." + item.key | translate }}
         </li>
-        <div
-          [class]="
-            selectedMenu === 'Shipment List'
-              ? 'translate-x-[190px] w-[120px]'
-              : 'translate-x-[0px] w-[160px]'
-          "
-          class="absolute transform-all duration-300 transition-all border-primary border-b-4 py-4"
-        ></div>
         }
 
-        <!-- (mouseleave)="toggleLogout = false" -->
+        <li class="relative -translate-y-1">
+          <div
+            class="cursor-pointer hover:text-blackColor/90 flex items-center"
+          >
+            <p class="w-[35px] text-end">
+              {{
+                currentLang === "tw"
+                  ? "繁中"
+                  : currentLang === "cn"
+                  ? "簡中"
+                  : "EN"
+              }}
+            </p>
+            <mat-icon class="text-blackColor/60 cursor-pointer"
+              >language</mat-icon
+            >
+          </div>
+          <div class="absolute top-10 -left-6">
+            <div class="border w-[100px] bg-white rounded-sm">
+              <div class="menu w-full mx-auto text-center px-1">
+                @for (lang of ['en', 'tw', 'cn']; track $index) {
+                <p
+                  (click)="lanBtn(lang)"
+                  class="hover:bg-blackColor/10 hover:text-blackColor/90 py-1 transition-all cursor-pointer"
+                >
+                  {{
+                    lang === "en"
+                      ? "English"
+                      : lang === "tw"
+                      ? "繁體中文"
+                      : "簡體中文"
+                  }}
+                </p>
+                }
+              </div>
+            </div>
+          </div>
+        </li>
         <li class="login cursor-pointer -translate-y-1 flex items-center gap-2">
           @if (account !== '' && userToken!=='') {
           <p class="pl-1">
             {{ account }}
           </p>
           <div
-            matTooltip="Logout"
+            [matTooltip]="'HEADER.LOGOUT' | translate"
             matTooltipPosition="above"
             style="width: 28px; height: 28px"
             class="icon hover:bg-blackColor/10 rounded-full p-[5px]"
@@ -63,16 +92,6 @@
             <p class="cursor-pointer p-0 m-0 text-sm">Login</p>
           </div>
           }
-        </li>
-        <li
-          class="-translate-y-1 flex items-center cursor-pointer hover:text-blackColor/90"
-        >
-          <mat-icon class="text-blackColor/80 cursor-pointer">
-            <!-- language -->
-          </mat-icon>
-          <p class="pl-1 py-3">
-            <!-- English -->
-          </p>
         </li>
       </ul>
     </div>

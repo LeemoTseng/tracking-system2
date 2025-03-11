@@ -12,5 +12,11 @@
     "GREETING":"Hi",
     "WELCOME_BACK": "Welcome back!",
     "BTN_VIEW":"View your all shipments"
+  },
+  "HEADER":{
+    "LOGO_TITLE":"Tracking System",
+    "SHIPMENT_SUMMARY":"Shipment Summary",
+    "SHIPMENT_LIST":"Shipment List",
+    "LOGOUT":"Logout"
   }
 }

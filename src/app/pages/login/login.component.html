@@ -132,7 +132,7 @@
       <div class="w-[450px]">
         <p class="text-blackColor text-2xl font-semibold">
           {{ "LOGIN.GREETING" | translate }}
-          {{ account }},
+          {{ account }}
         </p>
         <p class="text-blackColor text-xl">
           {{ "LOGIN.WELCOME_BACK" | translate }}
@@ -144,7 +144,9 @@
           [matRippleColor]="rippleColor"
           style="margin-top: 30px"
         >
-          <div class="cursor-pointer">View your all shipments</div>
+          <div class="cursor-pointer">
+            {{ "LOGIN.BTN_VIEW" | translate }}
+          </div>
         </div>
       </div>
     </div>
