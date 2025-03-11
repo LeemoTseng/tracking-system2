@@ -18,5 +18,14 @@
     "SHIPMENT_SUMMARY":"Shipment Summary",
     "SHIPMENT_LIST":"Shipment List",
     "LOGOUT":"Logout"
+  },
+  "SHIPMENT_SUMMARY":{
+    "TITLE":"Simple query",
+    "SUBTITLE":"Tracking your shipment by entering the tracking number",
+    "SEARCH_BTN":"Search",
+    "BACK_BTN":"Back to list",
+    "ERROR_MSG":"Please enter a valid tracking number.",
+    "ERROR_NODATA":"Data not found.",
+    "ERROR_TIMEOUT":"Request timed out. Please try again later."
   }
 }

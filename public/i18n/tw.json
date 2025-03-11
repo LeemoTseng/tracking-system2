@@ -18,5 +18,14 @@
     "SHIPMENT_SUMMARY":"簡易查詢",
     "SHIPMENT_LIST":"貨物清單",
     "LOGOUT":"登出"
+  },
+    "SHIPMENT_SUMMARY":{
+    "TITLE":"簡易查詢",
+    "BACK_BTN":"返回",
+    "SUBTITLE":"請輸入完整的單號以追蹤您的貨物",
+    "SEARCH_BTN":"搜尋",
+    "ERROR_MSG":"請輸入正確的單號",
+    "ERROR_NODATA":"查無資料",
+    "ERROR_TIMEOUT":"請稍後再試"
   }
 }

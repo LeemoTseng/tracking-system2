@@ -18,5 +18,15 @@
     "SHIPMENT_SUMMARY": "简易查询",
     "SHIPMENT_LIST": "货物清单",
     "LOGOUT": "登出"
+  },
+    "SHIPMENT_SUMMARY": {
+      "TITLE": "简易查询",
+      "BACK_BTN": "返回",
+      "SUBTITLE": "请输入完整的单号以追踪您的货物",
+      "SEARCH_BTN": "搜索",
+      "ERROR_MSG": "请输入正确的单号",
+      "ERROR_NODATA": "查无数据",
+      "ERROR_TIMEOUT": "请稍后再试"
+    
   }
 }

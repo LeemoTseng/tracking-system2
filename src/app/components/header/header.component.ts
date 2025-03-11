@@ -8,6 +8,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { LoginComponent } from '../../pages/login/login.component';
 import { LoginPopupComponent } from "../login-popup/login-popup.component";
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { I18nService } from '../../services/i18n.service';
 
 @Component({
   selector: 'app-header',
@@ -26,6 +27,7 @@ export class HeaderComponent {
   route = inject(ActivatedRoute)
   cookieService = inject(CookieService)
   translate = inject(TranslateService);
+  i18nService = inject(I18nService);
 
   /*--------- variables ---------*/
 
@@ -54,29 +56,17 @@ export class HeaderComponent {
   // on init
 
   ngOnInit() {
-    // language settings
-    const availableLangs = ['en', 'tw', 'cn'];
-    this.translate.addLangs(availableLangs);
-    this.translate.setDefaultLang('en');
 
-    // update language
+  // LANGUAGE - Getter and Setter
+    // current lan
+    this.i18nService.currentLang$.subscribe(lang => {
+      this.currentLang = lang;
+    });
+    // get and set lan
     this.route.params.subscribe(params => {
       let lang = params['lang'] || 'en';
-
-      if (lang === 'tw') lang = 'tw';
-      if (lang === 'cn') lang = 'cn';
-
-      if (!availableLangs.includes(lang)) {
-        lang = 'en';
-        this.router.navigate(['/en']);
-      }
-      this.currentLang = params['lang'];
-      this.translate.use(lang);
-
-      this.getUrlAndRender();
+      this.i18nService.setLanguage(lang);
     });
-
-
 
     // get user token and account
     if (this.userToken == '') {
@@ -110,11 +100,17 @@ export class HeaderComponent {
     }
   }
 
+  changeLanguage(lang: string) {
+    this.i18nService.setLanguage(lang);
+    const currentUrl = this.router.url.split('/').slice(2).join('/');
+    this.router.navigate([`/${lang}`, currentUrl]);
+  }
+
   getUrlAndRender() {
-    this.url = this.router.url.split('/').slice(2).join('/'); // 去除語言部分
+    this.url = this.router.url.split('/').slice(2).join('/');
 
     const foundMenu = this.menuList.find(item => item.route === this.url);
-    this.selectedMenu = foundMenu ? foundMenu.key : ''; // 只更新有效選單
+    this.selectedMenu = foundMenu ? foundMenu.key : '';
   }
 
 

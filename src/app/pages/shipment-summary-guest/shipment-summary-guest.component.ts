@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, effect, inject } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { ShipmentDetailsGuestComponent } from '../../components/summary-page-guest/shipment-details-guest/shipment-details-guest.component';
 import { ShipmentOtherInfoGuestComponent } from '../../components/summary-page-guest/shipment-other-info-guest/shipment-other-info-guest.component';
@@ -11,6 +11,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from '../../.environments/environment.prod';
 import { catchError, Observable, throwError, timeout } from 'rxjs';
 import { MatRipple } from '@angular/material/core';
+import { I18nService } from '../../services/i18n.service';
 
 @Component({
   selector: 'app-shipment-summary-guest',
@@ -22,6 +23,9 @@ import { MatRipple } from '@angular/material/core';
 export class ShipmentSummaryGuestComponent {
   /*--------- Inject ---------*/
   http = inject(HttpClient)
+  router = inject(Router);
+  route = inject(ActivatedRoute);
+  i18nService = inject(I18nService);
 
 
   /*------- style settings -------*/
@@ -77,10 +81,10 @@ export class ShipmentSummaryGuestComponent {
     this.getSummaryData(this.trackingNumber)
       .pipe(timeout(15000),
         catchError(err => {
-        this.hasData = false;
-        this.loading = false;
-        this.errorMessages = 'Request timed out. Please try again later.';
-        return throwError(() => err);
+          this.hasData = false;
+          this.loading = false;
+          this.errorMessages = 'Request timed out. Please try again later.';
+          return throwError(() => err);
         }))
       .subscribe({
         next: (res) => {
