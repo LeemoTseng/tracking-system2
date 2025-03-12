@@ -1,0 +1,1 @@
+import{Q as a,ra as i}from"./chunk-NMV4VB5V.js";var r=class t{viewDetailsTrackingNumber=i("");setData(e){this.viewDetailsTrackingNumber.set(e)}getData(){return this.viewDetailsTrackingNumber.asReadonly()}static \u0275fac=function(n){return new(n||t)};static \u0275prov=a({token:t,factory:t.\u0275fac,providedIn:"root"})};export{r as a};

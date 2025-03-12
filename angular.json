@@ -6,7 +6,6 @@
     "tracking-system": {
       "i18n": {
         "sourceLocale": "en-US"
-
       },
       "projectType": "application",
       "schematics": {},
