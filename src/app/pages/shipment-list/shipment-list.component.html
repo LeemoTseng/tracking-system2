@@ -11,22 +11,26 @@
     <div class="frame bg-white rounded-md p-10 pb-[100px] mb-[100px]">
       <div class="process-menu flex justify-between mb-5 border-b-2">
         <div class="flex gap-x-2 relative">
-          @for (item of menuItems; track $index) {
+          @for (item of selectedMenuOptions; track $index) {
           <p
-            (click)="menuSelected(item)"
-            [class]="selectedMenu === item ? '' : 'text-blackColor/50'"
+            (click)="menuSelected(item.value)"
+            [class]="
+              selectedMenu === item.value
+                ? 'text-blackColor'
+                : 'text-blackColor/50'
+            "
             class="cursor-pointer text-xl transition-all font-semibold hover:text-blackColor/90 py-0 pb-3 px-3 mr-1 m-0 border-transparent border-b-4"
           >
-            {{ item }}
+            {{ item.viewValue }}
           </p>
           }
           <div
             [class]="
-              selectedMenu === '' || selectedMenu === 'All Cargos'
+              !selectedMenu || selectedMenu === 0
                 ? 'absolute border-b-4 border-primary'
-                : selectedMenu === 'On-Going'
+                : selectedMenu === 1
                 ? 'absolute border-b-4 border-primary translate-x-[120px]'
-                : selectedMenu === 'Completed'
+                : selectedMenu === 2
                 ? 'absolute border-b-4  border-primary translate-x-[250px]'
                 : 'absolute border-b-4'
             "
@@ -36,6 +40,7 @@
       </div>
       <!-- mutiple search bar -->
       <app-search-bar
+        [selectedMenu]="selectedMenu"
         [totalPages]="totalPages"
         (searchContentOutput)="getSearchListData($event)"
       ></app-search-bar>
@@ -78,5 +83,7 @@
   "
   class="upToTop z-10 transition-all duration-200 fixed bottom-[250px] right-1/2 -translate-x-1/2 drop-shadow-xl h-[60px] w-[60px] p-[18px] rounded-full hover:scale-[1.2]"
 >
-  <mat-icon class="cursor-pointer">arrow_upward</mat-icon>
+  <mat-icon [class]="isShowArrow ? 'cursor-pointer' : 'cursor-default'"
+    >arrow_upward</mat-icon
+  >
 </div>

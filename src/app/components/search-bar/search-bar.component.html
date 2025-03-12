@@ -72,12 +72,12 @@
 
         <!-- search status -->
         <select
-          [(ngModel)]="searchStatus"
+          [(ngModel)]="dateType"
           name="searchStatus"
           id="searchStatus"
           class="searchStatus cursor-pointer focus:outline-none px-3 border-none bg-transparent"
         >
-          @for (item of searchStatusOptions; track $index) {
+          @for (item of searchDateTypes; track $index) {
           <option [value]="item.value">{{ item.viewValue }}</option>
           }
         </select>

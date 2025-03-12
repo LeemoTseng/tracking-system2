@@ -22,10 +22,15 @@ export class ShipmentListComponent {
 
   account: string = 'User'
   // menu items
-  menuItems = ['All Cargos', 'On-Going', 'Completed'];
-  selectedMenu: string = 'All Cargos';
 
-  searchListData = {}
+  selectedMenuOptions: { value: number; viewValue: string; }[] = [
+    { value: 0, viewValue: 'All Cargos' },
+    { value: 1, viewValue: 'On-going' },
+    { value: 2, viewValue: 'Completed' },
+  ]
+  selectedMenu: number = 0;
+
+  searchListData: any = {}
   totalPages: number = 0;
 
   // Scroll to top
@@ -57,8 +62,10 @@ export class ShipmentListComponent {
 
 
   // select menu
-  menuSelected(menu: string) {
+  menuSelected(menu: number) {
     this.selectedMenu = menu;
+    this.searchListData.Status = this.selectedMenu;
+    this.clearAll();
   }
 
 
@@ -80,7 +87,21 @@ export class ShipmentListComponent {
   }
 
 
-
+  // search clear all
+  clearAll() {
+    const initData = {
+      "StartDate": null,
+      "EndDate": null,
+      "Status": this.selectedMenu,
+      "DateType": 0,
+      "NumberType": 0,
+      "TrackingNo": null,
+      "SortBy": "new_to_old",
+      "Page": 1,
+      "PageSize": 5
+    }
+    this.searchListData = initData;
+  }
 
 
 

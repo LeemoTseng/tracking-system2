@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatRipple, MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
@@ -26,6 +26,7 @@ export class SearchBarComponent {
   /* --------- Output / Onput ---------*/
   @Output() searchContentOutput = new EventEmitter<object>();
   @Input() totalPages: number = 1;
+  @Input() selectedMenu: number = 0;
 
   /* --------- variables---------*/
 
@@ -36,7 +37,7 @@ export class SearchBarComponent {
   // input
   trackingNumber: string = ''
   numberType: number = 0
-  searchStatus: number = 0
+  dateType: number = 0
   startDate: string = ''
   endDate: string = ''
   sortBy: string = 'new_to_old'
@@ -50,7 +51,7 @@ export class SearchBarComponent {
 
 
   // dropdown options
-  searchStatusOptions = [
+  searchDateTypes = [
     { value: 0, viewValue: 'All' },
     { value: 1, viewValue: 'ETD' },
     { value: 2, viewValue: 'ETA' },
@@ -71,15 +72,22 @@ export class SearchBarComponent {
     { value: 'new_to_old', viewValue: 'Old to new', icon: 'arrow_upward' },
   ]
 
+  // this.selectedMenu
+  selectedMenuOptions = [
+    { value: 0, viewValue: 'All Cargos' },
+    { value: 1, viewValue: 'On-going' },
+    { value: 2, viewValue: 'Completed' },
+  ]
+
+
   // send data
   dataSent: { [key: string]: any } = {}
   initData = {
     "StartDate": this.startDate || null,
     "EndDate": this.endDate || null,
-    // "DateType": this.searchStatusOptions[this.searchStatus].value,
-    "DateType": 1,
-    "Status": 0,
-    "NumberType": this.numberTypeOptions[this.numberType].value,
+    "Status": this.selectedMenu, // All cargos, on-going, completed
+    "DateType": 0, // ETD, ETA
+    "NumberType": this.numberTypeOptions[this.numberType].value, // MA, HA, PO...
     "TrackingNo": this.trackingNumber || null,
     "SortBy": this.sortBy,
     "Page": 1,
@@ -112,11 +120,12 @@ export class SearchBarComponent {
     // can be seleceted date
     this.minDate = threeMonthsBefore.toISOString().split('T')[0];
     this.maxDate = '';
+
   }
 
   // search clicked
   searchClicked() {
-    // 檢查是否有填入日期
+    // Date validation
     if ((this.startDate && !this.endDate) || (this.startDate && this.endDate)) {
       const today = new Date();
       const threeMonthsBefore = new Date(today);
@@ -126,7 +135,7 @@ export class SearchBarComponent {
         threeMonthsBefore.setDate(threeMonthsBefore.getDate() - (threeMonthsBefore.getDate() - 1));
       }
 
-        // +1
+      // +1
       threeMonthsBefore.setDate(threeMonthsBefore.getDate() - 1);
       threeMonthsBefore.setHours(0, 0, 0, 0);
 
@@ -139,7 +148,7 @@ export class SearchBarComponent {
         (endDateObj && endDateObj <= threeMonthsBefore)) {
 
         const searchStartDate = new Date(threeMonthsBefore);
-        searchStartDate.setDate(searchStartDate.getDate() +1); 
+        searchStartDate.setDate(searchStartDate.getDate() + 1);
         this.searchResult = `
             <div class="w-fit text-red-500 px-2">
             The search range is within the last three months starting from ${searchStartDate.toISOString().split('T')[0]}
@@ -149,8 +158,7 @@ export class SearchBarComponent {
         return;
       }
     }
-
-
+    // Tracking number validation
     if (this.trackingNumber === '' && this.numberType != 0) {
       this.isInputError = true;
       this.searchResult = `
@@ -164,8 +172,8 @@ export class SearchBarComponent {
     this.dataSent = {
       "StartDate": this.startDate || null,
       "EndDate": this.endDate || null,
-      "DateType": 1,
-      "Status": this.searchStatusOptions[this.searchStatus].value,
+      "DateType": this.searchDateTypes[this.dateType].value,
+      "Status": this.selectedMenu,
       "NumberType": this.numberTypeOptions[this.numberType].value,
       "TrackingNo": this.trackingNumber || null,
       "SortBy": this.sortBy,
@@ -175,7 +183,6 @@ export class SearchBarComponent {
     this.currentPage = 1;
     this.searchResultText();
 
-    // 發送搜尋資料
     this.searchContentOutput.emit(this.dataSent);
   }
 
@@ -195,9 +202,9 @@ export class SearchBarComponent {
       <div class="hover:bg-blackColor/5 border rounded-full w-fit border-blackColor/50 px-2 py-[1px]">${this.startDate} - ${this.endDate}</div>
       `
     }
-    text += `
-    <div class="hover:bg-blackColor/5 border rounded-full w-fit border-blackColor/50 px-2 py-[1px]">Status: ${this.searchStatusOptions[this.searchStatus].viewValue}</div>
-    `
+    // text += `
+    // <div class="hover:bg-blackColor/5 border rounded-full w-fit border-blackColor/50 px-2 py-[1px]">Status:${this.selectedMenuOptions[this.selectedMenu].viewValue}</div>
+    // `
 
     this.searchResult = text
     return this.searchResult
@@ -208,13 +215,14 @@ export class SearchBarComponent {
     this.searchResult = ''
     this.trackingNumber = ''
     this.numberType = 0
-    this.searchStatus = 0
     this.startDate = ''
     this.endDate = ''
     this.sortBy = 'new_to_old'
     this.currentPage = 1;
 
     this.dataSent = this.initData
+    this.dataSent['Status'] = this.selectedMenu
+    console.log(this.dataSent)
     this.searchContentOutput.emit(this.dataSent)
 
   }
@@ -294,8 +302,6 @@ export class SearchBarComponent {
       this.loading = false;
     }, 300)
   }
-
-
 
 
 

@@ -29,7 +29,7 @@ export class LoginComponent {
 
   /*------- Variables -------*/
   //loading
-  loading:boolean = false;
+  loading: boolean = false;
 
   // tracking number
   trackingNumber: string = '';
@@ -51,7 +51,7 @@ export class LoginComponent {
 
 
   /*------- Data import -------*/
-  
+
   // services
   trackingNumberService = inject(TrackingNumberService);
 
@@ -66,31 +66,31 @@ export class LoginComponent {
     if (rememberMeCookie === 'true') {
       this.rememberMe = rememberMeCookie === 'true';
       this.account = this.cookieService.get('account');
-    }else{
+    } else {
       this.rememberMe = false;
       this.account = '';
     }
 
-    if(authToken){
+    if (authToken) {
       this.isLogin = true;
-    }else{
+    } else {
       this.isLogin = false;
     }
-    
+
   }
 
   checkLogin() {
     this.loading = true;
     this.checkLoginInput(this.account, this.password);
-    if (!this.isLoginInput){
+    if (!this.isLoginInput) {
       this.loading = false;
       return;
-    } 
+    }
     this.authService.login(this.account, this.password, this.rememberMe).subscribe({
       next: (res) => {
         const token = res.data;
         const expirationDate = new Date();
-        expirationDate.setDate(expirationDate.getDate() + 7); 
+        expirationDate.setDate(expirationDate.getDate() + 7);
 
         this.cookieService.set('authToken', res.data, {
           path: '/',
@@ -118,7 +118,8 @@ export class LoginComponent {
         this.typing = false;
         this.loading = false;
 
-      }
+      },
+      complete: () => { }
     });
   }
 
@@ -139,10 +140,9 @@ export class LoginComponent {
   }
 
   checkValid(e: any) {
-    console.log(e.target.value);
     if (e.target.value === '') {
       this.isValidTrackingNum = false;
-      
+
       this.alertMessage = 'the tracking number cannot be empty';
     } else {
       this.isValidTrackingNum = true;
@@ -152,7 +152,6 @@ export class LoginComponent {
 
   sendTrackingNumber() {
     if (this.isValidTrackingNum) {
-      console.log('sent!');
       this.trackingNumberService.setData(this.trackingNumber);
       this.router.navigate(['/shipment-summary-guest']);
     } else {
@@ -161,7 +160,7 @@ export class LoginComponent {
   }
 
   logout() {
-    this.authService.logout(); 
+    this.authService.logout();
   }
 
 

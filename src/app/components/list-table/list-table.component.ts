@@ -25,7 +25,7 @@ export class ListTableComponent {
   http = inject(HttpClient)
 
   /*--------- get data from outter ---------*/
-  @Input() selectedMenuInner: string = 'All Cargos';
+  @Input() selectedMenuInner: number = 0;
   @Input() searchContentsData: object = {};
   @Output() totalPages = new EventEmitter<number>();
 
@@ -88,17 +88,18 @@ export class ListTableComponent {
     this.isSkeletonLoading = true;
     this.postSearchData(obj).subscribe({
       next: (res) => {
-        console.log('res',res)
+        console.log('res', res)
         if (res.code == 1) {
           this.hasData = true;
           this.shipmentList = res.data.Shipments;
           if (this.shipmentList.length === 0) {
             this.hasData = false;
             this.isSkeletonLoading = false;
-          }else{
-          this.totalPage = res.data.TotalPages;
-          this.totalPages.emit(this.totalPage);
-          this.isSkeletonLoading = false}
+          } else {
+            this.totalPage = res.data.TotalPages;
+            this.totalPages.emit(this.totalPage);
+            this.isSkeletonLoading = false
+          }
         } else {
           if (res.status === 401) {
             this.router.navigate(['/login']);
@@ -110,7 +111,7 @@ export class ListTableComponent {
 
       },
       error: (err) => {
-        console.log('err',err)
+        console.log('err', err)
         this.isSkeletonLoading = false
         this.hasData = false;
         this.isSkeletonLoading = false
@@ -138,13 +139,13 @@ export class ListTableComponent {
   // view items
   //Click and view the details of the item
 
-  viewItemBtn(HAWBNo: string, MAWBNo:string) {
+  viewItemBtn(HAWBNo: string, MAWBNo: string) {
     console.log(HAWBNo, MAWBNo)
-    if (HAWBNo !== ''){
+    if (HAWBNo !== '') {
       this.trackingNumber = HAWBNo;
       this.trackingNumberService.setData(this.trackingNumber);
       this.router.navigate(['/shipment-summary']);
-    }else{
+    } else {
       this.trackingNumber = MAWBNo;
       this.trackingNumberService.setData(this.trackingNumber);
       this.router.navigate(['/shipment-summary']);
@@ -153,9 +154,9 @@ export class ListTableComponent {
 
 
   // table items
-  findNowStatusIndex(allStatus: string[], nowStatus: string): number {
-    return allStatus.indexOf(nowStatus);
-  }
+  // findNowStatusIndex(allStatus: string[], nowStatus: string): number {
+  //   return allStatus.indexOf(nowStatus);
+  // }
 
   // Cookie
   // get coolies
@@ -166,41 +167,41 @@ export class ListTableComponent {
 
 
   // Status class implementation
-getStatusClass(MilestoneNode: string | null, nowStatus: string): any {
-  if (!MilestoneNode) {
-    return "bg-gray-300"; // 當 MilestoneNode 為 null 時，使用預設灰色樣式
+  getStatusClass(MilestoneNode: string | null, nowStatus: string): any {
+    if (!MilestoneNode) {
+      return "bg-gray-300"; // 當 MilestoneNode 為 null 時，使用預設灰色樣式
+    }
+
+    if (MilestoneNode === 'Pod') {
+      return "bg-primary";
+    }
+    if (MilestoneNode === 'ATA') {
+      return nowStatus === 'Completed' ? "bg-gray-300" : "bg-primary";
+    }
+    if (MilestoneNode === 'ETA') {
+      return (nowStatus === 'Completed' || nowStatus === 'ATA') ? "bg-gray-300" : "bg-primary";
+    }
+
+    return "bg-gray-300";
   }
 
-  if (MilestoneNode === 'Pod') {
-    return "bg-primary";
-  }
-  if (MilestoneNode === 'ATA') {
-    return nowStatus === 'Completed' ? "bg-gray-300" : "bg-primary";
-  }
-  if (MilestoneNode === 'ETA') {
-    return (nowStatus === 'Completed' || nowStatus === 'ATA') ? "bg-gray-300" : "bg-primary";
-  }
+  getTextClass(MilestoneNode: string | null, nowStatus: string): any {
+    if (!MilestoneNode) {
+      return "text-gray-400"; // 當 MilestoneNode 為 null 時，使用預設樣式
+    }
 
-  return "bg-gray-300"; 
-}
+    if (MilestoneNode === 'Pod') {
+      return "text-primary";
+    }
+    if (MilestoneNode === 'ATA') {
+      return nowStatus === 'Completed' ? "text-gray-300" : "text-primary";
+    }
+    if (MilestoneNode === 'ETA') {
+      return (nowStatus === 'Completed' || nowStatus === 'ATA') ? "text-gray-300" : "text-primary";
+    }
 
-getTextClass(MilestoneNode: string | null, nowStatus: string): any {
-  if (!MilestoneNode) {
-    return "text-gray-400"; // 當 MilestoneNode 為 null 時，使用預設樣式
+    return "text-gray-400";
   }
-
-  if (MilestoneNode === 'Pod') {
-    return "text-primary";
-  }
-  if (MilestoneNode === 'ATA') {
-    return nowStatus === 'Completed' ? "text-gray-300" : "text-primary";
-  }
-  if (MilestoneNode === 'ETA') {
-    return (nowStatus === 'Completed' || nowStatus === 'ATA') ? "text-gray-300" : "text-primary";
-  }
-
-  return "text-gray-400"; 
-}
 
 
 
