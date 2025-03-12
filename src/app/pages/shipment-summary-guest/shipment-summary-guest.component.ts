@@ -77,10 +77,10 @@ export class ShipmentSummaryGuestComponent {
     this.getSummaryData(this.trackingNumber)
       .pipe(timeout(15000),
         catchError(err => {
-        this.hasData = false;
-        this.loading = false;
-        this.errorMessages = 'Request timed out. Please try again later.';
-        return throwError(() => err);
+          this.hasData = false;
+          this.loading = false;
+          this.errorMessages = 'Request timed out. Please try again later.';
+          return throwError(() => err);
         }))
       .subscribe({
         next: (res) => {

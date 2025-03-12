@@ -112,7 +112,7 @@ export class ShipmentOtherInfoMilestonesGuestComponent {
           DateTime: milestones?.CargoArrive?.DateTime ?? '',
         });
       }
-             else if (row === 'ETD') {
+      else if (row === 'ETD') {
         list.push({
           Milestone: row,
           DateTime: milestones?.ETD.DateTime ?? '',
@@ -145,7 +145,7 @@ export class ShipmentOtherInfoMilestonesGuestComponent {
         }
       }
       else if (row === 'Release') {
-        if (milestones.ReleaseDate != null && milestones.ReleaseDate !=''&& milestones.ReleaseDate !='undefined' ) {
+        if (milestones.ReleaseDate != null && milestones.ReleaseDate != '' && milestones.ReleaseDate != 'undefined') {
           list.push({
             Milestone: row,
             DateTime: milestones?.ReleaseDate ?? '',

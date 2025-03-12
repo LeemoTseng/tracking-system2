@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  baseAPI: 'https://example/api/',
+  baseAPI: 'ttps://netapi-test.t3ex-group.com/api/',
 
 
 };

@@ -185,11 +185,11 @@ export class ShipmentOtherInfoFilesComponent {
       'Authorization': `Bearer ${token}`
     });
     const params = new HttpParams().set('guid', guid);
-      return this.http.get(`${this.baseAPI}TrackingApi/Download`, { 
-    headers, 
-    params, 
-    responseType: 'blob'  
-  });
+    return this.http.get(`${this.baseAPI}TrackingApi/Download`, {
+      headers,
+      params,
+      responseType: 'blob'
+    });
   }
 
   downloadFile(data: Blob, fileName: string) {
@@ -210,7 +210,7 @@ export class ShipmentOtherInfoFilesComponent {
     this.postFilesData(guid).subscribe({
       next: (res) => {
         console.log(res)
-        
+
         // this.downloadFile(res, guid)
       },
       error: (err) => {

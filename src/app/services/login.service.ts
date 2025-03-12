@@ -15,7 +15,7 @@ export class LoginService {
   http = inject(HttpClient);
   router = inject(Router);
   cookieService = inject(CookieService);
-  
+
 
   baseAPI = environment.baseAPI;
 
@@ -33,13 +33,13 @@ export class LoginService {
     );
   }
 
-logout() {
-  this.cookieService.delete('authToken', '/');
-  //彈出瀏覽器的警告視窗
-  alert('登出成功');
+  logout() {
+    this.cookieService.delete('authToken', '/');
+    //彈出瀏覽器的警告視窗
+    alert('登出成功');
 
-  this.router.navigate(['/login']);
-}
+    this.router.navigate(['/login']);
+  }
 
   isAuthenticated(): boolean {
     return !!localStorage.getItem('authToken');

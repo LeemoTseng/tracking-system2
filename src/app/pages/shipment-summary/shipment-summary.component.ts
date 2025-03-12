@@ -59,49 +59,49 @@ export class ShipmentSummaryComponent {
     this.trackingNumber = this.trackingNumberService.getData()();
     effect(() => {
       /* ------- 測試完記得解除註解 ------- */
-      if (this.trackingNumber) { 
-      this.getDetailsData(this.trackingNumber) 
-      /**-------------------------------- */
-      // this.getDetailsData('THI132400003') // 測試檔案用
-        // this.getDetailsData('TECSHA126236') // 測試圖片用
-        .pipe(timeout(15000),
-          catchError(err => {
-            console.error('API Timeout or Error:', err);
-            this.hasData = false;
-            this.loading = false;
-            this.errorMessages = 'Request timed out. Please try again later.';
-            return throwError(() => err);
-          }))
-        .subscribe({
-          next: (res) => {
-            if (!this.data && !this.data.ok) {
-              if (this.data.status === 401) {
-                this.router.navigate(['/login']);
-              } else {
-                this.loading = false;
-                this.hasData = false;
-                this.errorMessages = `${this.trackingNumber} not found.<br/>  Please check your tracking number.`;
-                return;
+      if (this.trackingNumber) {
+        this.getDetailsData(this.trackingNumber)
+          /**-------------------------------- */
+          // this.getDetailsData('THI132400003') // 測試檔案用
+          // this.getDetailsData('TECSHA126236') // 測試圖片用
+          .pipe(timeout(15000),
+            catchError(err => {
+              console.error('API Timeout or Error:', err);
+              this.hasData = false;
+              this.loading = false;
+              this.errorMessages = 'Request timed out. Please try again later.';
+              return throwError(() => err);
+            }))
+          .subscribe({
+            next: (res) => {
+              if (!this.data && !this.data.ok) {
+                if (this.data.status === 401) {
+                  this.router.navigate(['/login']);
+                } else {
+                  this.loading = false;
+                  this.hasData = false;
+                  this.errorMessages = `${this.trackingNumber} not found.<br/>  Please check your tracking number.`;
+                  return;
 
+                }
+
+              } else {
+                this.hasData = true;
+                this.data = res;
+                this.loading = false;
               }
 
-            } else {
-              this.hasData = true;
-              this.data = res;
+            },
+            error: (err) => {
+              console.log(err);
               this.loading = false;
-            }
 
-          },
-          error: (err) => {
-            console.log(err);
-            this.loading = false;
-
-            this.errorMessages = `Please check your tracking number`;
-          },
-          complete: () => { }
-        })
-      /* ------- 測試完記得解除註解 ------- */
-      } else { 
+              this.errorMessages = `Please check your tracking number`;
+            },
+            complete: () => { }
+          })
+        /* ------- 測試完記得解除註解 ------- */
+      } else {
         this.hasData = false;
         this.loading = false;
         this.errorMessages = `There is no data`;

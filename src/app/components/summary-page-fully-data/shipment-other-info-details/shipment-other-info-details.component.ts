@@ -145,7 +145,7 @@ export class ShipmentOtherInfoDetailsComponent {
 
   // send deatils for export
   sendDetailsForExport() {
-    
+
   }
 
   // Cookie

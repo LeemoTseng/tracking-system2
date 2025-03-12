@@ -40,7 +40,7 @@ export class ShipmentOtherInfoDetailsGuestComponent {
   // @Input
   @Input() trackingNo: string = ''
 
-  
+
   // API
   summaryDataGuestAPI = environment.baseAPI;
 
@@ -80,7 +80,7 @@ export class ShipmentOtherInfoDetailsGuestComponent {
     if (!text) { return; }
 
     navigator.clipboard.writeText(text).then(() => {
-      console.log('clipboard:',text);
+      console.log('clipboard:', text);
     });
 
     const copiedElement = e.target.closest('.copyIcon');

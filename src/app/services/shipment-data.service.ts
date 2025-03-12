@@ -10,21 +10,21 @@ export class ShipmentDataService {
 
   /*--------- Inject ---------*/
   http = inject(HttpClient)
-  
+
   /*--------- Variables ---------*/
-  shipmentDataAPI = environment.shipmentDataAPI;
-  flightsDataAPI = environment.shipmentDataAPI;
+  // shipmentDataAPI = environment.shipmentDataAPI;
+  // flightsDataAPI = environment.shipmentDataAPI;
 
 
 
   /*--------- Functions ---------*/
-  getShipmentData(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.shipmentDataAPI}/data`);
-  }
+  // getShipmentData(): Observable<any[]> {
+  // return this.http.get<any[]>(`${this.shipmentDataAPI}/data`);
+  // }
 
-  getFlightsData(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.flightsDataAPI}/data`);
-  }
+  // getFlightsData(): Observable<any[]> {
+  // return this.http.get<any[]>(`${this.flightsDataAPI}/data`);
+  // }
 
 
 

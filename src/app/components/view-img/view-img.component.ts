@@ -42,11 +42,11 @@ export class ViewImgComponent {
     this.preloadImages();
   }
 
-  
+
   /*--------- Functions ---------*/
   preloadImages() {
     this.imgList.forEach((item: any, index: number) => {
-      this.postFilesData(item.Guid).subscribe({      
+      this.postFilesData(item.Guid).subscribe({
         next: (blob) => {
           const url = URL.createObjectURL(blob);
           this.imageUrls[index] = url;
@@ -56,7 +56,7 @@ export class ViewImgComponent {
           console.error(err);
           this.loading = false;
         },
-        complete: () => {}
+        complete: () => { }
       });
     });
   }
