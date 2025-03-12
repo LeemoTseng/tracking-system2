@@ -141,15 +141,15 @@ export class ListTableComponent {
 
   viewItemBtn(HAWBNo: string, MAWBNo: string) {
     console.log(HAWBNo, MAWBNo)
-    // if (HAWBNo !== '') {
-    this.trackingNumber = HAWBNo;
-    this.trackingNumberService.setData(this.trackingNumber);
-    this.router.navigate(['/shipment-summary']);
-    // } else {
-    //   this.trackingNumber = MAWBNo;
-    //   this.trackingNumberService.setData(this.trackingNumber);
-    //   this.router.navigate(['/shipment-summary']);
-    // }
+    if (HAWBNo !== '') {
+      this.trackingNumber = HAWBNo;
+      this.trackingNumberService.setData(this.trackingNumber);
+      this.router.navigate(['/shipment-summary']);
+    } else {
+      this.trackingNumber = MAWBNo;
+      this.trackingNumberService.setData(this.trackingNumber);
+      this.router.navigate(['/shipment-summary']);
+    }
   }
 
 
