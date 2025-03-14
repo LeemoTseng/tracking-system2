@@ -32,7 +32,7 @@
 
         <!-- (mouseleave)="toggleLogout = false" -->
         <li class="login cursor-pointer -translate-y-1 flex items-center gap-2">
-          @if (account !== '' && userToken!=='') {
+          @if (account !== '' || userToken!=='' ) {
           <p class="pl-1">
             {{ account }}
           </p>

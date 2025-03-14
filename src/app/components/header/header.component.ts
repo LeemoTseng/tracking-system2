@@ -57,14 +57,13 @@ export class HeaderComponent {
     this.account = this.cookieService.get('account');
     if (this.userToken && this.account) {
       if (this.isLoginExpired == true) {
-        this.cookieService.delete('authToken');
-        this.cookieService.delete('account');
-        this.userToken = '';
-        this.account = '';
+        this.handleLoginExpiration()
+      } else {
+        this.getUrlAndRender();
       }
-      this.getUrlAndRender();
     } else {
       this.userToken = '';
+      this.account = '';
       this.getUrlAndRender();
     }
 
@@ -118,7 +117,7 @@ export class HeaderComponent {
     this.url = this.router.url;
     if (this.url == "/shipment-summary-guest") {
       this.selectedMenu = "Shipment Summary";
-      this.toggleLogin = this.userToken === "";
+      this.toggleLogin = false;
     } else if (this.url == "/shipment-list") {
       this.selectedMenu = "Shipment List";
       this.toggleLogin = this.userToken === "";
@@ -129,6 +128,7 @@ export class HeaderComponent {
 
   logoutBtn() {
     console.log(this.isLoginExpired)
+    this.toggleLogout = true;
   }
   toggleLogoutChange(event: boolean) {
     this.toggleLogout = event;
@@ -137,15 +137,10 @@ export class HeaderComponent {
   loginBtn() {
     this.toggleLogin = true;
   }
+
   toggleLoginChange(event: boolean) {
     this.toggleLogin = event;
   }
-
-
-
-
-
-
 
 
 }
