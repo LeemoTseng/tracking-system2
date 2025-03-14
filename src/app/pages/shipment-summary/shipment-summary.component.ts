@@ -1,4 +1,4 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, effect, inject, SimpleChanges } from '@angular/core';
 import { HeaderComponent } from '../../components/header/header.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
@@ -28,6 +28,7 @@ export class ShipmentSummaryComponent {
   router = inject(Router);
 
   /*------- Data import -------*/
+
 
   // services
   trackingNumberService = inject(ViewDetailsTrackingNumberService);
@@ -74,6 +75,7 @@ export class ShipmentSummaryComponent {
             }))
           .subscribe({
             next: (res) => {
+              console.log(res);
               if (!this.data && !this.data.ok) {
                 if (this.data.status === 401) {
                   this.router.navigate(['/login']);
@@ -82,9 +84,7 @@ export class ShipmentSummaryComponent {
                   this.hasData = false;
                   this.errorMessages = `${this.trackingNumber} not found.<br/>  Please check your tracking number.`;
                   return;
-
                 }
-
               } else {
                 this.hasData = true;
                 this.data = res;
@@ -101,6 +101,24 @@ export class ShipmentSummaryComponent {
             complete: () => { }
           })
         /* ------- 測試完記得解除註解 ------- */
+      } else if (!this.trackingNumber) {
+        this.getDetailsData(this.trackingNumber).subscribe({
+          next: (res) => {
+            console.log('res', res);
+          },
+          error: (err) => {
+            console.log('err', err);
+            if (err.status === 401) {
+              this.router.navigate(['/login']);
+            }
+            if (err.status === 400) {
+              this.hasData = false;
+              this.loading = false;
+              this.errorMessages = `There is no data`;
+            }
+          },
+          complete: () => { }
+        })
       } else {
         this.hasData = false;
         this.loading = false;
@@ -113,6 +131,7 @@ export class ShipmentSummaryComponent {
   ngOnInit() {
     window.scrollTo(0, 0);
   }
+
 
   // get data from API
   getDetailsData(trackingNo: string): Observable<any[]> {
@@ -129,7 +148,6 @@ export class ShipmentSummaryComponent {
   backToLink() {
     this.router.navigate(['/shipment-list']);
   }
-
 
   // Cookie
   // get coolies

@@ -1,4 +1,4 @@
-<app-header></app-header>
+<app-header [isLoginExpired]="isLoginExpired"></app-header>
 
 <div class="bg-blackColor/5">
   <div class="container mx-auto max-w-screen-xl p-3">
@@ -51,6 +51,7 @@
           (totalPages)="getTotalPages($event)"
           [selectedMenuInner]="selectedMenu"
           [searchContentsData]="searchListData"
+          (isLoginExpired)="isLoginCheck($event)"
         ></app-list-table>
       </div>
     </div>

@@ -1,11 +1,10 @@
-import { Component, HostListener, inject, Inject } from '@angular/core';
+import { Component, EventEmitter, HostListener, inject, Inject, Input, Output, SimpleChanges } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterLink } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { LogoutPopupComponent } from "../logout-popup/logout-popup.component";
 import { MatRippleModule } from '@angular/material/core';
-import { LoginComponent } from '../../pages/login/login.component';
 import { LoginPopupComponent } from "../login-popup/login-popup.component";
 
 @Component({
@@ -17,6 +16,11 @@ import { LoginPopupComponent } from "../login-popup/login-popup.component";
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
+
+
+  /*--------- Input ---------*/
+  @Input() isLoginExpired: boolean = false;
+  @Output() isLoginExpiredChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
 
   /*--------- Inject ---------*/
@@ -49,13 +53,30 @@ export class HeaderComponent {
   // on init
 
   ngOnInit() {
-    if (this.userToken == '') {
-      this.userToken = this.cookieService.get('authToken');
-      this.account = this.cookieService.get('account');
+    this.userToken = this.cookieService.get('authToken');
+    this.account = this.cookieService.get('account');
+    if (this.userToken && this.account) {
+      if (this.isLoginExpired == true) {
+        this.cookieService.delete('authToken');
+        this.cookieService.delete('account');
+        this.userToken = '';
+        this.account = '';
+      }
+      this.getUrlAndRender();
     } else {
       this.userToken = '';
+      this.getUrlAndRender();
     }
-    this.getUrlAndRender();
+
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['isLoginExpired'] && !changes['isLoginExpired'].firstChange) {
+      this.isLoginExpiredChange.emit(this.isLoginExpired);
+      if (this.isLoginExpired) {
+        this.handleLoginExpiration();
+      }
+    }
   }
 
   // Getter and Setter
@@ -85,39 +106,29 @@ export class HeaderComponent {
     this.router.navigate([route]);
   }
 
+  handleLoginExpiration() {
+    this.cookieService.delete('authToken');
+    this.cookieService.delete('account');
+    this.userToken = '';
+    this.account = '';
+    this.toggleLogin = true;
+  }
+
   getUrlAndRender() {
     this.url = this.router.url;
     if (this.url == "/shipment-summary-guest") {
-      this.selectedMenu = "Shipment Summary"
-      if (this.userToken == "") {
-        this.toggleLogin = false;
-      }
+      this.selectedMenu = "Shipment Summary";
+      this.toggleLogin = this.userToken === "";
     } else if (this.url == "/shipment-list") {
-      this.selectedMenu = "Shipment List"
-      if (this.userToken !== "") {
-        this.toggleLogin = false;
-
-      } else {
-        this.toggleLogin = true;
-        // this.router.navigate(['/login']);
-      }
-    } else if (this.url == "/shipment-summary") {
-      this.selectedMenu = "Shipment List"
-      if (this.userToken !== "") {
-        this.toggleLogin = false;
-      } else {
-        this.toggleLogin = true;
-
-        // this.router.navigate(['/login']);
-
-      }
+      this.selectedMenu = "Shipment List";
+      this.toggleLogin = this.userToken === "";
     } else {
-      this.selectedMenu = "Shipment List"
+      this.selectedMenu = "Shipment List";
     }
   }
 
   logoutBtn() {
-    this.toggleLogout = true;
+    console.log(this.isLoginExpired)
   }
   toggleLogoutChange(event: boolean) {
     this.toggleLogout = event;

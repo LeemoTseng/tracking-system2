@@ -21,6 +21,7 @@ export class ShipmentListComponent {
   /*--------- Variables ---------*/
 
   account: string = 'User'
+  isLoginExpired: boolean = false;
   // menu items
 
   selectedMenuOptions: { value: number; viewValue: string; }[] = [
@@ -101,6 +102,11 @@ export class ShipmentListComponent {
       "PageSize": 5
     }
     this.searchListData = initData;
+  }
+
+  // check login
+  isLoginCheck(e: boolean) {
+    this.isLoginExpired = e;
   }
 
 

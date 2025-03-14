@@ -28,6 +28,7 @@ export class ListTableComponent {
   @Input() selectedMenuInner: number = 0;
   @Input() searchContentsData: object = {};
   @Output() totalPages = new EventEmitter<number>();
+  @Output() isLoginExpired = new EventEmitter<boolean>();
 
   /*--------- Variables ---------*/
 
@@ -62,7 +63,7 @@ export class ListTableComponent {
   shipmentList: any[] = []
 
   // data import
-  searchDataGuestAPI = environment.baseAPI;
+  baseAPI = environment.baseAPI;
 
 
   /*--------- Functions ---------*/
@@ -107,11 +108,13 @@ export class ListTableComponent {
           this.isSkeletonLoading = false
           this.hasData = false;
         }
-
-
       },
       error: (err) => {
         console.log('err', err)
+        if (err.status === 401) {
+          this.isLoginExpired.emit(true);
+          // this.router.navigate(['/login']);  // 這裡要改成跳轉到登入頁面
+        }
         this.isSkeletonLoading = false
         this.hasData = false;
         this.isSkeletonLoading = false
@@ -129,7 +132,7 @@ export class ListTableComponent {
     });
 
     return this.http.post<any[]>(
-      `${this.searchDataGuestAPI}TrackingApi/search`,
+      `${this.baseAPI}TrackingApi/search`,
       searchContent,
       { headers }
     );
@@ -157,6 +160,7 @@ export class ListTableComponent {
   // findNowStatusIndex(allStatus: string[], nowStatus: string): number {
   //   return allStatus.indexOf(nowStatus);
   // }
+
 
   // Cookie
   // get coolies
