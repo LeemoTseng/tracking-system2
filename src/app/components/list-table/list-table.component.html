@@ -6,9 +6,10 @@
       <td width="3%" align="center"></td>
       <td width="12%" align="left" class="py-3 px-1">
         <p class="text-blackColor font-semibold">HAWB No</p>
+        <p class="text-blackColor font-semibold">MAWB No.</p>
       </td>
       <td width="10%" align="left" class="py-3 px-1">
-        <p class="text-blackColor font-semibold">MAWB No.</p>
+        <p class="text-blackColor font-semibold">POD</p>
       </td>
       <td width="65%" align="left" class="py-3 px-1 flex gap-x-1 items-center">
         <p class="text-blackColor font-semibold">Milestones</p>
@@ -43,9 +44,10 @@
       <td width="3%" align="center"></td>
       <td width="12%" align="left" class="py-3 px-1">
         <p class="text-blackColor font-semibold">HAWB No</p>
+        <p class="text-blackColor font-semibold">MAWB No.</p>
       </td>
       <td width="10%" align="left" class="py-3 px-1">
-        <p class="text-blackColor font-semibold">MAWB No.</p>
+        <p class="text-blackColor font-semibold">POD</p>
       </td>
       <td width="65%" align="left" class="py-3 px-1 flex gap-x-1 items-center">
         <p class="text-blackColor font-semibold">Milestones</p>
@@ -73,9 +75,10 @@
         <p class="breack-words break-all">
           {{ shipment.HAWBNo || "-" }}
         </p>
+        <p class="breack-words break-all">{{ shipment.MAWBNo || "-" }}</p>
       </td>
       <td class="py-5 px-1">
-        <p class="breack-words break-all">{{ shipment.MAWBNo || "-" }}</p>
+        <p class="breack-words break-all">{{ shipment.PONo || "-" }}</p>
       </td>
       <td class="py-5 px-1" align="left">
         <div class="process">
@@ -132,7 +135,7 @@
                 </div>
                 <p
                   class="font-medium"
-                  [ngClass]="getTextClass(shipment.MilestoneNode, 'Booked')"
+                  [ngClass]="getTextClass(shipment.MilestoneNode, 'ETD')"
                 >
                   ETD
                 </p>
@@ -161,7 +164,7 @@
                 </div>
                 <p
                   class="font-medium"
-                  [ngClass]="getTextClass(shipment.MilestoneNode, 'Booked')"
+                  [ngClass]="getTextClass(shipment.MilestoneNode, 'ATD')"
                 >
                   ATD
                 </p>
@@ -190,7 +193,7 @@
                 </div>
                 <p
                   class="font-medium"
-                  [ngClass]="getTextClass(shipment.MilestoneNode, 'Booked')"
+                  [ngClass]="getTextClass(shipment.MilestoneNode, 'ETA')"
                 >
                   ETA
                 </p>
@@ -219,7 +222,7 @@
                 </div>
                 <p
                   class="font-medium"
-                  [ngClass]="getTextClass(shipment.MilestoneNode, 'Booked')"
+                  [ngClass]="getTextClass(shipment.MilestoneNode, 'ATA')"
                 >
                   ATA
                 </p>

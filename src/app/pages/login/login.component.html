@@ -25,7 +25,7 @@
           placeholder="ex.12345678"
           type="text"
         />
-        <p class="absolute text-sm text-white -top-7">（測試用）TECSHA126236</p>
+
         <mat-icon
           (click)="sendTrackingNumber()"
           class="absolute cursor-pointer right-2 top-1/2 -translate-y-1/2 fill-current text-blackColor"
@@ -34,6 +34,9 @@
         <p class="absolute top-10 text-sm text-red-500">
           {{ alertMessage }}
         </p>
+        <!-- ---------------完成記得刪除這個--------------- -->
+        <p class="absolute text-sm text-white -top-7">（測試用）TECSHA126236</p>
+        <!-- ------------------------------------------- -->
       </div>
     </div>
     <!---------- Login ---------->
@@ -82,14 +85,15 @@
               >Remember me</label
             >
           </div>
-          <select
+          <!-- Languages -->
+          <!-- <select
             name=""
             id=""
             class="border rounded-sm py-1 px-5 focus:border-blackColor focus:outline-none"
           >
             <option value="chinese">中文</option>
             <option value="eng">English</option>
-          </select>
+          </select> -->
         </div>
 
         <!-- login btn -->

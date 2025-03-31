@@ -44,6 +44,7 @@ export class ShipmentListComponent {
   getSearchListData(item: any) {
     this.searchListData = item
     this.searchListData = JSON.parse(JSON.stringify(this.searchListData)); // deep copy
+    console.log(this.searchListData);
   }
 
   getTotalPages(totalPages: number) {
@@ -66,7 +67,7 @@ export class ShipmentListComponent {
   menuSelected(menu: number) {
     this.selectedMenu = menu;
     this.searchListData.Status = this.selectedMenu;
-    this.clearAll();
+
   }
 
 

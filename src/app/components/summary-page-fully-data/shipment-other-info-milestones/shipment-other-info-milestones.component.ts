@@ -40,7 +40,7 @@ export class ShipmentOtherInfoMilestonesComponent {
   isSkeletonLoading: boolean = true;
 
   //data
-  milestoneCols = ['', 'Milestone', 'Date and Time', 'Files']
+  milestoneCols = ['', 'Milestone', 'Date and Time', 'Show Images']
   milestonRows = [
     'Booking Creation', 'Cargo Arrive Terminal', 'ETD', 'ATD', 'ETA', 'ATA', 'Document Release', 'Release', 'Airport Pickup', 'Delivered', 'POD'];
   milestoneColsGuest = ['Order', 'Milestone', 'Date and Time', 'Files']

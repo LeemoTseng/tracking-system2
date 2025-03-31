@@ -3,7 +3,6 @@ import { Component, inject, Input } from '@angular/core';
 import { environment } from '../../../.environments/environment.prod';
 import { Observable } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
-import { CubeComponent } from '../../cube/cube.component';
 
 @Component({
   selector: 'app-shipment-other-info-details-guest',
@@ -19,7 +18,6 @@ export class ShipmentOtherInfoDetailsGuestComponent {
   skeletonClass: string = 'w-full h-5 rounded bg-gradient-to-r from-gray-50 via-gray-100 to-gray-50 bg-[length:200%_100%] animate-[shimmer_1.5s_infinite_linear]';
 
 
-
   /*--------- Inject ---------*/
   http = inject(HttpClient);
 
@@ -28,12 +26,9 @@ export class ShipmentOtherInfoDetailsGuestComponent {
   // skeleton loader
   isSkeletonLoading: boolean = true;
 
-
-
   // shipmentDataService = inject(ShipmentDataService);
   shipmentData: any = [];
   shipmentDetails: any = [];
-
 
   /*--------- Data import ---------*/
 
@@ -61,7 +56,6 @@ export class ShipmentOtherInfoDetailsGuestComponent {
 
         this.shipmentData = res;
         this.shipmentDetails = this.shipmentData.data.ShipmentDetails;
-
       },
       error: (err) => {
         console.log(err);

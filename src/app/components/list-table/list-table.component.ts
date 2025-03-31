@@ -171,9 +171,74 @@ export class ListTableComponent {
 
 
   // Status class implementation
+
   getStatusClass(MilestoneNode: string | null, nowStatus: string): any {
     if (!MilestoneNode) {
       return "bg-gray-300"; // 當 MilestoneNode 為 null 時，使用預設灰色樣式
+    }
+    // MilestoneNode === 'Booked'
+    if (MilestoneNode === 'Booked') {
+      if (nowStatus === 'Booked') {
+        return "bg-primary";
+      } else if (nowStatus === 'ETD') {
+        return "bg-gray-300";
+      } else if (nowStatus === 'ATD') {
+        return "bg-gray-300";
+      } else if (nowStatus === 'ETA') {
+        return "bg-gray-300";
+      } else if (nowStatus === 'ATA') {
+        return "bg-gray-300";
+      } else if (nowStatus === 'Completed') {
+        return "bg-gray-300";
+      }
+    }
+    // MilestoneNode === 'ETD'
+    if (MilestoneNode === 'ETD') {
+      if (nowStatus === 'Booked') {
+        return "bg-primary";
+      } else if (nowStatus === 'ETD') {
+        return "bg-primary";
+      } else if (nowStatus === 'ATD') {
+        return "bg-gray-300";
+      } else if (nowStatus === 'ETA') {
+        return "bg-gray-300";
+      } else if (nowStatus === 'ATA') {
+        return "bg-gray-300";
+      } else if (nowStatus === 'Completed') {
+        return "bg-gray-300";
+      }
+    }
+    // MilestoneNode === 'ATD'
+    if (MilestoneNode === 'ATD') {
+      if (nowStatus === 'Booked') {
+        return "bg-primary";
+      } else if (nowStatus === 'ETD') {
+        return "bg-primary";
+      } else if (nowStatus === 'ATD') {
+        return "bg-primary";
+      } else if (nowStatus === 'ETA') {
+        return "bg-gray-300";
+      } else if (nowStatus === 'ATA') {
+        return "bg-gray-300";
+      } else if (nowStatus === 'Completed') {
+        return "bg-gray-300";
+      }
+    }
+    // MilestoneNode === 'ETA'
+    if (MilestoneNode === 'ATD') {
+      if (nowStatus === 'Booked') {
+        return "bg-primary";
+      } else if (nowStatus === 'ETD') {
+        return "bg-primary";
+      } else if (nowStatus === 'ATD') {
+        return "bg-primary";
+      } else if (nowStatus === 'ETA') {
+        return "bg-primary";
+      } else if (nowStatus === 'ATA') {
+        return "bg-gray-300";
+      } else if (nowStatus === 'Completed') {
+        return "bg-gray-300";
+      }
     }
 
     if (MilestoneNode === 'Pod') {
@@ -194,6 +259,71 @@ export class ListTableComponent {
       return "text-gray-400"; // 當 MilestoneNode 為 null 時，使用預設樣式
     }
 
+    // MilestoneNode === 'Booked'
+    if (MilestoneNode === 'Booked') {
+      if (nowStatus === 'Booked') {
+        return "text-primary";
+      } else if (nowStatus === 'ETD') {
+        return "text-gray-300";
+      } else if (nowStatus === 'ATD') {
+        return "text-gray-300";
+      } else if (nowStatus === 'ETA') {
+        return "text-gray-300";
+      } else if (nowStatus === 'ATA') {
+        return "text-gray-300";
+      } else if (nowStatus === 'Completed') {
+        return "text-gray-300";
+      }
+    }
+    // MilestoneNode === 'ETD'
+    if (MilestoneNode === 'ETD') {
+      if (nowStatus === 'Booked') {
+        return "text-primary";
+      } else if (nowStatus === 'ETD') {
+        return "text-gray-300";
+      } else if (nowStatus === 'ATD') {
+        return "text-gray-300";
+      } else if (nowStatus === 'ETA') {
+        return "text-gray-300";
+      } else if (nowStatus === 'ATA') {
+        return "text-gray-300";
+      } else if (nowStatus === 'Completed') {
+        return "text-gray-300";
+      }
+    }
+    // MilestoneNode === 'ATD'
+    if (MilestoneNode === 'ATD') {
+      if (nowStatus === 'Booked') {
+        return "text-primary";
+      } else if (nowStatus === 'ETD') {
+        return "text-primary";
+      } else if (nowStatus === 'ATD') {
+        return "text-gray-300";
+      } else if (nowStatus === 'ETA') {
+        return "text-gray-300";
+      } else if (nowStatus === 'ATA') {
+        return "text-gray-300";
+      } else if (nowStatus === 'Completed') {
+        return "text-gray-300";
+      }
+    }
+    // MilestoneNode === 'ATD'
+    if (MilestoneNode === 'ATD') {
+      if (nowStatus === 'Booked') {
+        return "text-primary";
+      } else if (nowStatus === 'ETD') {
+        return "text-primary";
+      } else if (nowStatus === 'ATD') {
+        return "text-primary";
+      } else if (nowStatus === 'ETA') {
+        return "text-gray-300";
+      } else if (nowStatus === 'ATA') {
+        return "text-gray-300";
+      } else if (nowStatus === 'Completed') {
+        return "text-gray-300";
+      }
+    }
+
     if (MilestoneNode === 'Pod') {
       return "text-primary";
     }
@@ -206,6 +336,10 @@ export class ListTableComponent {
 
     return "text-gray-400";
   }
+
+
+
+
 
 
 

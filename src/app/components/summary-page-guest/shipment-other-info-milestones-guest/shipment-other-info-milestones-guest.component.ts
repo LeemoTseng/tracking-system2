@@ -19,7 +19,6 @@ export class ShipmentOtherInfoMilestonesGuestComponent {
   skeletonClass: string = 'w-full h-5 rounded bg-gradient-to-r from-gray-50 via-gray-100 to-gray-50 bg-[length:200%_100%] animate-[shimmer_1.5s_infinite_linear]';
 
 
-
   /*--------- Variables ---------*/
 
   // skeleton loader

@@ -125,15 +125,15 @@
     </tr>
   </thead>
   <tbody>
+    @for (item of dimensions; track $index) {
     <tr class="text-blackColor/70 font-normal border-b">
-      @for (item of dimensions; track $index) {
       <td class="px-4 py-2 text-center w-auto">{{ item.PCS }}</td>
       <td class="px-4 py-2 text-center w-auto">{{ item.Length }}</td>
       <td class="px-4 py-2 text-center w-auto">{{ item.Width }}</td>
       <td class="px-4 py-2 text-center w-auto">{{ item.Height }}</td>
       <td class="px-4 py-2 text-center w-auto">{{ item.VW }}</td>
-      }
     </tr>
+    }
   </tbody>
 </table>
 }@else{
